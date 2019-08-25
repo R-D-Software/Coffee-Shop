@@ -1,6 +1,9 @@
-import 'package:coffee_shop/UI/Components/cart.dart';
+import 'package:coffee_shop/UI/Components/BottomNavigationBarComponent.dart';
+import 'package:coffee_shop/UI/Components/Home/cart.dart';
+import 'package:coffee_shop/UI/Components/Home/item_slider.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class Home extends StatelessWidget 
@@ -8,8 +11,11 @@ class Home extends StatelessWidget
     @override
     Widget build(BuildContext context) 
     {
+        MediaQueryData mQueryData = MediaQuery.of(context);
+    
         return Container
         (
+            
             child: Scaffold
             (
                 backgroundColor: Colors.transparent,
@@ -57,13 +63,18 @@ class Home extends StatelessWidget
 
                 
 
-               body: ListView
-               (
-                   children: <Widget>
-                   [
-                       Cart(),
-                   ],
-               ),
+                body: ListView
+                (
+                    children: <Widget>
+                    [
+                        Cart(),
+                        ItemSlider("Coffee"),
+                        ItemSlider("Breakfast"),
+                        ItemSlider("Today's Deals"),
+                        ItemSlider("Coffee Again"),
+                    ],
+                ),
+                bottomNavigationBar: BottomNavigationBarComponenet(), 
             ),
             decoration: BoxDecoration
             ( 
@@ -71,11 +82,11 @@ class Home extends StatelessWidget
                 (
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    stops: [0.0, 0.75],
+                    stops: [0.6, 0.9],
                     colors: 
                     [
-                        Theme.of(context).primaryColor,
                         Theme.of(context).accentColor,
+                        Theme.of(context).accentColor.withOpacity(0.8),
                     ],
                 ),
             ),

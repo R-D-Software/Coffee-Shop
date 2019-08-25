@@ -3,9 +3,11 @@ import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
 import 'cart_item_component.dart';
+import 'header_painter.dart';
 
 class Cart extends StatefulWidget 
 {
+
     @override
     _CartState createState() => _CartState();
 }
@@ -16,42 +18,30 @@ class _CartState extends State<Cart>
     double _height;
     double _width;
     double _heightBreak;
+    double _itemSize;
 
     @override
     Widget build(BuildContext context) 
     {
-        this._height = MediaQuery.of(context).size.height;
-        this._width = MediaQuery.of(context).size.width;
-        this._maxHeight = _height * 0.135;
-        this._heightBreak = _height * 0.08;
+        getPropertyValues();
 
         return Column
         (
             children: 
             [
-                CustomPaint
+                HeaderPainter
                 (
-                    child: Container
-                    (
-                        color: Colors.transparent,
-                        child: Align
-                        (
-                            alignment: Alignment.centerLeft,
-                            child: Container
-                            (
-                                margin: EdgeInsets.only(left: 20.0),
-                                child: StrokedText(text: "Cart", size: 34)
-                            )
-                        ),
-                        height: _heightBreak
-                    ),
-                    painter: CurvePainter(_height, _width, context, _maxHeight, _heightBreak),
+                	name: "Cart",
+                    width: _width,
+                    height: _height,
+                    maxHeight: _maxHeight,
+                    heightBreak: _heightBreak
                 ),
 
                 Container
                 (
                     margin: EdgeInsets.only(top: 7),
-                    height: 120,
+                    height: this._itemSize,
                     child: ListView
                     (
                         scrollDirection: Axis.horizontal,
@@ -61,35 +51,35 @@ class _CartState extends State<Cart>
                             (
                                 margin: EdgeInsets.only(right: 7),
                                 child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: 120.0,
+                                width: this._itemSize,
                                 color: Colors.transparent,
                             ),
                             Container
                             (
                                 margin: EdgeInsets.only(right: 7),
                                 child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: 120.0,
+                                width: this._itemSize,
                                 color: Colors.transparent,
                             ),
                             Container
                             (
                                 margin: EdgeInsets.only(right: 7),
                                 child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: 120.0,
+                                width: this._itemSize,
                                 color: Colors.transparent,
                             ),
                             Container
                             (
                                 margin: EdgeInsets.only(right: 7),
                                 child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: 120.0,
+                                width: this._itemSize,
                                 color: Colors.transparent,
                             ),
                             Container
                             (
                                 margin: EdgeInsets.only(right: 7),
                                 child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: 120.0,
+                                width: this._itemSize,
                                 color: Colors.transparent,
                             ),
                         ],
@@ -98,55 +88,15 @@ class _CartState extends State<Cart>
             ]
         );
     }
-}
 
-class CurvePainter extends CustomPainter
-{
-    final double height;
-    final double width;
-    final double maxHeight;
-    final double heightBreak;
-    final BuildContext context;
-
-    CurvePainter(this.height, this.width, this.context, this.maxHeight, this.heightBreak);
-
-    @override
-    void paint(Canvas canvas, Size size) 
+    void getPropertyValues() 
     {
-        Path path = Path();
-        Paint paint = Paint();
+        MediaQueryData mQueryData = MediaQuery.of(context);
 
-        List<Offset> polygon = <Offset>
-        [
-            new Offset(0, 0),
-            new Offset(0, heightBreak),
-            new Offset(width*0.72, heightBreak),
-            new Offset(width, maxHeight),
-            new Offset(width, 0)
-        ];
-
-        path.addPolygon(polygon, true);
-        path.close();
-
-        LinearGradient grad = LinearGradient
-        (
-            colors: <Color>
-            [
-                Colors.brown,
-                Theme.of(context).accentColor
-            ],
-            end: Alignment.bottomRight,
-            begin: Alignment.topLeft
-        );
-
-        paint.shader = grad.createShader(Rect.fromLTWH(0, 0, width, maxHeight)); 
-        //paint.strokeCap =      
-        canvas.drawPath(path, paint);
-    }
-
-    @override
-    bool shouldRepaint(CustomPainter oldDelegate) 
-    {
-        return oldDelegate != this;
+        this._height = mQueryData.size.height;
+        this._width = mQueryData.size.width;
+        this._maxHeight = 120;
+        this._heightBreak = 57;
+        this._itemSize = 100;
     }
 }

@@ -1,7 +1,23 @@
 import 'package:coffee_shop/UI/Screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+void main() 
+{
+
+    //Külön külön kommentezd ki
+    //SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+
+    //Külön külön kommentezd ki
+    /*
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.blue, // navigation bar color
+    statusBarColor: Colors.pink, // status bar color
+    ));
+    */
+
+    runApp(MyApp());
+} 
 
 class MyApp extends StatelessWidget
 {
