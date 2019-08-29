@@ -43,7 +43,7 @@ class _ItemSliderState extends State<ItemSlider>
                         ),
                         Container
                         (
-                            margin: EdgeInsets.only(top: 7),
+                            margin: EdgeInsets.only(top: 7, bottom: 7),
                             height: this._itemSize,
                             child: ListView
                             (

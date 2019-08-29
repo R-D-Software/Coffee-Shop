@@ -12,7 +12,7 @@ class _BottomNavigationBarComponenetState extends State<BottomNavigationBarCompo
     Widget build(BuildContext context) 
     {
         return BottomNavigationBar
-        (
+        (    
             backgroundColor: Colors.white,
             elevation: 4,
 
@@ -26,13 +26,13 @@ class _BottomNavigationBarComponenetState extends State<BottomNavigationBarCompo
                 ),
                 BottomNavigationBarItem
                 (
-                    icon: new Icon(Icons.mail),
-                    title: new Text('Messages'),
+                    icon: new Icon(Icons.loyalty),
+                    title: new Text('Quest'),
                 ),
                 BottomNavigationBarItem
                 (
-                    icon: Icon(Icons.person),
-                    title: Text('Profile')
+                    icon: Icon(Icons.account_balance_wallet),
+                    title: Text('Wallet')
                 )
             ],
         );
