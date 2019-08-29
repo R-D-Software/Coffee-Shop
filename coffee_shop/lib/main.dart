@@ -4,17 +4,7 @@ import 'package:flutter/services.dart';
 
 void main() 
 {
-
-    //Külön külön kommentezd ki
-    //SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
-
-    //Külön külön kommentezd ki
-    /*
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.blue, // navigation bar color
-    statusBarColor: Colors.pink, // status bar color
-    ));
-    */
+    SystemChrome.setEnabledSystemUIOverlays([]);
 
     runApp(MyApp());
 } 

@@ -7,6 +7,7 @@ class HeaderPainter extends StatelessWidget
     final double width;
     final double heightBreak;
     final String name;
+    final Icon 
 
     HeaderPainter({@required this.height,@required this.width,@required this.heightBreak,@required this.maxHeight, @required this.name});
 

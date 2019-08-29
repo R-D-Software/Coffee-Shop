@@ -40,7 +40,7 @@ class _CartState extends State<Cart>
 
                 Container
                 (
-                    margin: EdgeInsets.only(top: 7),
+                    margin: EdgeInsets.only(top: 7, bottom: 7),
                     height: this._itemSize,
                     child: ListView
                     (
