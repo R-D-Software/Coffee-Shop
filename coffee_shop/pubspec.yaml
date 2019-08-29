@@ -21,6 +21,11 @@ dependencies:
   flutter_statusbarcolor: any
   flutter:
     sdk: flutter
+  flutter_swiper: any
+  firebase_auth: ^0.14.0+3
+  flutter_facebook_login: ^1.2.0
+  shared_preferences: any
+  cloud_firestore: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -46,6 +51,7 @@ flutter:
   assets:
    - assets/images/kav.jpg
    - assets/images/minussign.png
+   - assets/images/default.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
