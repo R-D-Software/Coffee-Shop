@@ -4,8 +4,8 @@ import 'package:coffee_shop/UI/Components/custom_alert_dialog.dart';
 import 'package:coffee_shop/UI/Components/custom_flat_button.dart';
 import 'package:coffee_shop/UI/Components/custom_text_field.dart';
 import "package:flutter/material.dart";
-import 'file:///home/robeszpierre/AndroidStudioProjects/Coffee-Shop/coffee_shop/lib/Business/auth.dart';
-import 'file:///home/robeszpierre/AndroidStudioProjects/Coffee-Shop/coffee_shop/lib/Business/validator.dart';
+import 'package:coffee_shop/Business/auth.dart';
+import 'package:coffee_shop/Business/validator.dart';
 import 'package:flutter/services.dart';
 
 class SignUpScreen extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'file:///home/robeszpierre/AndroidStudioProjects/Coffee-Shop/coffee_shop/lib/Business/auth.dart';
+import 'package:coffee_shop/Business/auth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Padding(
             padding: const EdgeInsets.only(top: 35.0, right: 15.0, left: 15.0),
             child: Text(
-              "Welcome in our Caffee Shop!",
+              "Welcome in our Coffee Shop!",
               softWrap: true,
               textAlign: TextAlign.center,
               style: TextStyle(

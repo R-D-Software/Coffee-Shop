@@ -20,35 +20,36 @@ class ItemComponent extends StatelessWidget
                 borderRadius: BorderRadius.circular(18.0),
             ),
             elevation: 4,
-            child: Container
+            child: GestureDetector
             (
-                child: Stack
+                onTap: () => {_navigateToItemView(context)},
+                child: Container
                 (
-                    children: <Widget>
-                    [
-                        GestureDetector
-                        (
-                            child: Container
+                    child: Stack
+                    (
+                        children: <Widget>
+                        [
+                            GestureDetector
                             (
-                                width: this.width,
-                                height: this.height,
-                                margin: EdgeInsets.all(7),
-                                child: Align
+                                child: Container
                                 (
-                                    alignment: Alignment.topRight,
-                                    child: Image.asset
+                                    width: this.width,
+                                    height: this.height,
+                                    margin: EdgeInsets.all(7),
+                                    child: Align
                                     (
-                                        "assets/images/minussign.png",
-                                        width: 24.0,
-                                        height: 24.0,
+                                        alignment: Alignment.topRight,
+                                        child: Image.asset
+                                        (
+                                            "assets/images/minussign.png",
+                                            width: 24.0,
+                                            height: 24.0,
+                                        )
                                     )
-                                )
+                                ),
+                                onTap: () => {},
                             ),
-                            onTap: () => {print("touched me")},
-                        ),
-                        GestureDetector
-                        (
-                            child: Container
+                            Container
                             (
                                 width: this.width,
                                 height: this.height,
@@ -84,22 +85,21 @@ class ItemComponent extends StatelessWidget
                                     )
                                 )
                             ),
-                            onTap: () => {print("GREY BOX")},
-                        ),
-                    ] 
-                ),
-                decoration: BoxDecoration
-                (  
-                    image: new DecorationImage
-                    (
-                        fit: BoxFit.cover,
-                        image: AssetImage
-                        (
-                            this.item.imagePath
-                        )
+                        ] 
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(18.0))
-                ),  
+                    decoration: BoxDecoration
+                    (  
+                        image: new DecorationImage
+                        (
+                            fit: BoxFit.cover,
+                            image: AssetImage
+                            (
+                                this.item.imagePath
+                            )
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(18.0))
+                    ),  
+                ),
             ),
         );
     }
@@ -116,5 +116,10 @@ class ItemComponent extends StatelessWidget
                 fontSize: height * 0.085
             ),
         );
+    }
+
+    void _navigateToItemView(BuildContext context)
+    {
+        Navigator.of(context).pushNamed("/main/itemview");
     }
 }

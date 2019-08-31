@@ -2,13 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'UI/Screens/item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
 import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
 
 void main() {
-  Firestore.instance.settings(timestampsInSnapshotsEnabled: true);
-  SystemChrome.setEnabledSystemUIOverlays([]);
+    Firestore.instance.settings(timestampsInSnapshotsEnabled: true);
+    //SystemChrome.setEnabledSystemUIOverlays([]);
+    
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle
+    (
+        systemNavigationBarColor: Colors.white,
+    ));
+
   runApp(MyApp());
 }
 
@@ -24,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/signin': (BuildContext context) => LogInScreen(),
         '/signup': (BuildContext context) => SignUpScreen(),
         '/main': (BuildContext context) => HomeScreen(),
+        '/main/itemview' : (BuildContext context) => ItemViewScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),
