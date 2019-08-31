@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../stroked_text.dart';
 class HeaderPainter extends StatelessWidget 
 {
@@ -7,9 +8,9 @@ class HeaderPainter extends StatelessWidget
     final double width;
     final double heightBreak;
     final String name;
-    //final Icon 
+    final Icon icon;
 
-    HeaderPainter({@required this.height,@required this.width,@required this.heightBreak,@required this.maxHeight, @required this.name});
+    HeaderPainter({@required this.height,@required this.width,@required this.heightBreak,@required this.maxHeight, @required this.name, this.icon});
 
     @override
     Widget build(BuildContext context) 

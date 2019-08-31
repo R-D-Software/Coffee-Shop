@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatefulWidget {
+class RenaoTextField extends StatefulWidget {
   final String hint;
   final TextEditingController controller;
   final Color baseColor;
@@ -11,7 +11,7 @@ class CustomTextField extends StatefulWidget {
   final Function validator;
   final Function onChanged;
 
-  CustomTextField(
+  RenaoTextField(
       {this.hint,
       this.controller,
       this.onChanged,
@@ -22,10 +22,10 @@ class CustomTextField extends StatefulWidget {
       this.obscureText = false,
       this.validator});
 
-  _CustomTextFieldState createState() => _CustomTextFieldState();
+  _RenaoTextFieldState createState() => _RenaoTextFieldState();
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _RenaoTextFieldState extends State<RenaoTextField> {
   Color currentColor;
 
   @override
