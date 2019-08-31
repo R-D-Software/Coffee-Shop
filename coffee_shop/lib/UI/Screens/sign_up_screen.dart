@@ -1,11 +1,12 @@
 import 'dart:core';
+
+import 'package:coffee_shop/Business/auth.dart';
+import 'package:coffee_shop/Business/validator.dart';
 import 'package:coffee_shop/Models/user.dart';
-import 'package:coffee_shop/UI/Components/custom_alert_dialog.dart';
-import 'package:coffee_shop/UI/Components/custom_flat_button.dart';
-import 'package:coffee_shop/UI/Components/custom_text_field.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_alert_dialog.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_text_field.dart';
 import "package:flutter/material.dart";
-import 'file:///home/robeszpierre/AndroidStudioProjects/Coffee-Shop/coffee_shop/lib/Business/auth.dart';
-import 'file:///home/robeszpierre/AndroidStudioProjects/Coffee-Shop/coffee_shop/lib/Business/validator.dart';
 import 'package:flutter/services.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -15,8 +16,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _email = new TextEditingController();
   final TextEditingController _password = new TextEditingController();
-  CustomTextField _emailField;
-  CustomTextField _passwordField;
+  RenaoTextField _emailField;
+  RenaoTextField _passwordField;
   bool _blackVisible = false;
   VoidCallback onBackPress;
 
@@ -28,7 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.of(context).pop();
     };
 
-    _emailField = new CustomTextField(
+    _emailField = new RenaoTextField(
       baseColor: Colors.grey,
       borderColor: Colors.grey[400],
       errorColor: Colors.red,
@@ -37,7 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       inputType: TextInputType.emailAddress,
       validator: Validator.validateEmail,
     );
-    _passwordField = CustomTextField(
+    _passwordField = RenaoTextField(
       baseColor: Colors.grey,
       borderColor: Colors.grey[400],
       errorColor: Colors.red,
@@ -98,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 25.0, horizontal: 40.0),
-                        child: CustomFlatButton(
+                        child: RenaoFlatButton(
                           title: "Sign Up",
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -179,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return CustomAlertDialog(
+        return RenaoAlertDialog(
           content: content,
           title: title,
           onPressed: onPressed,

@@ -1,9 +1,7 @@
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/Home/header_painter.dart';
-import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
-import 'cart_item_component.dart';
 import 'item_component.dart';
 
 class ItemSlider extends StatefulWidget 

@@ -1,10 +1,10 @@
+import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/user.dart';
-import 'package:coffee_shop/UI/Components/custom_flat_button.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'file:///home/robeszpierre/AndroidStudioProjects/Coffee-Shop/coffee_shop/lib/Business/auth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -61,7 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 40.0),
-            child: CustomFlatButton(
+            child: RenaoFlatButton(
               title: "Log In",
               fontSize: 22,
               fontWeight: FontWeight.w700,
@@ -78,7 +78,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 40.0),
-            child: CustomFlatButton(
+            child: RenaoFlatButton(
               title: "Sign Up",
               fontSize: 22,
               fontWeight: FontWeight.w700,
@@ -109,7 +109,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(
                 vertical: 14.0, horizontal: 40.0),
-            child: CustomFlatButton(
+            child: RenaoFlatButton(
               title: "Continue with Facebook",
               fontSize: 22,
               fontWeight: FontWeight.w700,

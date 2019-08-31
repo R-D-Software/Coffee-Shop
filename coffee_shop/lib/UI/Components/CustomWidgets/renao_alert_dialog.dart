@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'custom_flat_button.dart';
 
-class CustomAlertDialog extends StatelessWidget {
+import 'renao_flat_button.dart';
+
+class RenaoAlertDialog extends StatelessWidget {
   final String title;
   final String content;
   final Function onPressed;
 
-  CustomAlertDialog({this.title, this.content, this.onPressed});
+  RenaoAlertDialog({this.title, this.content, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class CustomAlertDialog extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
-                  child: CustomFlatButton(
+                  child: RenaoFlatButton(
                     title: "OK",
                     fontSize: 16,
                     fontWeight: FontWeight.w700,

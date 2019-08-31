@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomFlatButton extends StatelessWidget {
+class RenaoFlatButton extends StatelessWidget {
   final String title;
   final Color textColor;
   final double fontSize;
@@ -11,7 +11,7 @@ class CustomFlatButton extends StatelessWidget {
   final Color borderColor;
   final double borderWidth;
 
-  CustomFlatButton(
+  RenaoFlatButton(
       {this.title,
       this.textColor,
       this.fontSize,
