@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class BottomNavigationBarComponenet extends StatefulWidget 
+class RenaoBottomNavigationBar extends StatefulWidget
 {
     @override
-    _BottomNavigationBarComponenetState createState() => _BottomNavigationBarComponenetState();
+    _RenaoBottomNavigationBarState createState() => _RenaoBottomNavigationBarState();
 }
 
-class _BottomNavigationBarComponenetState extends State<BottomNavigationBarComponenet> 
+class _RenaoBottomNavigationBarState extends State<RenaoBottomNavigationBar>
 {
     @override
     Widget build(BuildContext context) 

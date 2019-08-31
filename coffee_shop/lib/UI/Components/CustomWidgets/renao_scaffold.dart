@@ -23,7 +23,7 @@ class _RenaoScaffoldState extends State<RenaoScaffold> {
       ),
       drawer: RenaoDrawer(),
       body: widget.scaffoldBody,
-      bottomNavigationBar: BottomNavigationBarComponenet(),
+      bottomNavigationBar: RenaoBottomNavigationBar(),
     );
   }
 }
