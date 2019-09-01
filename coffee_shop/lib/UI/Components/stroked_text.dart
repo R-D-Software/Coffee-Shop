@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class StrokedText extends StatelessWidget 
+class StrokedText extends StatelessWidget
 {
     final String text;
     final double size;
@@ -9,11 +9,12 @@ class StrokedText extends StatelessWidget
     StrokedText({@required this.text, this.size, this.color});
 
     @override
-    Widget build(BuildContext context) 
+    Widget build(BuildContext context)
     {
         return Text
         (
             text,
+            textAlign: TextAlign.center,
             style: TextStyle
             (
                 color: this.color == null? Colors.white : color,

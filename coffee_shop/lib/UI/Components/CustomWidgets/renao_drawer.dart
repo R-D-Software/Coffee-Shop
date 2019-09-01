@@ -2,8 +2,6 @@ import 'package:coffee_shop/Business/auth.dart';
 import 'package:flutter/material.dart';
 
 class RenaoDrawer extends StatefulWidget {
-  RenaoDrawer({Key key}) : super(key: key);
-
   @override
   _RenaoDrawerState createState() => _RenaoDrawerState();
 }
