@@ -1,5 +1,5 @@
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
-import 'package:coffee_shop/UI/Components/Home/quest_body.dart';
+import 'package:coffee_shop/UI/Components/HomeWidgets/quest_body.dart';
 import 'package:flutter/material.dart';
 
 class QuestScreen extends StatefulWidget {

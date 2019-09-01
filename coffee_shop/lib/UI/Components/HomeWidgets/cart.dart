@@ -35,7 +35,8 @@ class _CartState extends State<Cart>
                     width: _width,
                     height: _height,
                     maxHeight: _maxHeight,
-                    heightBreak: _heightBreak
+                    heightBreak: _heightBreak,
+                    icon: Icons.payment,
                 ),
 
                 Container

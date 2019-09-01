@@ -8,7 +8,7 @@ class HeaderPainter extends StatelessWidget
     final double width;
     final double heightBreak;
     final String name;
-    final Icon icon;
+    final IconData icon;
 
     HeaderPainter({@required this.height,@required this.width,@required this.heightBreak,@required this.maxHeight, @required this.name, this.icon});
 
@@ -25,8 +25,20 @@ class HeaderPainter extends StatelessWidget
                     alignment: Alignment.centerLeft,
                     child: Container
                     (
-                        margin: EdgeInsets.only(left: 20.0),
-                        child: StrokedText(text: name, size: 30)
+                        margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: Row
+                        (
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>
+                            [
+                                StrokedText(text: name, size: 30),
+                                if(icon != null) GestureDetector
+                                (
+                                    child: Icon(icon),
+                                    onTap: () => {print("He wants to pay")},
+                                ) 
+                            ],
+                        )
                     )
                 ),
                 height: heightBreak
