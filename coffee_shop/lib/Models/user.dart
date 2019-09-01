@@ -19,7 +19,7 @@ class User {
       'firstName': firstName,
       'email': email == null ? '' : email,
       'profilePictureURL': profilePictureURL,
-      'appIdentifier': 'coffe-shop'
+      'appIdentifier': 'Renao'
     };
   }
 
