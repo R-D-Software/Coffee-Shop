@@ -1,5 +1,5 @@
 import 'package:coffee_shop/Models/shop_item.dart';
-import 'package:coffee_shop/UI/Components/Home/header_painter.dart';
+import 'package:coffee_shop/UI/Components/HomeWidgets/header_painter.dart';
 import 'package:flutter/material.dart';
 
 import 'item_component.dart';

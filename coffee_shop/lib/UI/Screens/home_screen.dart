@@ -1,5 +1,5 @@
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
-import 'package:coffee_shop/UI/Components/Home/home_body.dart';
+import 'package:coffee_shop/UI/Components/HomeWidgets/home_body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
