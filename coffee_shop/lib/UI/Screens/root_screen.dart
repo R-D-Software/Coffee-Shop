@@ -1,4 +1,4 @@
-import 'package:coffee_shop/UI/Screens/home_screen.dart';
+import 'package:coffee_shop/UI/Components/Navigation/main_screen.dart';
 import 'package:coffee_shop/UI/Screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +20,7 @@ class _RootScreenState extends State<RootScreen> {
           );
         } else {
           if (snapshot.hasData) {
-            return HomeScreen(
-              firebaseUser: snapshot.data,
-            );
+            return MainScreen();
           } else {
             return WelcomeScreen();
           }

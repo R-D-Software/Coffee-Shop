@@ -4,8 +4,6 @@ import 'cart.dart';
 import 'item_slider.dart';
 
 class HomeScreenBody extends StatefulWidget {
-  HomeScreenBody({Key key}) : super(key: key);
-
   @override
   _HomeScreenBodyState createState() => _HomeScreenBodyState();
 }

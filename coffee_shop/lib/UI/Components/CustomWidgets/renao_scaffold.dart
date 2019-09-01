@@ -1,5 +1,4 @@
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_appbar.dart';
-import 'package:coffee_shop/UI/Components/CustomWidgets/renao_bottom_navigation_bar.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,6 @@ class _RenaoScaffoldState extends State<RenaoScaffold> {
       ),
       drawer: RenaoDrawer(),
       body: widget.scaffoldBody,
-      bottomNavigationBar: RenaoBottomNavigationBar(),
     );
   }
 }
