@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_text_field.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,8 @@ import 'header_painter.dart';
 
 class Cart extends StatefulWidget 
 {
+    final List<ShopItem> _items;
+    Cart(this._items);
 
     @override
     _CartState createState() => _CartState();
@@ -46,44 +49,10 @@ class _CartState extends State<Cart>
                     child: ListView
                     (
                         scrollDirection: Axis.horizontal,
-                        children: <Widget>
-                        [
-                            Container
-                            (
-                                margin: EdgeInsets.only(right: 7),
-                                child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: this._itemSize,
-                                color: Colors.transparent,
-                            ),
-                            Container
-                            (
-                                margin: EdgeInsets.only(right: 7),
-                                child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: this._itemSize,
-                                color: Colors.transparent,
-                            ),
-                            Container
-                            (
-                                margin: EdgeInsets.only(right: 7),
-                                child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: this._itemSize,
-                                color: Colors.transparent,
-                            ),
-                            Container
-                            (
-                                margin: EdgeInsets.only(right: 7),
-                                child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: this._itemSize,
-                                color: Colors.transparent,
-                            ),
-                            Container
-                            (
-                                margin: EdgeInsets.only(right: 7),
-                                child: CartItemComponent(new ShopItem(name: "cica", price: 5, imagePath: "assets/images/kav.jpg")),
-                                width: this._itemSize,
-                                color: Colors.transparent,
-                            ),
-                        ],
+                        children: widget._items.isEmpty ? 
+                        _getEmptyField()                     
+                        :
+                        _getItems(widget._items),
                     )
                 )
             ]
@@ -99,5 +68,52 @@ class _CartState extends State<Cart>
         this._maxHeight = 120;
         this._heightBreak = 57;
         this._itemSize = 100;
+    }
+
+    List<Widget> _getItems(List<ShopItem> items)
+    {
+        return widget._items.map((f) => Container
+        (
+            margin: EdgeInsets.only(right: 7),
+            child: CartItemComponent(f),
+            width: this._itemSize,
+            color: Colors.transparent,
+        )).toList();
+    }
+
+    List<Widget> _getEmptyField()
+    {
+        return <Widget>
+        [
+            Container
+            (
+                width: _width,
+                child: Row
+                (
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>
+                    [
+                        Card
+                        (
+                            child: ClipRRect
+                            (
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: Image.asset("assets/images/kav.jpg")
+                            ),
+                            shape:RoundedRectangleBorder
+                            (
+                                borderRadius: BorderRadius.circular(15.0),
+                            )
+                        ),
+                        StrokedText
+                        (
+                            text:"No Order",
+                            color: Colors.white,
+                            size: 25,
+                        )
+                    ],
+                ),
+            )
+        ];
     }
 }

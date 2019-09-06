@@ -31,7 +31,7 @@ class _RenaoAppBarState extends State<RenaoAppBar> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(left: 14),
-            child: StrokedText(text: widget.title, size: 40),
+            child: StrokedText(text: widget.title, size: 40, fontWeight: FontWeight.bold,),
           ),
         ],
       ),

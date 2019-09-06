@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
@@ -5,11 +6,16 @@ import 'package:flutter/material.dart';
 
 class ItemViewScreen extends StatelessWidget 
 {
+    ShopItem _item = new ShopItem(name: "Great Coffee", price: 400, imagePath: "assets/images/kav.jpg");
+    AppBar _appBar = AppBar();
+    Container _addButton;
+    double height = 0;
+
     @override
     Widget build(BuildContext context) 
     {
         MediaQueryData mData = MediaQuery.of(context);       
-        double height = 0;
+        
         if(mData.orientation == Orientation.portrait)
         {
             height = mData.size.height;
@@ -19,9 +25,11 @@ class ItemViewScreen extends StatelessWidget
             height = mData.size.width;
         }
 
+        _addButton = _getAddButton(context);
+
         return Scaffold
         (
-            appBar: AppBar(),
+            appBar: _appBar,
             body: SingleChildScrollView
             (
                 scrollDirection: Axis.vertical,
@@ -41,9 +49,10 @@ class ItemViewScreen extends StatelessWidget
                             ],
                         ),
                     ),
-                    height: height*0.92,
+                    height: height - _appBar.preferredSize.height,
                     child: Column
                     (
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>
                         [
                             Row
@@ -54,7 +63,7 @@ class ItemViewScreen extends StatelessWidget
                                     Icon(Icons.keyboard_arrow_left),
                                     StrokedText
                                     (
-                                        text: "dsadas",
+                                        text: _item.name,
                                         color: Colors.white,
                                         size: 25,
                                     ),
@@ -131,34 +140,43 @@ class ItemViewScreen extends StatelessWidget
 
                             TemperatureChooser(),
 
-                            ButtonTheme
-                            (
-                                buttonColor: Color.fromRGBO(231,82,100, 1),
-                                minWidth: MediaQuery.of(context).size.width-20,
-                                height: 40.0,
-                                child: RaisedButton
-                                (	
-                                    shape: RoundedRectangleBorder
-                                    (
-                                        side: BorderSide(color: Colors.white),
-                                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                                    ),
-                                    elevation: 5,
-                                    onPressed: () {},
-                                    child: Text
-                                    (
-                                        "ADD",
-                                        style: TextStyle
-                                        (
-                                            fontSize: 25,
-                                            color: Colors.white
-                                        ),
-                                    ),
-                                ),
-                            )
+                            _addButton,
                         ],
                     ),
                     width: double.infinity,
+                ),
+            ),
+        );
+    }
+
+    Container _getAddButton(BuildContext context)
+    {
+        return Container
+        (
+            alignment: Alignment.bottomCenter,
+            child: ButtonTheme
+            (
+                buttonColor: Color.fromRGBO(231,82,100, 1),
+                minWidth: MediaQuery.of(context).size.width-20,
+                height: height * 0.065, 
+                child: RaisedButton
+                (	
+                    shape: RoundedRectangleBorder
+                    (
+                        side: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    elevation: 5,
+                    onPressed: () {},
+                    child: Text
+                    (
+                        "ADD",
+                        style: TextStyle
+                        (
+                            fontSize: 25,
+                            color: Colors.white
+                        ),
+                    ),
                 ),
             ),
         );

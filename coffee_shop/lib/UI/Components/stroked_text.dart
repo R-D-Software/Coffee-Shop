@@ -5,8 +5,9 @@ class StrokedText extends StatelessWidget
     final String text;
     final double size;
     final Color color;
+    final FontWeight fontWeight;
 
-    StrokedText({@required this.text, this.size, this.color});
+    StrokedText({@required this.text, this.size, this.color, this.fontWeight});
 
     @override
     Widget build(BuildContext context)
@@ -17,9 +18,10 @@ class StrokedText extends StatelessWidget
             textAlign: TextAlign.center,
             style: TextStyle
             (
-                color: this.color == null? Colors.white : color,
-                fontSize: this.size == null? 20 : size,
+                color: this.color == null ? Colors.white : this.color,
+                fontSize: this.size == null ? 20 : this.size,
                 fontFamily: Theme.of(context).textTheme.body1.fontFamily,
+                fontWeight: this.fontWeight == null ? FontWeight.normal : this.fontWeight,
                 shadows: <Shadow>
                 [
                     Shadow
