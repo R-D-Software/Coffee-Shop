@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
@@ -35,20 +36,7 @@ class ItemViewScreen extends StatelessWidget
                 scrollDirection: Axis.vertical,
                 child: Container
                 (
-                    decoration: BoxDecoration
-                    (
-                        gradient: LinearGradient
-                        (
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            stops: [0.6, 0.9],
-                            colors: 
-                            [
-                                Theme.of(context).accentColor,
-                                Theme.of(context).accentColor.withOpacity(0.8),
-                            ],
-                        ),
-                    ),
+                    decoration: RenaoBoxDecoration.builder(context),
                     height: height - _appBar.preferredSize.height,
                     child: Column
                     (

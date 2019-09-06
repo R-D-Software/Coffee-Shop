@@ -9,8 +9,9 @@ class HeaderPainter extends StatelessWidget
     final double heightBreak;
     final String name;
     final IconData icon;
+    final Function onIconClick;
 
-    HeaderPainter({@required this.height,@required this.width,@required this.heightBreak,@required this.maxHeight, @required this.name, this.icon});
+    HeaderPainter({@required this.height,@required this.width,@required this.heightBreak,@required this.maxHeight, @required this.name, this.icon, this.onIconClick});
 
     @override
     Widget build(BuildContext context) 
@@ -35,7 +36,7 @@ class HeaderPainter extends StatelessWidget
                                 if(icon != null) GestureDetector
                                 (
                                     child: Icon(icon),
-                                    onTap: () => {print("He wants to pay")},
+                                    onTap: onIconClick == null ? log : onIconClick,
                                 ) 
                             ],
                         )
@@ -45,6 +46,11 @@ class HeaderPainter extends StatelessWidget
             ),
             painter: CurvePainter(height, width, context, maxHeight, heightBreak),
         );
+    }
+
+    void log()
+    {
+        print("HeaderPainter GestureDetector onTap: " + name);
     }
 }
 

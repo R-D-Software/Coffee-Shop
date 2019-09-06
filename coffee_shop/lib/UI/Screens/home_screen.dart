@@ -1,3 +1,4 @@
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/home_body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,17 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBarTitle: "Home",
         scaffoldBody: HomeScreenBody(),
       ),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: [0.6, 0.9],
-          colors: [
-            Theme.of(context).accentColor,
-            Theme.of(context).accentColor.withOpacity(0.8),
-          ],
-        ),
-      ),
+      decoration: RenaoBoxDecoration.builder(context),     
     );
   }
 }

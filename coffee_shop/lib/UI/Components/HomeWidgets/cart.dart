@@ -72,7 +72,7 @@ class _CartState extends State<Cart>
 
     List<Widget> _getItems(List<ShopItem> items)
     {
-        return widget._items.map((f) => Container
+        return items.map((f) => Container
         (
             margin: EdgeInsets.only(right: 7),
             child: CartItemComponent(f),
