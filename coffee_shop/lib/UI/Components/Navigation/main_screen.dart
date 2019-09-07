@@ -33,7 +33,8 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
-    final BottomNavigationBar navBar = new BottomNavigationBar(
+    final BottomNavigationBar navBar = BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       currentIndex: currentTab,
       elevation: 4,
       backgroundColor: Theme.of(context).primaryColor,
@@ -65,8 +66,8 @@ class MainScreenState extends State<MainScreen> {
         title: new Text('Quest'),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.account_balance_wallet),
-        title: Text('Wallet'),
+        icon: Icon(Icons.shopping_cart),
+        title: Text('Cart'),
       ),
     ];
   }
