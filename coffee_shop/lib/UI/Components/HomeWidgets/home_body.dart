@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Models/dummy_data.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody>
         children: <Widget>
         [
             Cart(DummyData.empty),
-            ItemSlider(name: "Favourites", icon: Icons.star, items: DummyData.items, onIconClick: favouriteIconClick),
+            ItemSlider(name: LanguageModel.favourites[LanguageModel.currentLanguage], icon: Icons.star, items: DummyData.items, onIconClick: favouriteIconClick),
             ItemSlider(name: "Coffee", items: DummyData.items),
             ItemSlider(name: "Breakfast", items: DummyData.items),
             ItemSlider(name: "Today's Deals", items: DummyData.items),

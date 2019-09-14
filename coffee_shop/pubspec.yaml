@@ -17,9 +17,12 @@ environment:
   sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
+  devicelocale: ^0.2.0
   gradient_app_bar: ^0.0.1
   flutter_statusbarcolor: any
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   flutter_swiper: any
   firebase_auth: ^0.14.0+3

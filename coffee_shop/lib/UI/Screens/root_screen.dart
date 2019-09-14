@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/Navigation/main_screen.dart';
 import 'package:coffee_shop/UI/Screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,8 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+    LanguageModel.init(context);
     return new StreamBuilder<FirebaseUser>(
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (BuildContext context, snapshot) {

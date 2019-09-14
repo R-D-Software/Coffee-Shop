@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/home_body.dart';
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: RenaoScaffold(
-        appBarTitle: "Home",
+        appBarTitle: LanguageModel.home[LanguageModel.currentLanguage],
         scaffoldBody: HomeScreenBody(),
       ),
       decoration: RenaoBoxDecoration.builder(context),     

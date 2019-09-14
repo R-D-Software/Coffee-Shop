@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
+import 'package:coffee_shop/UI/Screens/settings.dart';
 import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'UI/Screens/item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
 import 'UI/Screens/root_screen.dart';
@@ -18,16 +21,25 @@ void main() {
     (
         systemNavigationBarColor: Colors.white,
     ));
-
-  runApp(MyApp());
+    runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Renao',
+      localizationsDelegates: 
+      [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales:
+      [
+        const Locale("en","US"),
+        const Locale("hu","HU"),
+      ],
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/root': (BuildContext context) => RootScreen(),
@@ -37,6 +49,7 @@ class MyApp extends StatelessWidget {
         '/main/itemview' : (BuildContext context) => ItemViewScreen(),
         '/main/favourites' : (BuildContext context) => FavouriteListScreen(),
         '/main/wallet' : (BuildContext context) => WalletScreen(),
+        "/main/settings": (BuildContext context) => SettingsScreen(),
         '/quest': (BuildContext context) => QuestScreen(),
       },
       theme: ThemeData(

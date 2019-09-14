@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Business/auth.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/DrawerComponents/drawer_list_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,10 +49,11 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
 
   List<Widget> get listTiles {
     List<Widget> listTiles = List();
-    listTiles.add(DrawerListTile(iconData: Icons.star, text: "Favourites", action: _moveToFavouritesScreen));
-    listTiles.add(DrawerListTile(iconData: Icons.account_balance_wallet, text: "Wallet", action: _moveToWalletScreen));
+    listTiles.add(DrawerListTile(iconData: Icons.star, text: LanguageModel.favourites[LanguageModel.currentLanguage], action: _moveToFavouritesScreen));
+    listTiles.add(DrawerListTile(iconData: Icons.account_balance_wallet, text: LanguageModel.wallet[LanguageModel.currentLanguage], action: _moveToWalletScreen));
+    listTiles.add(DrawerListTile(iconData: Icons.settings, text: LanguageModel.settings[LanguageModel.currentLanguage], action: _moveToSettingsScreen));
     listTiles.add(Divider(color: Colors.orange));
-    listTiles.add(DrawerListTile(iconData: Icons.power_settings_new, text: "Log out", action: _logOut));
+    listTiles.add(DrawerListTile(iconData: Icons.power_settings_new, text: LanguageModel.logOut[LanguageModel.currentLanguage], action: _logOut));
     return listTiles;
   }
 
@@ -65,5 +67,9 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
 
   void _moveToWalletScreen() {
     Navigator.of(context).pushNamed("/main/wallet");
+  }
+
+  void _moveToSettingsScreen() {
+    Navigator.of(context).pushNamed("/main/settings");
   }
 }

@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                 [
                     Container
                     (
-                        child: StrokedText(text: "Purchase History", size: 20),
+                        child: StrokedText(text: LanguageModel.purchaseHistory[LanguageModel.currentLanguage], size: 20),
                         margin: EdgeInsets.all(10),
                     ),
                     getHistoryElement(context),

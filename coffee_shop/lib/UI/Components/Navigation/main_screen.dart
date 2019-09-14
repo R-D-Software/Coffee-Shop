@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
 import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
@@ -32,7 +33,7 @@ class MainScreenState extends State<MainScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     SystemChrome.setEnabledSystemUIOverlays([]);
     final BottomNavigationBar navBar = BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -60,15 +61,15 @@ class MainScreenState extends State<MainScreen> {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: new Icon(Icons.home),
-        title: new Text('Home'),
+        title: new Text(LanguageModel.home[LanguageModel.currentLanguage]),
       ),
       BottomNavigationBarItem(
         icon: new Icon(Icons.loyalty),
-        title: new Text('Quest'),
+        title: new Text(LanguageModel.quest[LanguageModel.currentLanguage]),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.shopping_cart),
-        title: Text('Cart'),
+        title: Text(LanguageModel.cart[LanguageModel.currentLanguage]),
       ),
     ];
   }

@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Business/validator.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_alert_dialog.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
@@ -160,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _changeBlackVisible();
         await Auth.signUp(email, password).then((uID) {
           Auth.addUser(
-              new User(userID: uID, email: email, profilePictureURL: ''));
+              new User(userID: uID, email: email, profilePictureURL: '', userDefinedLanguage: Language.NOTHING));
           onBackPress();
         });
       } catch (e) {

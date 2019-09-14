@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/quest.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class QuestBody extends StatelessWidget
                   alignment: Alignment.center,
                   child: Container(
                       child:
-                          StrokedText(text: "Coffee of the week", size: 25))),
+                          StrokedText(text: LanguageModel.coffeeOfTheWeek[LanguageModel.currentLanguage], size: 25))),
               height: 50),
           painter: CurvePainter(context),
         ),
@@ -34,14 +35,14 @@ class QuestBody extends StatelessWidget
         Stack(
           children: <Widget>[
             Container(
-              height: widget.imageHeight,
+              height: imageHeight,
               child: Image.asset(
                 quest.imgPath,
                 fit: BoxFit.fitHeight,
               ),
             ),
             Container(
-              height: widget.imageHeight/(quest.numberOfPiecies/quest.missingParts),
+              height: imageHeight/(quest.numberOfPiecies/quest.missingParts),
               child: Container(
                 color: Theme.of(context).accentColor,
               )

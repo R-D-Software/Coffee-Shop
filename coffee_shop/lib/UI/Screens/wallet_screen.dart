@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/wallet_body.dart';
@@ -13,7 +14,7 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: RenaoScaffold(
-        appBarTitle: "Wallet",
+        appBarTitle: LanguageModel.wallet[LanguageModel.currentLanguage],
         scaffoldBody: WalletBody(),
       ),
       decoration: RenaoBoxDecoration.builder(context),

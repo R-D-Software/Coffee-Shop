@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_text_field.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
@@ -34,7 +35,7 @@ class _CartState extends State<Cart>
             [
                 HeaderPainter
                 (
-                	name: "Cart",
+                	name: LanguageModel.cart[LanguageModel.currentLanguage],
                     width: _width,
                     height: _height,
                     maxHeight: _maxHeight,
@@ -107,7 +108,7 @@ class _CartState extends State<Cart>
                         ),
                         StrokedText
                         (
-                            text:"No Order",
+                            text:LanguageModel.noOrder[LanguageModel.currentLanguage],
                             color: Colors.white,
                             size: 25,
                         )
