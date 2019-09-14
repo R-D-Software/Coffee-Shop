@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
+import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'UI/Screens/item_view_screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/main': (BuildContext context) => HomeScreen(),
         '/main/itemview' : (BuildContext context) => ItemViewScreen(),
         '/main/favourites' : (BuildContext context) => FavouriteListScreen(),
+        '/main/wallet' : (BuildContext context) => WalletScreen(),
         '/quest': (BuildContext context) => QuestScreen(),
       },
       theme: ThemeData(

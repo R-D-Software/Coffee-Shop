@@ -1,5 +1,6 @@
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
+import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +14,7 @@ class MainScreenState extends State<MainScreen> {
   int currentTab = 0;
   HomeScreen homeScreen = HomeScreen();
   QuestScreen questScreen = QuestScreen();
-//  Wallet walletScreen = WalletScreen();
+  //WalletScreen walletScreen = WalletScreen();
   List<Widget> pages;
 
   Widget currentPage;

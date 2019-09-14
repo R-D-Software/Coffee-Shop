@@ -4,12 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../stroked_text.dart';
 
-class QuestBody extends StatefulWidget {
-  @override
-  _QuestBodyState createState() => _QuestBodyState();
-}
-
-class _QuestBodyState extends State<QuestBody> {
+class QuestBody extends StatelessWidget 
+{
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,7 +25,7 @@ class _QuestBodyState extends State<QuestBody> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Container(
-              child: StrokedText(text: "Order 4 lattes to get a free one!")),
+              child: StrokedText(text: "Order 4 lattes to get a free one!", capsOn: true,)),
         ),
         Container(
           child: Image.asset(

@@ -49,7 +49,7 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
   List<Widget> get listTiles {
     List<Widget> listTiles = List();
     listTiles.add(DrawerListTile(iconData: Icons.star, text: "Favourites", action: _moveToFavouritesScreen));
-    listTiles.add(DrawerListTile(iconData: Icons.account_balance_wallet, text: "Wallet", action: null));
+    listTiles.add(DrawerListTile(iconData: Icons.account_balance_wallet, text: "Wallet", action: _moveToWalletScreen));
     listTiles.add(Divider(color: Colors.orange));
     listTiles.add(DrawerListTile(iconData: Icons.power_settings_new, text: "Log out", action: _logOut));
     return listTiles;
@@ -61,5 +61,9 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
 
   void _moveToFavouritesScreen() {
     Navigator.of(context).pushNamed("/main/favourites");
+  }
+
+  void _moveToWalletScreen() {
+    Navigator.of(context).pushNamed("/main/wallet");
   }
 }

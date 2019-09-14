@@ -6,15 +6,16 @@ class StrokedText extends StatelessWidget
     final double size;
     final Color color;
     final FontWeight fontWeight;
+    final bool capsOn;
 
-    StrokedText({@required this.text, this.size, this.color, this.fontWeight});
+    StrokedText({@required this.text, this.size, this.color, this.fontWeight, this.capsOn});
 
     @override
     Widget build(BuildContext context)
     {
         return Text
         (
-            text,
+            getText(text, context),
             textAlign: TextAlign.center,
             style: TextStyle
             (
@@ -33,5 +34,13 @@ class StrokedText extends StatelessWidget
                 ]
             ),
         );
+    }
+
+    String getText(String text, BuildContext context)
+    {   
+        if(capsOn == null) return text;
+        if(!capsOn) return text.toLowerCase();
+
+        return text.toUpperCase();
     }
 }
