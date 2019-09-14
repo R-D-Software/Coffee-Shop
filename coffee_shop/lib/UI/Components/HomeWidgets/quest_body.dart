@@ -1,11 +1,15 @@
 import 'dart:ui';
 
+import 'package:coffee_shop/Models/quest.dart';
 import 'package:flutter/material.dart';
 
 import '../stroked_text.dart';
 
 class QuestBody extends StatelessWidget 
 {
+  double imageHeight = 250;
+  Quest quest = Quest(4, 3, 'assets/images/quest_coffee.png');
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,13 +29,24 @@ class QuestBody extends StatelessWidget
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Container(
-              child: StrokedText(text: "Order 4 lattes to get a free one!", capsOn: true,)),
+              child: StrokedText(text: "Order ${quest.missingParts} more lattes to get a free one!", capsOn: true)),
         ),
-        Container(
-          child: Image.asset(
-            'assets/images/quest_coffee.png',
-            fit: BoxFit.fitHeight,
-          ),
+        Stack(
+          children: <Widget>[
+            Container(
+              height: widget.imageHeight,
+              child: Image.asset(
+                quest.imgPath,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+            Container(
+              height: widget.imageHeight/(quest.numberOfPiecies/quest.missingParts),
+              child: Container(
+                color: Theme.of(context).accentColor,
+              )
+            ),
+          ],
         ),
       ],
     );

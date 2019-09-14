@@ -1,4 +1,3 @@
-import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/quest_body.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class _QuestScreenState extends State<QuestScreen> {
         appBarTitle: "Quest",
         scaffoldBody: QuestBody(),
       ),
-      decoration: RenaoBoxDecoration.builder(context),
+      color: Theme.of(context).accentColor,
     );
   }
 }
