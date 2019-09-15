@@ -64,8 +64,8 @@ class LanguageModel
     
     static Map<Language, String> yourBalance = const
     {
-        Language.ENGLISH: "Your Balance: ",
-        Language.HUNGARIAN: "Az Egyenleged: "
+        Language.ENGLISH: "Balance: ",
+        Language.HUNGARIAN: "Egyenleg: "
     };
     
     static Map<Language, String> add = const
@@ -103,6 +103,18 @@ class LanguageModel
         Language.ENGLISH: "Language",
         Language.HUNGARIAN: "Nyelv"
     };
+
+    static Map<Language, String> deposit = const
+    {
+        Language.ENGLISH: "Add to Balance",
+        Language.HUNGARIAN: "Egyenleg Feltöltése"
+    };  
+      
+    static Map<Language, String> navigatoToShop = const
+    {
+        Language.ENGLISH: "Navigate to the Shop",
+        Language.HUNGARIAN: "Irány a Bolt"
+    };  
 
     static Future init(BuildContext context) async 
     {

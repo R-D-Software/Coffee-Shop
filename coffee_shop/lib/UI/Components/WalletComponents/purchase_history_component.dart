@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 class PurchaseHistoryComponent extends StatefulWidget 
 {
+    final double height;
+    PurchaseHistoryComponent({@required this.height});
+
     @override
     _PurchaseHistoryComponentState createState() => _PurchaseHistoryComponentState();
 }
@@ -16,7 +19,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
         return Container
         (
             width: MediaQuery.of(context).size.width*0.98,
-            height: MediaQuery.of(context).size.height - 70 - 64 - 50,
+            height: widget.height,
             child: ListView
             (
                 children: <Widget>
