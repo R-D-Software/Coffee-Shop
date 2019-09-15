@@ -1,7 +1,7 @@
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/UI/Screens/cart_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
-import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +15,7 @@ class MainScreenState extends State<MainScreen> {
   int currentTab = 0;
   HomeScreen homeScreen = HomeScreen();
   QuestScreen questScreen = QuestScreen();
-  //WalletScreen walletScreen = WalletScreen();
+  CartScreen cartScreen = CartScreen();
   List<Widget> pages;
 
   Widget currentPage;
@@ -23,7 +23,7 @@ class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    pages = [homeScreen, questScreen];
+    pages = [homeScreen, questScreen, cartScreen];
     currentPage = homeScreen;
   }
 
@@ -33,7 +33,7 @@ class MainScreenState extends State<MainScreen> {
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
     final BottomNavigationBar navBar = BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -70,6 +70,35 @@ class MainScreenState extends State<MainScreen> {
       BottomNavigationBarItem(
         icon: Icon(Icons.shopping_cart),
         title: Text(LanguageModel.cart[LanguageModel.currentLanguage]),
+        icon: Stack(
+          children: <Widget>[
+              new Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+            Positioned(
+              bottom: 10,
+                left: 10,
+                child: Stack(
+              children: <Widget>[
+                Icon(Icons.brightness_1,
+                    size: 15.0, color: Colors.red[700]),
+                Positioned(
+                    top: 3.5,
+                    right: 3,
+                    child: Center(
+                      child: Text(
+                        '1',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8.0,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    )),
+              ],
+            )),
+          ],
+        ),
       ),
     ];
   }
