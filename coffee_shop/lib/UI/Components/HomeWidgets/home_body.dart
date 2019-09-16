@@ -20,11 +20,11 @@ class _HomeScreenBodyState extends State<HomeScreenBody>
         children: <Widget>
         [
             Cart(DummyData.empty),
-            ItemSlider(name: LanguageModel.favourites[LanguageModel.currentLanguage], icon: Icons.star, items: DummyData.items, onIconClick: favouriteIconClick),
-            ItemSlider(name: "Coffee", items: DummyData.items),
-            ItemSlider(name: "Breakfast", items: DummyData.items),
-            ItemSlider(name: "Today's Deals", items: DummyData.items),
-            ItemSlider(name: "Coffee Again", items: DummyData.items),
+            ItemSlider(name: LanguageModel.favourites[LanguageModel.currentLanguage], icon: Icons.star, items: DummyData.shopItems, onIconClick: favouriteIconClick),
+            ItemSlider(name: "Coffee", items: DummyData.shopItems),
+            ItemSlider(name: "Breakfast", items: DummyData.shopItems),
+            ItemSlider(name: "Today's Deals", items: DummyData.shopItems),
+            ItemSlider(name: "Coffee Again", items: DummyData.shopItems),
         ],
         );
     }

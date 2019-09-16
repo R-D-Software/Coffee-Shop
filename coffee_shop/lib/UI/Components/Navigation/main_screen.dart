@@ -68,7 +68,6 @@ class MainScreenState extends State<MainScreen> {
         title: new Text(LanguageModel.quest[LanguageModel.currentLanguage]),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.shopping_cart),
         title: Text(LanguageModel.cart[LanguageModel.currentLanguage]),
         icon: Stack(
           children: <Widget>[
