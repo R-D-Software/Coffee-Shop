@@ -20,7 +20,10 @@ class ItemViewScreen extends StatelessWidget
         final Map<String,String> routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>;
         final String itemID = routeArgs["itemID"];
 
-        print("THHE ARGID IS : " + itemID);
+        if(itemID == null)
+        {
+            return Container();
+        }
 
         MediaQueryData mData = MediaQuery.of(context);       
         

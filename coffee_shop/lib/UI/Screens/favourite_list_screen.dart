@@ -18,7 +18,7 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
     Widget build(BuildContext context) 
     {
         List<ShopItem> favourites;
-        favourites = DummyData.shopItems;
+        favourites = DummyData.items;
         
         MediaQueryData mData = MediaQuery.of(context);       
         

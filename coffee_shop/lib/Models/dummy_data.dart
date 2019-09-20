@@ -17,10 +17,10 @@ class DummyData
 
     static final List<CoffeeItem> cartItems =
     [
-        CoffeeItem(shopItem: shopItems[0], temperature: Temperature.cold(), itemCount: 2, sugar: 1),
-        CoffeeItem(shopItem: shopItems[1], temperature: Temperature.warm(), itemCount: 1, sugar: 2),
-        CoffeeItem(shopItem: shopItems[2], temperature: Temperature.iceCold(), itemCount: 3, sugar: 4),
-        CoffeeItem(shopItem: shopItems[3], temperature: Temperature.hot(), itemCount: 4, sugar: 3),
-        CoffeeItem(shopItem: shopItems[4], temperature: Temperature.warm(), itemCount: 5, sugar: 0),
+        CoffeeItem(shopItem: items[0], temperature: Temperature.cold(), itemCount: 2, sugar: 1),
+        CoffeeItem(shopItem: items[1], temperature: Temperature.warm(), itemCount: 1, sugar: 2),
+        CoffeeItem(shopItem: items[2], temperature: Temperature.iceCold(), itemCount: 3, sugar: 4),
+        CoffeeItem(shopItem: items[3], temperature: Temperature.hot(), itemCount: 4, sugar: 3),
+        CoffeeItem(shopItem: items[4], temperature: Temperature.warm(), itemCount: 5, sugar: 0),
     ];
 }

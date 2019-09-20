@@ -8,8 +8,8 @@ class CoffeeItem extends ShopItem {
 
   CoffeeItem({ShopItem shopItem, @required this.temperature, @required this.itemCount, @required this.sugar})
       : super(
-            id: shopItem.id,
-            imagePath: shopItem.imagePath,
+            itemID: shopItem.itemID,
+            imageUrl: shopItem.imageUrl,
             name: shopItem.name,
             price: shopItem.price);
 }
