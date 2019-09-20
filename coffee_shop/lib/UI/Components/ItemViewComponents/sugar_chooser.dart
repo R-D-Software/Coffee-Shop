@@ -1,3 +1,4 @@
+import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_card.dart';
 import 'package:flutter/material.dart';
 
 class SugarChooser extends StatefulWidget 
@@ -35,20 +36,6 @@ class _SugarChooserState extends State<SugarChooser>
 
     Widget sugarCube()
     {
-        return Card
-        (
-            elevation: 2,
-            child: Container
-            (
-                child: Image.asset("assets/images/kav.jpg"),
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration
-                (
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(6.0))
-                ),  
-            ),
-        );
+        return SugarCard(height: 50, width: 50,);
     }
 }

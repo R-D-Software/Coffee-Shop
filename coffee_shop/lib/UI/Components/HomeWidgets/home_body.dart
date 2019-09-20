@@ -13,6 +13,7 @@ class HomeScreenBody extends StatefulWidget {
   _HomeScreenBodyState createState() => _HomeScreenBodyState();
 }
 
+<<<<<<< HEAD
 class _HomeScreenBodyState extends State<HomeScreenBody> {
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,25 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
 
     for (DocumentSnapshot ds in snapshot.data.documents) {
       ShopItem currentItem = ShopItem.fromDocument(ds, ds.documentID);
+=======
+class _HomeScreenBodyState extends State<HomeScreenBody> 
+{
+    @override
+    Widget build(BuildContext context) {
+
+        return ListView(
+        children: <Widget>
+        [
+            Cart(DummyData.empty),
+            ItemSlider(name: LanguageModel.favourites[LanguageModel.currentLanguage], icon: Icons.star, items: DummyData.shopItems, onIconClick: favouriteIconClick),
+            ItemSlider(name: "Coffee", items: DummyData.shopItems),
+            ItemSlider(name: "Breakfast", items: DummyData.shopItems),
+            ItemSlider(name: "Today's Deals", items: DummyData.shopItems),
+            ItemSlider(name: "Coffee Again", items: DummyData.shopItems),
+        ],
+        );
+    }
+>>>>>>> origin/Develop
 
       switch (currentItem.itemType) {
         case "Coffee":
