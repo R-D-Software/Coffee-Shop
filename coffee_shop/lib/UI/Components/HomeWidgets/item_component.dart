@@ -92,9 +92,9 @@ class ItemComponent extends StatelessWidget
                         image: new DecorationImage
                         (
                             fit: BoxFit.cover,
-                            image: AssetImage
+                            image: NetworkImage
                             (
-                                this.item.imagePath
+                                this.item.imageUrl
                             )
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(18.0))
@@ -120,6 +120,6 @@ class ItemComponent extends StatelessWidget
 
     void _navigateToItemView(BuildContext context)
     {
-        Navigator.of(context).pushNamed("/main/itemview");
+        Navigator.of(context).pushNamed("/main/itemview", arguments: {"itemID": item.itemID});
     }
 }

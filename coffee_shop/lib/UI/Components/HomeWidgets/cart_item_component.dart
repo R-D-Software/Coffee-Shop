@@ -45,9 +45,9 @@ class CartItemComponent extends StatelessWidget
                     image: new DecorationImage
                     (
                         fit: BoxFit.cover,
-                        image: AssetImage
+                        image: NetworkImage
                         (
-                            this.item.imagePath
+                            this.item.imageUrl
                         )
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(16.0))

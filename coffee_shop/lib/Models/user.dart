@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/language.dart';
 
@@ -21,8 +22,7 @@ class User
 
     Map<String, Object> toJson() 
     {
-        return 
-        {
+        return{
         'userID': userID,
         'firstName': firstName,
         'email': email == null ? '' : email,
@@ -112,7 +112,7 @@ class User
             break;
         }
 
-        Auth.modifyUserLanguage(this);
+        UserDB.modifyUserLanguage(this);
         LanguageModel.currentLanguage = userDefinedLanguage;
     }
 }

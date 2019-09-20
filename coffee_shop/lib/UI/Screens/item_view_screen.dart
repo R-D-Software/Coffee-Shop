@@ -1,5 +1,7 @@
+import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class ItemViewScreen extends StatelessWidget 
 {
-    ShopItem _item = new ShopItem(name: "Great Coffee", price: 400, imagePath: "assets/images/kav.jpg");
+    ShopItem _item;
     AppBar _appBar = AppBar();
     Container _addButton;
     double height = 0;
@@ -15,6 +17,11 @@ class ItemViewScreen extends StatelessWidget
     @override
     Widget build(BuildContext context) 
     {
+        final Map<String,String> routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>;
+        final String itemID = routeArgs["itemID"];
+
+        print("THHE ARGID IS : " + itemID);
+
         MediaQueryData mData = MediaQuery.of(context);       
         
         if(mData.orientation == Orientation.portrait)
@@ -27,6 +34,27 @@ class ItemViewScreen extends StatelessWidget
         }
 
         _addButton = _getAddButton(context);
+
+        return StreamBuilder
+        (
+            stream: ShopItemDB.getShopItemByID(itemID),
+            builder: (context, snapshot) 
+            {
+                if (snapshot.connectionState == ConnectionState.waiting) 
+                {
+                    return RenaoWaitingRing(); //Penis Ring
+                } 
+                else
+                {
+                    return makeItemViewBody(snapshot, context);
+                }
+            }
+        );
+    }
+
+    Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context)
+    {
+        _item = snapshot.data;
 
         return Scaffold
         (
@@ -84,7 +112,7 @@ class ItemViewScreen extends StatelessWidget
                                             image: new DecorationImage
                                             (
                                                 fit: BoxFit.fill,
-                                                image: new NetworkImage("https://i.imgur.com/BoN9kdC.png")
+                                                image: new NetworkImage(_item.imageUrl)
                                             )
                                         )
                                     ),

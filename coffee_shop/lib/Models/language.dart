@@ -1,3 +1,5 @@
+import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -116,10 +118,29 @@ class LanguageModel
         Language.HUNGARIAN: "Irány a Bolt"
     };  
 
+    static Map<Language, String> coffee = const
+    {
+        Language.ENGLISH: "Coffee",
+        Language.HUNGARIAN: "Kávé"
+    };
+
+    static Map<Language, String> sandwich = const
+    {
+        Language.ENGLISH: "Sandwich",
+        Language.HUNGARIAN: "Szendvics"
+    };
+    
+    static Map<Language, String> todaysDeals = const
+    {
+        Language.ENGLISH: "Today's Deals",
+        Language.HUNGARIAN: "Napi ajánlat"
+    };
+    
+
     static Future init(BuildContext context) async 
     {
         User user;
-        await Auth.getCurrentUser().then((u)
+        await UserDB.getCurrentUser().then((u)
         {
             user = u;
         });
@@ -139,8 +160,6 @@ class LanguageModel
         {
             currentLanguage = _getLocalizedLang(context);
         }
-
-        print(currentLanguage);
     }
 
     static String getCurrentLanguageString()

@@ -41,7 +41,10 @@ class FavouriteListItem extends StatelessWidget
                     borderRadius: BorderRadius.circular(35),
                     image: DecorationImage
                     (
-                        image: AssetImage(item.imagePath),
+                        image: NetworkImage
+                        (
+                            this.item.imageUrl
+                        ),
                         fit: BoxFit.fill
                     ),
                 ),

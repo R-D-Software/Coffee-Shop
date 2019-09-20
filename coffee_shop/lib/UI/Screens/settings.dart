@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/user.dart';
@@ -20,7 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     @override
     Future initState() 
     {
-        Auth.getCurrentUser().then((u)
+        UserDB.getCurrentUser().then((u)
         {
             user = u;
         });
