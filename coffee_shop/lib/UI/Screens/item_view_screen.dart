@@ -1,7 +1,10 @@
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
+import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
@@ -13,12 +16,13 @@ class ItemViewScreen extends StatelessWidget
     AppBar _appBar = AppBar();
     Container _addButton;
     double height = 0;
+    String itemID;
 
     @override
     Widget build(BuildContext context) 
     {
         final Map<String,String> routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>;
-        final String itemID = routeArgs["itemID"];
+        itemID = routeArgs["itemID"];
 
         if(itemID == null)
         {
@@ -119,16 +123,8 @@ class ItemViewScreen extends StatelessWidget
                                             )
                                         )
                                     ),
-                                    Container
-                                    (
-                                        child: Icon
-                                        (
-                                            Icons.star,
-                                            size: 50,
-                                            color: Colors.white,
-                                        ),
-                                        margin: EdgeInsets.only(top: 2),
-                                    )
+
+                                    FavouriteStar(itemID: itemID),
                                 ],
                             ),
 
@@ -167,6 +163,7 @@ class ItemViewScreen extends StatelessWidget
             ),
         );
     }
+       
 
     Container _getAddButton(BuildContext context)
     {

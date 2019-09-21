@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,6 +14,8 @@ class UserDB
         {
             user = u;
         });
+
+        StaticData.currentUser = user;
         return user;  
     }
 
@@ -30,5 +34,29 @@ class UserDB
     static void modifyUserLanguage(User modifiedUser)
     {
         Firestore.instance.collection("users").document(modifiedUser.userID).updateData(modifiedUser.toJson());
+    }
+
+    static void modifyFavouriteByItemID(String itemID, User user) 
+    {
+        if(user.favouriteItems.contains(itemID))
+        {
+            user.favouriteItems.remove(itemID);
+            removeItemFromFavourites(itemID, user.userID);
+        }
+        else
+        {
+            user.favouriteItems.add(itemID);
+            addItemToFavourites(itemID, user.userID);
+        }
+    }
+            
+    static void removeItemFromFavourites(String itemID, String userID) 
+    {
+        Firestore.instance.collection("users").document(userID).updateData({"favouriteItems": FieldValue.arrayRemove([itemID])});
+    }
+
+    static void addItemToFavourites(String itemID, String userID) 
+    {
+        Firestore.instance.collection("users").document(userID).updateData({"favouriteItems": FieldValue.arrayUnion([itemID])});
     }
 }

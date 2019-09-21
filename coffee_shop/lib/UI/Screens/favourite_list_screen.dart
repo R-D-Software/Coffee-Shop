@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/dummy_data.dart';
+import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/static_data.dart';
+import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/FavouriteListComponents/favourite_list_item.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +23,10 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
     @override
     Widget build(BuildContext context) 
     {
-        List<ShopItem> favourites;
-        favourites = DummyData.items;
-        
         MediaQueryData mData = MediaQuery.of(context);       
-        
-        if(mData.orientation == Orientation.portrait)
-        {
-            height = mData.size.height;
-        }
-        else
-        {
-            height = mData.size.width;
-        }
+        height = mData.size.height;
+        List<ShopItem> favourites;
+        favourites = DummyData.items;       
 
         return Scaffold
         (
@@ -40,11 +37,7 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
             ),
             body: Container
             (
-                child: favourites.isNotEmpty ?
-                _getFavouriteList(favourites)
-                :
-                _getEmptyList(),
-
+                child: makeFavListBody(),
                 decoration: RenaoBoxDecoration.builder(context)
             ),
         );
@@ -67,10 +60,48 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
         return Column
         (
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>
-            [
-                
-            ],
+            children: <Widget> [],
+        );
+    }
+
+    Widget makeFavListBody()
+    {
+        return StreamBuilder
+        (
+            stream: UserDB.getUser(StaticData.currentUser.userID),
+            builder: (context, snapshot) 
+            {
+                User user = snapshot.data as User;
+
+                if(user == null) return Container();
+
+                return StreamBuilder
+                (
+                    stream: ShopItemDB.getShopItems(),
+                    builder: (context1, snapshot1) 
+                    {
+                        QuerySnapshot items = snapshot1.data as QuerySnapshot;
+                        List<ShopItem> favouriteItems = new List<ShopItem>();
+
+                        if(items == null) return Container();
+
+                        for(String itemID in user.favouriteItems)
+                        {
+                            for(DocumentSnapshot doc in items.documents)
+                            {
+                                if(itemID == doc.documentID)
+                                {
+                                    favouriteItems.add(ShopItem.fromDocument(doc, doc.documentID));
+                                }
+                            }
+                        }
+
+                        if(favouriteItems.isNotEmpty) 
+                            return _getFavouriteList(favouriteItems);
+                        else return _getEmptyList();
+                    }
+                );
+            }
         );
     }
 }

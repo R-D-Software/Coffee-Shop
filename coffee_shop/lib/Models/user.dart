@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
-import 'package:coffee_shop/Business/auth.dart';
+import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/language.dart';
 
 class User 
@@ -10,24 +12,36 @@ class User
     final String email;
     final String profilePictureURL;
     Language userDefinedLanguage;
-
+    List<String> favouriteItems = new List<String>();
+    //List<FavouriteItem> favItems = new List<FavouriteItem>();
+  
     User(
     {
         this.userID,
         this.firstName,
         this.email,
         this.profilePictureURL,
-        this.userDefinedLanguage
+        this.userDefinedLanguage,
+        //this.favItems,
+        this.favouriteItems
     });
 
     Map<String, Object> toJson() 
-    {
+    {   //DONT DELETE IT YET
+        /*List<Object> boj = new List<Object>();
+
+        for(FavouriteItem item in favItems)
+        {
+            boj.add({"itemID": item.itemID, "temperature": item.temperature, "sugar": item.sugar});
+        }*/
+
         return{
         'userID': userID,
         'firstName': firstName,
         'email': email == null ? '' : email,
         'profilePictureURL': profilePictureURL,
         'userDefinedLanguage': _getUserDefinedLanguageToString(),
+        'favouriteItems': favouriteItems,
         'appIdentifier': 'Renao'
         };
     }
@@ -41,8 +55,23 @@ class User
             email: doc['email'],
             userDefinedLanguage: _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
             profilePictureURL: doc['profilePictureURL'],
+            favouriteItems: List.from(doc["favouriteItems"]),
         );
+
         return user;
+    }
+
+    static List<FavouriteItem> getFavouriteItems(List<Object> objects)
+    {
+        List<FavouriteItem> retVal = new List<FavouriteItem>();
+
+        for(Object object in objects)
+        {
+            Map jsonData = Map.from(object);
+            retVal.add(new FavouriteItem(itemID: jsonData["itemID"], sugar: jsonData["sugar"], temperature: jsonData["temperature"]));
+        }
+
+        return retVal;
     }
 
     factory User.fromDocument(DocumentSnapshot doc) 
