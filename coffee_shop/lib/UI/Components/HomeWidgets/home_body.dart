@@ -59,24 +59,11 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       }
     }
 
-    return ListView(
-      children: <Widget>[
-        Cart(DummyData.empty),
-        buildFavouriteItemSlider(),
-        ItemSlider(
-            name: LanguageModel.coffee[LanguageModel.currentLanguage],
-            items: coffeeItems),
-        ItemSlider(
-            name: LanguageModel.sandwich[LanguageModel.currentLanguage],
-            items: sandwichItems),
-        ItemSlider(
-            name: LanguageModel.todaysDeals[LanguageModel.currentLanguage],
-            items: dealItems),
-      ],
-    );
+    return buildItemSliders(coffeeItems, sandwichItems, dealItems);
   }
 
-  Widget buildFavouriteItemSlider() {
+  Widget buildItemSliders(List<ShopItem> coffeeItems,
+      List<ShopItem> sandwichItems, List<ShopItem> dealItems) {
     return StreamBuilder(
         stream: UserDB.getCurrentUser().asStream(),
         builder: (context, snapshot) {
@@ -92,7 +79,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 QuerySnapshot items = snapshot1.data as QuerySnapshot;
                 List<ShopItem> favouriteItems = new List<ShopItem>();
 
-                if (items == null || user == null) return Container();
+                if (items == null) return Container();
 
                 for (String itemID in user.favouriteItems) {
                   for (DocumentSnapshot doc in items.documents) {
@@ -102,13 +89,29 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                     }
                   }
                 }
-
-                return ItemSlider(
-                    name:
-                        LanguageModel.favourites[LanguageModel.currentLanguage],
-                    icon: Icons.star,
-                    items: favouriteItems,
-                    onIconClick: favouriteIconClick);
+                return ListView(
+                  children: <Widget>[
+                    Cart(DummyData.empty),
+                    ItemSlider(
+                        name: LanguageModel
+                            .favourites[LanguageModel.currentLanguage],
+                        icon: Icons.star,
+                        items: favouriteItems,
+                        onIconClick: favouriteIconClick),
+                    ItemSlider(
+                        name:
+                            LanguageModel.coffee[LanguageModel.currentLanguage],
+                        items: coffeeItems),
+                    ItemSlider(
+                        name: LanguageModel
+                            .sandwich[LanguageModel.currentLanguage],
+                        items: sandwichItems),
+                    ItemSlider(
+                        name: LanguageModel
+                            .todaysDeals[LanguageModel.currentLanguage],
+                        items: dealItems),
+                  ],
+                );
               });
         });
   }
