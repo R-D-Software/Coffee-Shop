@@ -18,6 +18,8 @@ class ItemViewScreen extends StatelessWidget
     double height = 0;
     String itemID;
 
+    int leavingCounter = 0;
+
     @override
     Widget build(BuildContext context) 
     {
@@ -42,26 +44,6 @@ class ItemViewScreen extends StatelessWidget
 
         _addButton = _getAddButton(context);
 
-        return StreamBuilder
-        (
-            stream: ShopItemDB.getShopItemByID(itemID),
-            builder: (context, snapshot) 
-            {
-                if (snapshot.connectionState == ConnectionState.waiting) 
-                {
-                    return RenaoWaitingRing(); //Penis Ring
-                } 
-                else
-                {
-                    return makeItemViewBody(snapshot, context);
-                }
-            }
-        );
-    }
-
-    Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context)
-    {
-        _item = snapshot.data;
 
         return Scaffold
         (
@@ -73,94 +55,118 @@ class ItemViewScreen extends StatelessWidget
                 (
                     decoration: RenaoBoxDecoration.builder(context),
                     height: height - _appBar.preferredSize.height,
-                    child: Column
+                    child: StreamBuilder
                     (
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>
-                        [
-                            Row
-                            (
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>
-                                [
-                                    Icon(Icons.keyboard_arrow_left),
-                                    StrokedText
-                                    (
-                                        text: _item.name,
-                                        color: Colors.white,
-                                        size: 25,
-                                    ),
-                                    Icon(Icons.keyboard_arrow_right),
-                                ],
-                            ),
-                            Stack
-                            (
-                                alignment: Alignment.topCenter,
-                                children: <Widget>
-                                [
-                                    Container
-                                    (
-                                        margin: EdgeInsets.only(top: 20, bottom: 25),
-                                        width: height*0.35,
-                                        height: height*0.35,
-                                        decoration: new BoxDecoration
-                                        (
-                                            boxShadow:  
-                                            [
-                                                new BoxShadow
-                                                (
-                                                    color: Colors.red,
-                                                    spreadRadius: 2,
-                                                    offset: new Offset(-5.0, 10.0),
-                                                )
-                                            ],
-                                            border: Border.all(color: Theme.of(context).primaryColor, width: 14),
-                                            shape: BoxShape.circle,
-                                            image: new DecorationImage
-                                            (
-                                                fit: BoxFit.fill,
-                                                image: new NetworkImage(_item.imageUrl)
-                                            )
-                                        )
-                                    ),
+                        stream: ShopItemDB.getShopItemByID(itemID),
+                        builder: (context, snapshot) 
+                        {
+                            if(snapshot.connectionState == ConnectionState.active 
+                                || snapshot.connectionState == ConnectionState.waiting) leavingCounter++;        
 
-                                    FavouriteStar(itemID: itemID),
-                                ],
-                            ),
-
-
-                            Container
-                            (
-                                margin: EdgeInsets.only(bottom: 0),
-                                child: StrokedText
-                                (
-                                    text: "Sugar",
-                                    color: Colors.white,
-                                    size: 25,
-                                ),
-                            ),
-
-                            SugarChooser(),
-
-                            Container
-                            (
-                                margin: EdgeInsets.only(bottom: 10),
-                                child: StrokedText
-                                (
-                                    text: "Temperature",
-                                    color: Colors.white,
-                                    size: 25,
-                                ),
-                            ),
-
-                            TemperatureChooser(),
-
-                            _addButton,
-                        ],
+                            if(leavingCounter == 2)
+                            {
+                                return makeItemViewBody(snapshot, context);
+                            }
+                            else
+                            {
+                                return Container();
+                            }
+                        }
                     ),
                     width: double.infinity,
                 ),
-            ),
+            )
+        );
+    }
+
+    Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context)
+    {
+        _item = snapshot.data;
+
+        return Column
+        (
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>
+            [
+                Row  
+                (
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>
+                    [
+                        Icon(Icons.keyboard_arrow_left),
+                        StrokedText
+                        (
+                            text: _item.name,
+                            color: Colors.white,
+                            size: 25,
+                        ),
+                        Icon(Icons.keyboard_arrow_right),
+                    ],
+                ),
+                Stack
+                (
+                    alignment: Alignment.topCenter,
+                    children: <Widget>
+                    [
+                        Container
+                        (
+                            margin: EdgeInsets.only(top: 20, bottom: 25),
+                            width: height*0.35,
+                            height: height*0.35,
+                            decoration: new BoxDecoration
+                            (
+                                boxShadow:  
+                                [
+                                    new BoxShadow
+                                    (
+                                        color: Colors.red,
+                                        spreadRadius: 2,
+                                        offset: new Offset(-5.0, 10.0),
+                                    )
+                                ],
+                                border: Border.all(color: Theme.of(context).primaryColor, width: 14),
+                                shape: BoxShape.circle,
+                                image: new DecorationImage
+                                (
+                                    fit: BoxFit.fill,
+                                    image: new NetworkImage(_item.imageUrl)
+                                )
+                            )
+                        ),
+
+                        FavouriteStar(itemID: itemID),
+                    ],
+                ),
+
+
+                Container
+                (
+                    margin: EdgeInsets.only(bottom: 0),
+                    child: StrokedText
+                    (
+                        text: "Sugar",
+                        color: Colors.white,
+                        size: 25,
+                    ),
+                ),
+
+                SugarChooser(),
+
+                Container
+                (
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: StrokedText
+                    (
+                        text: "Temperature",
+                        color: Colors.white,
+                        size: 25,
+                    ),
+                ),
+
+                TemperatureChooser(),
+
+                _addButton,              
+            ]
         );
     }
        

@@ -3,11 +3,13 @@ import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/dummy_data.dart';
 import 'package:coffee_shop/Models/favourite_item.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/FavouriteListComponents/favourite_list_item.dart';
+import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
 class FavouriteListScreen extends StatefulWidget 
@@ -24,9 +26,7 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
     Widget build(BuildContext context) 
     {
         MediaQueryData mData = MediaQuery.of(context);       
-        height = mData.size.height;
-        List<ShopItem> favourites;
-        favourites = DummyData.items;       
+        height = mData.size.height;      
 
         return Scaffold
         (
@@ -57,11 +57,47 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
 
     Widget _getEmptyList()
     {
+        double width = MediaQuery.of(context).size.width;
         return Container
         (
             child: Center
             (
-                child: Text("NINCS"),
+                child: Column
+                (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>
+                    [
+                        ClipRRect
+                        (
+                            borderRadius: BorderRadius.circular(200.0),
+                            child: Card
+                            (
+                                elevation: 2,
+                                child: Image.asset("assets/images/kav.jpg", width: width*0.75,),
+                            ),
+                        ),
+                        SizedBox(height: 10,),
+                        StrokedText
+                        (
+                            text: LanguageModel.yourListIsEmpty[LanguageModel.currentLanguage],
+                            size: 30,
+                        ),
+                        Container
+                        (
+                            margin: EdgeInsets.only(left: width*0.11, right: width*0.11, top: 25),
+                            child: Text
+                            (
+                                LanguageModel.addToFavourite[LanguageModel.currentLanguage],
+                                textAlign: TextAlign.center,
+                                style: TextStyle
+                                (
+                                    color: Colors.white70
+                                ),
+                            ),
+                        ),
+                        SizedBox(height: width*0.07)
+                    ],
+                ),
             ),
         );
     }

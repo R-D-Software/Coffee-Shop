@@ -1,4 +1,6 @@
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +13,17 @@ class FavouriteListItem extends StatelessWidget
     @override
     Widget build(BuildContext context) 
     {
-        return Stack
+        return GestureDetector
         (
-            children: <Widget>
-            [
-                _getInfoRow(context),
-                _getPicture(context),
-            ],
+            onTap: (){_navigateToItemView(context, this.item.itemID);},
+            child: Stack
+            (
+                children: <Widget>
+                [
+                    _getInfoRow(context),
+                    _getPicture(context),
+                ],
+            ),
         );
     }
 
@@ -66,7 +72,11 @@ class FavouriteListItem extends StatelessWidget
                 children: <Widget>
                 [
                     StrokedText(text: item.name, color: Colors.white, size:20),
-                    Icon(Icons.delete)
+                    GestureDetector
+                    (
+                        onTap: (){deleteItemFromFavouriteList(item.itemID);},
+                        child: Icon(Icons.delete),
+                    )
                 ],
             ),
             decoration: BoxDecoration
@@ -76,5 +86,15 @@ class FavouriteListItem extends StatelessWidget
                 borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), topRight: Radius.circular(10))
             ),
         );
+    }
+
+    void _navigateToItemView(BuildContext context, String itemID)
+    {
+        Navigator.of(context).pushNamed("/main/itemview", arguments: {"itemID": itemID});
+    }
+
+    void deleteItemFromFavouriteList(String itemID)
+    {
+        UserDB.removeItemFromFavourites(itemID, StaticData.currentUser.userID);
     }
 }

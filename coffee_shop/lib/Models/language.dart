@@ -135,7 +135,19 @@ class LanguageModel
         Language.ENGLISH: "Today's Deals",
         Language.HUNGARIAN: "Napi ajánlat"
     };
-    
+
+        
+    static Map<Language, String> addToFavourite = const
+    {
+        Language.ENGLISH: "To add something to your favourite list, please tap on the star icon in the product view.",
+        Language.HUNGARIAN: "Ahhoz, hogy a kedvencek listához tudd adni egy terméket, a termék képe fölötti csillagra kell kattintanod."
+    };  
+
+    static Map<Language, String> yourListIsEmpty = const
+    {
+        Language.ENGLISH: "Your list is empty",
+        Language.HUNGARIAN: "A listád üres"
+    }; 
 
     static Future init(BuildContext context) async 
     {
