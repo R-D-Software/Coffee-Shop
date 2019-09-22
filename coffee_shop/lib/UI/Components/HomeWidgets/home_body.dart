@@ -92,7 +92,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 QuerySnapshot items = snapshot1.data as QuerySnapshot;
                 List<ShopItem> favouriteItems = new List<ShopItem>();
 
-                if (items == null) return Container();
+                if (items == null || user == null) return Container();
 
                 for (String itemID in user.favouriteItems) {
                   for (DocumentSnapshot doc in items.documents) {

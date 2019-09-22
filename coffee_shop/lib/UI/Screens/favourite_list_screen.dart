@@ -57,10 +57,12 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
 
     Widget _getEmptyList()
     {
-        return Column
+        return Container
         (
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget> [],
+            child: Center
+            (
+                child: Text("NINCS"),
+            ),
         );
     }
 
@@ -73,7 +75,10 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
             {
                 User user = snapshot.data as User;
 
-                if(user == null) return Container();
+                if(user == null || snapshot.connectionState == ConnectionState.waiting) 
+                {
+                    return Container();
+                }
 
                 return StreamBuilder
                 (

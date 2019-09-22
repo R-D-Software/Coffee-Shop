@@ -55,7 +55,7 @@ class User
             email: doc['email'],
             userDefinedLanguage: _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
             profilePictureURL: doc['profilePictureURL'],
-            favouriteItems: List.from(doc["favouriteItems"]),
+            favouriteItems: doc["favouriteItems"] != null ? List.from(doc["favouriteItems"]) : new List<String>(),
         );
 
         return user;
