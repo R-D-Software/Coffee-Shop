@@ -1,40 +1,32 @@
-import 'package:coffee_shop/Models/CartItem.dart';
+import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/circle_card_picture.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_card.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
-class CartListItem extends StatefulWidget {
+class CartListItem extends StatelessWidget {
   final CoffeeItem item;
   final double height = 100;
+  Function refreshList;
 
-  CartListItem({@required this.item});
+  CartListItem(this.refreshList, {@required this.item});
 
-  @override
-  _CartListItemState createState() => _CartListItemState();
-}
-
-class _CartListItemState extends State<CartListItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Card(
-        margin: EdgeInsets.only( bottom: 30, left: 10),
+        margin: EdgeInsets.only(bottom: 30, left: 10),
         color: Color.fromRGBO(255, 255, 255, 0),
-        elevation: 11,
+        elevation: 0,
         child: InkWell(
-          onTap: () => Navigator.of(context).pushNamed("/main/itemview"),
+          onTap: () => Navigator.of(context)
+              .pushNamed("/main/itemview", arguments: {"itemID": item.itemID}),
           child: Stack(
             children: <Widget>[
               _getInfoRow(context),
-              Container(
-                margin: EdgeInsets.only(top: 5, left: 10),
-                child: CircleCardPicture(
-                  radius: 80,
-                  imagePath: "assets/images/kav.jpg",
-                ),
-              ),
-              _buildIcon(),
+              _buildCirclePicture(),
+              _buildIcon(context),
             ],
           ),
         ),
@@ -42,13 +34,25 @@ class _CartListItemState extends State<CartListItem> {
     );
   }
 
-  Widget _buildIcon() {
+  Container _buildCirclePicture() {
     return Container(
-      margin: EdgeInsets.only(left: 280, top: 20),
+      margin: EdgeInsets.only(top: 5, left: 10),
+      child: CircleCardPicture(
+        radius: 80,
+        imagePath: "assets/images/kav.jpg",
+      ),
+    );
+  }
+
+  Widget _buildIcon(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerRight,
+      margin: EdgeInsets.only(right: 10, top: 20),
       child: IconButton(
         icon: Icon(Icons.delete),
         onPressed: () {
-          print('kuka');
+          CartItemDB.deleteItemFromCart(item);
+          refreshList();
         },
         padding: EdgeInsets.all(10),
         iconSize: 40,
@@ -59,7 +63,7 @@ class _CartListItemState extends State<CartListItem> {
   Widget _getInfoRow(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 20,
-      height: widget.height,
+      height: height,
       padding: EdgeInsets.only(left: 80),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,16 +74,16 @@ class _CartListItemState extends State<CartListItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 StrokedText(
-                    text: "${widget.item.name}",
+                    text: "${item.name}",
                     color: Theme.of(context).primaryColor,
                     size: 20),
                 StrokedText(
-                    text: "${widget.item.temperature.temperature}",
-                    color: widget.item.temperature.color,
+                    text: "${item.temperature.temperature}",
+                    color: item.temperature.color,
                     size: 16),
                 _getIcons(context),
                 StrokedText(
-                    text: "${widget.item.price * widget.item.itemCount} Ft",
+                    text: "${item.price} Ft",
                     color: Theme.of(context).primaryColor,
                     size: 14),
               ],
@@ -90,13 +94,13 @@ class _CartListItemState extends State<CartListItem> {
       decoration: BoxDecoration(
           border: Border.all(color: Colors.white, width: 2),
           color: Color.fromRGBO(189, 150, 150, 1),
-          borderRadius: BorderRadius.all(Radius.circular(widget.height / 2))),
+          borderRadius: BorderRadius.all(Radius.circular(height / 2))),
     );
   }
 
   Widget _getIcons(BuildContext context) {
     List<Widget> sugarIcons = List();
-    for (int i = 0; i < widget.item.sugar; i++) {
+    for (int i = 0; i < item.sugar; i++) {
       sugarIcons.add(SugarCard(
         width: 15,
         height: 15,

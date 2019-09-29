@@ -2,15 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/dummy_data.dart';
-import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
-import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
 import 'package:flutter/material.dart';
 
-import 'cart.dart';
+import 'cart_on_homescreen.dart';
 import 'item_slider.dart';
 
 class HomeScreenBody extends StatefulWidget {
@@ -91,7 +89,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 }
                 return ListView(
                   children: <Widget>[
-                    Cart(DummyData.empty),
+                    CartOnHomeScreen(DummyData.empty),
                     ItemSlider(
                         name: LanguageModel
                             .favourites[LanguageModel.currentLanguage],
