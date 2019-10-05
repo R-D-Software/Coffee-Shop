@@ -4,7 +4,6 @@ import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
 
 class CoffeeItem extends ShopItem {
-  String documentID;
   Temperature temperature;
   int sugar;
 

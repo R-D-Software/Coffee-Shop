@@ -3,8 +3,6 @@ import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
 
 class FoodItem extends ShopItem {
-  String documentID;
-
   FoodItem({
     @required ShopItem shopItem,
   }) : super(
