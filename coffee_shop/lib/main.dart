@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'UI/Screens/coffee_item_view_screen.dart';
+import 'UI/Screens/food_item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
 import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
         '/signin': (BuildContext context) => LogInScreen(),
         '/signup': (BuildContext context) => SignUpScreen(),
         '/main': (BuildContext context) => HomeScreen(),
-        '/main/itemview': (BuildContext context) => CoffeeItemViewScreen(),
+        '/main/itemview/coffee': (BuildContext context) => CoffeeItemViewScreen(),
+        '/main/itemview/food': (BuildContext context) => FoodItemViewScreen(),
         '/main/favourites': (BuildContext context) => FavouriteListScreen(),
         '/main/wallet': (BuildContext context) => WalletScreen(),
         "/main/settings": (BuildContext context) => SettingsScreen(),
@@ -52,8 +54,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),
           accentColor: Color.fromRGBO(171, 122, 91, 1),
-          textTheme:
-              TextTheme(body1: TextStyle(fontFamily: "Roboto", fontSize: 20)),
+          textTheme: TextTheme(body1: TextStyle(fontFamily: "Roboto", fontSize: 20)),
           iconTheme: IconThemeData(color: Colors.white, opacity: 1, size: 39)),
       home: RootScreen(),
     );

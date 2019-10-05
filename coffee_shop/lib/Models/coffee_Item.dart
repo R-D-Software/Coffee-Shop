@@ -1,30 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Exceptions/RenaoException.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
 
 class CoffeeItem extends ShopItem {
-  String documentID;
   Temperature temperature;
   int sugar;
 
-  CoffeeItem(
-      {@required ShopItem shopItem,
-      @required this.temperature,
-      @required this.documentID,
-      @required this.sugar})
+  CoffeeItem({@required ShopItem shopItem, @required this.temperature, @required this.sugar})
       : super(
-            itemID: shopItem.itemID,
+            documentID: shopItem.documentID,
             imageUrl: shopItem.imageUrl,
             name: shopItem.name,
             price: shopItem.price,
             description: shopItem.description,
-            itemType: shopItem.itemType,
+            itemType: "coffee",
             onSale: shopItem.onSale);
 
   Map<String, Object> toJson() {
     return {
       'name': name,
-      'itemID': itemID,
       'price': price,
       'imageUrl': imageUrl,
       'description': description,
@@ -37,10 +32,13 @@ class CoffeeItem extends ShopItem {
   }
 
   factory CoffeeItem.fromJson(Map<String, Object> doc, String documentID) {
+    if (doc['sugar'] == null || doc['temperature'] == null) {
+      throw RenaoException.notCoffeeItemException();
+    }
     CoffeeItem item = CoffeeItem(
       shopItem: ShopItem(
+        documentID: documentID,
         name: doc['name'],
-        itemID: doc['itemID'],
         price: doc['price'],
         imageUrl: doc['imageUrl'],
         description: doc['description'],
@@ -49,7 +47,6 @@ class CoffeeItem extends ShopItem {
       ),
       temperature: _setTemperature(doc['temperature']),
       sugar: doc['sugar'],
-      documentID: documentID,
     );
     return item;
   }

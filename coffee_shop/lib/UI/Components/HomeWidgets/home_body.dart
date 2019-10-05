@@ -42,11 +42,11 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       ShopItem currentItem = ShopItem.fromDocument(ds, ds.documentID);
 
       switch (currentItem.itemType) {
-        case "Coffee":
+        case "coffee":
           coffeeItems.add(currentItem);
           break;
 
-        case "Breakfast":
+        case "food":
           sandwichItems.add(currentItem);
           break;
       }
@@ -97,23 +97,13 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                   children: <Widget>[
                     //CartOnHomeScreen(DummyData.empty),
                     ItemSlider(
-                        name: LanguageModel
-                            .favourites[LanguageModel.currentLanguage],
+                        name: LanguageModel.favourites[LanguageModel.currentLanguage],
                         icon: Icons.star,
                         items: favouriteItems,
                         onIconClick: favouriteIconClick),
-                    ItemSlider(
-                        name:
-                            LanguageModel.coffee[LanguageModel.currentLanguage],
-                        items: coffeeItems),
-                    ItemSlider(
-                        name: LanguageModel
-                            .sandwich[LanguageModel.currentLanguage],
-                        items: sandwichItems),
-                    ItemSlider(
-                        name: LanguageModel
-                            .todaysDeals[LanguageModel.currentLanguage],
-                        items: dealItems),
+                    ItemSlider(name: LanguageModel.coffee[LanguageModel.currentLanguage], items: coffeeItems),
+                    ItemSlider(name: LanguageModel.sandwich[LanguageModel.currentLanguage], items: sandwichItems),
+                    ItemSlider(name: LanguageModel.todaysDeals[LanguageModel.currentLanguage], items: dealItems),
                   ],
                 );
               });
