@@ -24,11 +24,6 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
             (
                 children: <Widget>
                 [
-                    Container
-                    (
-                        child: StrokedText(text: LanguageModel.purchaseHistory[LanguageModel.currentLanguage], size: 20),
-                        margin: EdgeInsets.all(10),
-                    ),
                     getHistoryElement(context),
                     getHistoryElement(context),
                     getHistoryElement(context),

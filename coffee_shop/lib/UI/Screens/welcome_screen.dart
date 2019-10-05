@@ -107,8 +107,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: 14.0, horizontal: 40.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 14.0, horizontal: 40.0),
             child: RenaoFlatButton(
               title: "Continue with Facebook",
               fontSize: 22,
@@ -136,7 +136,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       FacebookLoginResult facebookLoginResult = await facebookLogin
           .logInWithReadPermissions(['email', 'public_profile']);
       FacebookAccessToken myToken = facebookLoginResult.accessToken;
-      AuthCredential credential= FacebookAuthProvider.getCredential(accessToken: myToken.token);
+      AuthCredential credential =
+          FacebookAuthProvider.getCredential(accessToken: myToken.token);
       switch (facebookLoginResult.status) {
         case FacebookLoginStatus.loggedIn:
           Auth.signInWithFacebook(credential).then((uid) {

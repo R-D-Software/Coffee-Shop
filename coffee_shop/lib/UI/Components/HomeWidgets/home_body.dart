@@ -7,7 +7,7 @@ import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:flutter/material.dart';
 
-import 'cart.dart';
+import 'cart_on_homescreen.dart';
 import 'item_slider.dart';
 
 class HomeScreenBody extends StatefulWidget {
@@ -95,7 +95,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 }
                 return ListView(
                   children: <Widget>[
-                    Cart(DummyData.empty),
+                    //CartOnHomeScreen(DummyData.empty),
                     ItemSlider(
                         name: LanguageModel
                             .favourites[LanguageModel.currentLanguage],

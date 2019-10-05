@@ -161,6 +161,12 @@ class LanguageModel
         Language.HUNGARIAN: "Gratulálunk, nyertél!"
     }; 
 
+    static Map<Language, String> toastAddToCart = const
+    {
+        Language.ENGLISH: " was added to your cart",
+        Language.HUNGARIAN: " hozzáadásra került"
+    }; 	
+
     static Future init(BuildContext context) async 
     {
         User user;
