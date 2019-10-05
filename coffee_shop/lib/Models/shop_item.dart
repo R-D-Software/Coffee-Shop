@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class ShopItem {
+  final String documentID;
   final String name;
-  final String itemID;
   final int price;
   final String imageUrl;
   final String description;
@@ -11,8 +11,8 @@ class ShopItem {
   final bool onSale;
 
   ShopItem({
+    @required this.documentID,
     @required this.name,
-    @required this.itemID,
     @required this.price,
     @required this.imageUrl,
     @required this.description,
@@ -23,7 +23,6 @@ class ShopItem {
   Map<String, Object> toJson() {
     return {
       'name': name,
-      'itemID': itemID,
       'price': price,
       'imageUrl': imageUrl,
       'description': description,
@@ -35,8 +34,8 @@ class ShopItem {
 
   factory ShopItem.fromJson(Map<String, Object> doc, String documentID) {
     ShopItem item = new ShopItem(
+      documentID: documentID,
       name: doc['name'],
-      itemID: doc['itemID'],
       price: doc['price'],
       imageUrl: doc['imageUrl'],
       description: doc['description'],

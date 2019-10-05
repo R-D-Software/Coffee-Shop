@@ -43,11 +43,11 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       ShopItem currentItem = ShopItem.fromDocument(ds, ds.documentID);
 
       switch (currentItem.itemType) {
-        case "Coffee":
+        case "coffee":
           coffeeItems.add(currentItem);
           break;
 
-        case "Breakfast":
+        case "food":
           sandwichItems.add(currentItem);
           break;
       }
@@ -60,8 +60,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     return buildItemSliders(coffeeItems, sandwichItems, dealItems);
   }
 
-  Widget buildItemSliders(List<ShopItem> coffeeItems,
-      List<ShopItem> sandwichItems, List<ShopItem> dealItems) {
+  Widget buildItemSliders(List<ShopItem> coffeeItems, List<ShopItem> sandwichItems, List<ShopItem> dealItems) {
     return StreamBuilder(
         stream: UserDB.getCurrentUser().asStream(),
         builder: (context, snapshot) {
@@ -82,8 +81,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 for (String itemID in user.favouriteItems) {
                   for (DocumentSnapshot doc in items.documents) {
                     if (itemID == doc.documentID) {
-                      favouriteItems
-                          .add(ShopItem.fromDocument(doc, doc.documentID));
+                      favouriteItems.add(ShopItem.fromDocument(doc, doc.documentID));
                     }
                   }
                 }
@@ -91,23 +89,13 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                   children: <Widget>[
                     CartOnHomeScreen(DummyData.empty),
                     ItemSlider(
-                        name: LanguageModel
-                            .favourites[LanguageModel.currentLanguage],
+                        name: LanguageModel.favourites[LanguageModel.currentLanguage],
                         icon: Icons.star,
                         items: favouriteItems,
                         onIconClick: favouriteIconClick),
-                    ItemSlider(
-                        name:
-                            LanguageModel.coffee[LanguageModel.currentLanguage],
-                        items: coffeeItems),
-                    ItemSlider(
-                        name: LanguageModel
-                            .sandwich[LanguageModel.currentLanguage],
-                        items: sandwichItems),
-                    ItemSlider(
-                        name: LanguageModel
-                            .todaysDeals[LanguageModel.currentLanguage],
-                        items: dealItems),
+                    ItemSlider(name: LanguageModel.coffee[LanguageModel.currentLanguage], items: coffeeItems),
+                    ItemSlider(name: LanguageModel.sandwich[LanguageModel.currentLanguage], items: sandwichItems),
+                    ItemSlider(name: LanguageModel.todaysDeals[LanguageModel.currentLanguage], items: dealItems),
                   ],
                 );
               });

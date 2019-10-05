@@ -1,11 +1,11 @@
-import 'package:coffee_shop/Business/Cart/cart.dart';
-import 'package:coffee_shop/Business/Cart/cart_bloc.dart';
-import 'package:coffee_shop/Models/coffee_Item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
+import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../stroked_text.dart';
 import 'cart_list_item.dart';
@@ -28,49 +28,22 @@ class _CartBodyState extends State<CartBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider<CartBloc>(
-        builder: (context) => CartBloc(),
-        child: Container(
-          decoration: RenaoBoxDecoration.builder(context),
-          child: BlocListener(
-            bloc: BlocProvider.of<CartBloc>(context),
-            listener: (BuildContext context, CartState state) {},
-            child: BlocBuilder(
-              bloc: BlocProvider.of<CartBloc>(context),
-              builder: (BuildContext context, CartState state) {
-                if (state is CartInitial) {
-                  getCoffees();
-                  return Container();
-                } else if (state is CartLoading) {
-                  return _buildLoading();
-                } else if (state is CartLoaded) {
-                  return buildScreen(state.cart);
-                } else {
-                  return Container();
-                }
-              },
-            ),
-          ),
-        ),
+      body: Container(
+        decoration: RenaoBoxDecoration.builder(context),
+        child: _buildScreen(),
       ),
     );
   }
 
-  Widget _getCoffeeList(List<CoffeeItem> items, Cart cart) {
+  Widget _getCartItems(List<ShopItem> items) {
     return ListView(
       children: items.map((f) {
         return Container(
-          margin: f == items.first
-              ? EdgeInsets.only(top: 30)
-              : EdgeInsets.only(top: 0),
-          child: CartListItem(getCoffees, item: f),
+          margin: f == items.first ? EdgeInsets.only(top: 30) : EdgeInsets.only(top: 0),
+          child: CartListItem(item: f),
         );
       }).toList(),
     );
-  }
-
-  Widget _buildLoading() {
-    return RenaoWaitingRing();
   }
 
   Widget _getEmptyList() {
@@ -80,47 +53,62 @@ class _CartBodyState extends State<CartBody> {
     );
   }
 
-  void getCoffees() {
-    final cartBloc = BlocProvider.of<CartBloc>(context);
-    cartBloc.dispatch(GetCoffeeItems());
-  }
+  Widget _buildScreen() {
+    return StreamBuilder(
+        stream: CartItemDB.fetchCartItems(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) return RenaoWaitingRing();
 
-  Widget buildScreen(Cart cart) {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: MediaQuery.of(context).size.height -
-              widget.bottomNavBarHeight -
-              widget.bottomBarHeight,
-          child: cart.shopItems.isNotEmpty
-              ? _getCoffeeList(cart.shopItems, cart)
-              : _getEmptyList(),
-        ),
-        Container(
-          height: widget.bottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          QuerySnapshot shopItems = snapshot.data as QuerySnapshot;
+          List<ShopItem> cartItems = [];
+
+          for (DocumentSnapshot doc in shopItems.documents) {
+            ShopItem item = DecideItemType.getItemByClassFromFireStore(doc);
+            cartItems.add(item);
+          }
+
+          if (shopItems == null) return Container();
+
+          return Column(
             children: <Widget>[
-              StrokedText(
-                text: "Végösszeg: ${cart.sum}",
-                size: 20,
-                color: Theme.of(context).primaryColor,
+              Container(
+                height: MediaQuery.of(context).size.height - widget.bottomNavBarHeight - widget.bottomBarHeight,
+                child: cartItems.isNotEmpty ? _getCartItems(cartItems) : _getEmptyList(),
               ),
-              RenaoFlatButton(
-                title: "Időpont",
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                textColor: Theme.of(context).primaryColor,
-                onPressed: () {
-                  print("időpont");
-                },
-                borderColor: Colors.black12,
-                borderWidth: 2,
+              Container(
+                height: widget.bottomBarHeight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    StrokedText(
+                      text: "Végösszeg: ${getTotal(cartItems)}",
+                      size: 20,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    RenaoFlatButton(
+                      title: "Időpont",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      textColor: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        print("időpont");
+                      },
+                      borderColor: Colors.black12,
+                      borderWidth: 2,
+                    ),
+                  ],
+                ),
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          );
+        });
+  }
+
+  int getTotal(List<ShopItem> cartItems) {
+    int total = 0;
+    for (ShopItem item in cartItems) {
+      total += item.price;
+    }
+    return total;
   }
 }
