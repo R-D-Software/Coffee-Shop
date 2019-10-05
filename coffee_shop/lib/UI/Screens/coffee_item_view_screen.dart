@@ -1,6 +1,7 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/coffee_Item.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
@@ -8,6 +9,7 @@ import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart'
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CoffeeItemViewScreen extends StatelessWidget {
   ShopItem _item;
@@ -112,7 +114,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(bottom: 0),
             child: StrokedText(
-              text: "Sugar",
+              text: LanguageModel.sugar[LanguageModel.currentLanguage],
               color: Colors.white,
               size: 25,
             ),
@@ -121,7 +123,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: StrokedText(
-              text: "Temperature",
+              text: LanguageModel.temperature[LanguageModel.currentLanguage],
               color: Colors.white,
               size: 25,
             ),
@@ -148,6 +150,15 @@ class CoffeeItemViewScreen extends StatelessWidget {
             var coffeeItem = CoffeeItem(
                 shopItem: _item, temperature: Temperature.hot(), sugar: 2);
             CartItemDB.addItemToCart(coffeeItem);
+			Fluttertoast.showToast(
+				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
+				toastLength: Toast.LENGTH_SHORT,
+				gravity: ToastGravity.BOTTOM,
+				timeInSecForIos: 1,
+				backgroundColor: Color.fromRGBO(231, 82, 100, 1),
+				textColor: Colors.white,
+				fontSize: 16.0
+			);
           },
           child: Text(
             "ADD",

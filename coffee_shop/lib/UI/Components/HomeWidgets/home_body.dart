@@ -89,7 +89,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 }
                 return ListView(
                   children: <Widget>[
-                    CartOnHomeScreen(DummyData.empty),
+                    //CartOnHomeScreen(DummyData.empty),
                     ItemSlider(
                         name: LanguageModel
                             .favourites[LanguageModel.currentLanguage],
