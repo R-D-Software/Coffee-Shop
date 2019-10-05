@@ -12,15 +12,16 @@ class RenaoFlatButton extends StatelessWidget {
   final double borderWidth;
 
   RenaoFlatButton(
-      {this.title,
-      this.textColor,
-      this.fontSize,
-      this.fontWeight,
-      this.onPressed,
-      this.color,
-      this.splashColor,
-      this.borderColor,
-      this.borderWidth});
+      {
+      @required this.title,
+      @required this.textColor,
+      @required this.fontSize,
+      @required this.fontWeight,
+      @required this.onPressed,
+      @required this.color,
+      @required this.splashColor,
+      @required this.borderColor,
+      @required this.borderWidth});
 
   @override
   Widget build(BuildContext context) {

@@ -149,6 +149,18 @@ class LanguageModel
         Language.HUNGARIAN: "A listád üres"
     }; 
 
+    static Map<Language, String> addToCart = const
+    {
+        Language.ENGLISH: "Add to Cart",
+        Language.HUNGARIAN: "Kosárba"
+    }; 
+
+    static Map<Language, String> questComplete = const
+    {
+        Language.ENGLISH: "Congratulation, You have completed the quest!",
+        Language.HUNGARIAN: "Gratulálunk, nyertél!"
+    }; 
+
     static Future init(BuildContext context) async 
     {
         User user;
@@ -209,5 +221,25 @@ class LanguageModel
         }
 
         return retLang;
+    }
+
+    static String questOrder(int missingParts, String itemName) 
+    {
+        switch (currentLanguage)
+        {
+            case Language.NOTHING:
+                return "Order " + missingParts.toString() + " more " + itemName + " to get a free one!";
+            break;
+            
+            case Language.ENGLISH:
+                return "Order " + missingParts.toString() + " more " + itemName + " to get a free one!";
+            break;
+
+            case Language.HUNGARIAN:
+               return "Rendelj még " + missingParts.toString() + " " + itemName + "t és egyet ingyen vihetsz!";
+            break;
+        }
+
+        
     }
 }

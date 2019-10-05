@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/favourite_item.dart';
@@ -11,6 +9,7 @@ class User
     final String firstName;
     final String email;
     final String profilePictureURL;
+    int completedQuestPart = 7;
     Language userDefinedLanguage;
     List<String> favouriteItems = new List<String>();
     //List<FavouriteItem> favItems = new List<FavouriteItem>();
@@ -23,7 +22,8 @@ class User
         this.profilePictureURL,
         this.userDefinedLanguage,
         //this.favItems,
-        this.favouriteItems
+        this.favouriteItems,
+        this.completedQuestPart
     });
 
     Map<String, Object> toJson() 
@@ -42,6 +42,7 @@ class User
         'profilePictureURL': profilePictureURL,
         'userDefinedLanguage': _getUserDefinedLanguageToString(),
         'favouriteItems': favouriteItems,
+        'completedQuestPart': completedQuestPart,
         'appIdentifier': 'Renao'
         };
     }
@@ -56,6 +57,7 @@ class User
             userDefinedLanguage: _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
             profilePictureURL: doc['profilePictureURL'],
             favouriteItems: doc["favouriteItems"] != null ? List.from(doc["favouriteItems"]) : new List<String>(),
+            completedQuestPart: doc["completedQuestPart"],
         );
 
         return user;
