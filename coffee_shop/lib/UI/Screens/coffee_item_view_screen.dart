@@ -159,6 +159,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
 				textColor: Colors.white,
 				fontSize: 16.0
 			);
+            Navigator.of(context).pop();             
           },
           child: Text(
             "ADD",

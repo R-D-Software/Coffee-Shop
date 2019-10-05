@@ -1,15 +1,16 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/quest_DB.dart';
+import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/quest.dart';
-import 'package:pimp_my_button/pimp_my_button.dart' as particles;
+import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/QuestWidgets/animated_present.dart';
-import 'package:fireworks/fireworks.dart';
 import 'package:flutter/material.dart';
 
 import '../stroked_text.dart';
@@ -18,12 +19,6 @@ class QuestBody extends StatelessWidget
 {
     double imageHeight = 270;
     Quest quest;
-    Fireworks firework = new  Fireworks
-    (
-        delay: 1,
-        numberOfExplosions: 4,
-        particle: particles.Rectangle3DemoParticle()
-    );
     
     @override
     Widget build(BuildContext context) 
@@ -110,9 +105,20 @@ class QuestBody extends StatelessWidget
                 fontSize: 30,
                 fontWeight: FontWeight.w700,
                 textColor: Colors.white,
-                onPressed: () 
+                onPressed: () async
                 {
-                    print(quest.questItemName);
+                    ShopItem rewardItem;
+                    
+                    await ShopItemDB.getShopItemByID(quest.questItemID).first.then((item)=> rewardItem = item);
+                    
+                    if(rewardItem.itemType == "coffee")
+                    {
+                       //Navigator.of(context).pushNamed("/main/itemview/coffee") 
+                    }
+                    else if (rewardItem.itemType == "food")
+                    {
+                        CartItemDB.addRewardItemToCart(rewardItem);
+                    }
                 },
                 splashColor: Colors.black12,
                 borderColor: Colors.white,

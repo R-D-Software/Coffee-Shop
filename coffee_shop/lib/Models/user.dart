@@ -26,15 +26,6 @@ class User
         this.completedQuestPart
     });
 
-  User(
-      {this.userID,
-      this.firstName,
-      this.email,
-      this.profilePictureURL,
-      this.userDefinedLanguage,
-      //this.favItems,
-      this.favouriteItems});
-
   Map<String, Object> toJson() {
     //DONT DELETE IT YET
     /*List<Object> boj = new List<Object>();
