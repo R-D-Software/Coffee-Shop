@@ -3,24 +3,17 @@ import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dar
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
 import 'package:flutter/material.dart';
 
-class CartScreen extends StatefulWidget {
-  _CartScreenState createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: RenaoScaffold(
-        appBarTitle: "Cart",
-        scaffoldBody: CartBody(),
+    return Scaffold(
+      body: Container(
+        child: RenaoScaffold(
+          appBarTitle: "Cart",
+          scaffoldBody: CartBody(),
+        ),
+        decoration: RenaoBoxDecoration.builder(context),
       ),
-      decoration: RenaoBoxDecoration.builder(context),
     );
   }
 }

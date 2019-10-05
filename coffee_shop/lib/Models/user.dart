@@ -26,9 +26,18 @@ class User
         this.completedQuestPart
     });
 
-    Map<String, Object> toJson() 
-    {   //DONT DELETE IT YET
-        /*List<Object> boj = new List<Object>();
+  User(
+      {this.userID,
+      this.firstName,
+      this.email,
+      this.profilePictureURL,
+      this.userDefinedLanguage,
+      //this.favItems,
+      this.favouriteItems});
+
+  Map<String, Object> toJson() {
+    //DONT DELETE IT YET
+    /*List<Object> boj = new List<Object>();
 
         for(FavouriteItem item in favItems)
         {
@@ -60,90 +69,84 @@ class User
             completedQuestPart: doc["completedQuestPart"],
         );
 
-        return user;
+    return user;
+  }
+
+  static List<FavouriteItem> getFavouriteItems(List<Object> objects) {
+    List<FavouriteItem> retVal = new List<FavouriteItem>();
+
+    for (Object object in objects) {
+      Map jsonData = Map.from(object);
+      retVal.add(new FavouriteItem(
+          itemID: jsonData["itemID"],
+          sugar: jsonData["sugar"],
+          temperature: jsonData["temperature"]));
     }
 
-    static List<FavouriteItem> getFavouriteItems(List<Object> objects)
-    {
-        List<FavouriteItem> retVal = new List<FavouriteItem>();
+    return retVal;
+  }
 
-        for(Object object in objects)
-        {
-            Map jsonData = Map.from(object);
-            retVal.add(new FavouriteItem(itemID: jsonData["itemID"], sugar: jsonData["sugar"], temperature: jsonData["temperature"]));
-        }
+  factory User.fromDocument(DocumentSnapshot doc) {
+    return User.fromJson(doc.data);
+  }
 
-        return retVal;
+  static Language _getUserDefinedLanguageFromString(String lang) {
+    Language retVal;
+    switch (lang) {
+      case "English":
+        retVal = Language.ENGLISH;
+        break;
+
+      case "Magyar":
+        retVal = Language.HUNGARIAN;
+        break;
+
+      case "-1":
+        retVal = Language.NOTHING;
+        break;
     }
 
-    factory User.fromDocument(DocumentSnapshot doc) 
-    {
-        return User.fromJson(doc.data);
-    }
-    
-    static Language _getUserDefinedLanguageFromString(String lang)
-    {
-        Language retVal;
-        switch (lang)
-        {
-            case "English":
-                retVal = Language.ENGLISH;
-            break;
+    return retVal;
+  }
 
-            case "Magyar":
-                retVal = Language.HUNGARIAN;
-            break;
+  String _getUserDefinedLanguageToString() {
+    String retVal = "-1";
 
-            case "-1":
-                retVal = Language.NOTHING;
-            break;
-        }
+    switch (userDefinedLanguage) {
+      case Language.ENGLISH:
+        retVal = "English";
+        break;
 
-        return retVal;
+      case Language.HUNGARIAN:
+        retVal = "Magyar";
+        break;
+
+      case Language.NOTHING:
+      default:
+        retVal = "-1";
+        break;
     }
 
-    String _getUserDefinedLanguageToString()
-    {
-        String retVal = "-1";
-        
-        switch (userDefinedLanguage)
-        {
-            case Language.ENGLISH:
-                retVal = "English";
-            break;
+    return retVal;
+  }
 
-            case Language.HUNGARIAN:
-                retVal = "Magyar";
-            break;
+  void setUserDefinedLanguage(String lang) {
+    switch (lang) {
+      case "English":
+        userDefinedLanguage = Language.ENGLISH;
+        break;
 
-            case Language.NOTHING:
-            default:
-                retVal = "-1";
-            break;
-        }
+      case "Magyar":
+        userDefinedLanguage = Language.HUNGARIAN;
+        break;
 
-        return retVal;
+      case "-1":
+      default:
+        userDefinedLanguage = Language.NOTHING;
+        break;
     }
 
-    void setUserDefinedLanguage(String lang) 
-    {
-        switch (lang)
-        {
-            case "English":
-                userDefinedLanguage = Language.ENGLISH;
-            break;
-
-            case "Magyar":
-                userDefinedLanguage = Language.HUNGARIAN;
-            break;
-
-            case "-1":
-            default:
-                userDefinedLanguage = Language.NOTHING;
-            break;
-        }
-
-        UserDB.modifyUserLanguage(this);
-        LanguageModel.currentLanguage = userDefinedLanguage;
-    }
+    UserDB.modifyUserLanguage(this);
+    LanguageModel.currentLanguage = userDefinedLanguage;
+  }
 }
