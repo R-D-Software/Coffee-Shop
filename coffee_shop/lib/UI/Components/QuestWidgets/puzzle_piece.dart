@@ -108,7 +108,7 @@ Path getPiecePath(Size size, int row, int col, int maxRow, int maxCol)
     final offsetY = row * height;
     final bumpSize = height / 4;
 
-    var path = Path();
+    Path path = Path();
     path.moveTo(offsetX, offsetY);
 
     if (row == 0) 

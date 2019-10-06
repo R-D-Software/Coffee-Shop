@@ -90,6 +90,7 @@ class QuestBody extends StatelessWidget
         );
     }    
 
+    ///TODO: coffee type must be navigated to modify 
     Widget _buildAddToCartButton(BuildContext context)
     {
         if(quest.missingParts() != 0)
