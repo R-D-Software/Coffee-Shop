@@ -1,9 +1,21 @@
-class Quest{
-  int numberOfPiecies;
-  int completedParts;
-  String imgPath;
+import 'package:flutter/foundation.dart';
 
-  Quest(this.numberOfPiecies, this.completedParts, this.imgPath);
+class Quest
+{
+    @required int numberOfPieciesRow;
+    @required int numberOfPieciesColumn;
+    @required int completedParts;
+    @required String questItemID;
+    @required String imgPath;
+    @required String questItemName;
 
-  int get missingParts => numberOfPiecies-completedParts;
+    Quest({this.numberOfPieciesRow, this.numberOfPieciesColumn, this.completedParts, this.imgPath, this.questItemID, this.questItemName});
+
+    int missingParts() 
+    {
+        if(numberOfPieciesColumn == null || numberOfPieciesRow == null || completedParts == null)
+            return 10;
+
+        return (numberOfPieciesColumn*numberOfPieciesRow)-completedParts;
+    }
 }

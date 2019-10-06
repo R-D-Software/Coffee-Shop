@@ -21,20 +21,6 @@ class ItemComponent extends StatelessWidget {
         onTap: () => {_navigateToItemView(context)},
         child: Container(
           child: Stack(children: <Widget>[
-            GestureDetector(
-              child: Container(
-                  width: this.width,
-                  height: this.height,
-                  margin: EdgeInsets.all(7),
-                  child: Align(
-                      alignment: Alignment.topRight,
-                      child: Image.asset(
-                        "assets/images/minussign.png",
-                        width: 24.0,
-                        height: 24.0,
-                      ))),
-              onTap: () => {},
-            ),
             Container(
                 width: this.width,
                 height: this.height,

@@ -5,7 +5,6 @@ import 'package:coffee_shop/Models/dummy_data.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/user.dart';
-import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
 import 'package:flutter/material.dart';
 
 import 'cart_on_homescreen.dart';
@@ -23,7 +22,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
         stream: Firestore.instance.collection("shop_items").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return RenaoWaitingRing(); //Penis Ring
+            return Container(); //Penis Ring
           } else {
             return makeHomeBody(snapshot);
           }
@@ -60,11 +59,15 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     return buildItemSliders(coffeeItems, sandwichItems, dealItems);
   }
 
-  Widget buildItemSliders(List<ShopItem> coffeeItems, List<ShopItem> sandwichItems, List<ShopItem> dealItems) {
+  Widget buildItemSliders(List<ShopItem> coffeeItems,
+      List<ShopItem> sandwichItems, List<ShopItem> dealItems) 
+      {
     return StreamBuilder(
         stream: UserDB.getCurrentUser().asStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        builder: (context, snapshot) 
+        {
+          if (snapshot.connectionState == ConnectionState.waiting) 
+          {
             return Container();
           }
 
@@ -72,22 +75,27 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
 
           return StreamBuilder(
               stream: ShopItemDB.getShopItems(),
-              builder: (context1, snapshot1) {
+              builder: (context1, snapshot1) 
+              {
                 QuerySnapshot items = snapshot1.data as QuerySnapshot;
                 List<ShopItem> favouriteItems = new List<ShopItem>();
 
-                if (items == null) return Container();
+                if (items == null && user.favouriteItems != null) return Container();
 
-                for (String itemID in user.favouriteItems) {
-                  for (DocumentSnapshot doc in items.documents) {
-                    if (itemID == doc.documentID) {
-                      favouriteItems.add(ShopItem.fromDocument(doc, doc.documentID));
+                for (String itemID in user.favouriteItems) 
+                {
+                  for (DocumentSnapshot doc in items.documents) 
+                  {
+                    if (itemID == doc.documentID) 
+                    {
+                      favouriteItems
+                          .add(ShopItem.fromDocument(doc, doc.documentID));
                     }
                   }
                 }
                 return ListView(
                   children: <Widget>[
-                    CartOnHomeScreen(DummyData.empty),
+                    //CartOnHomeScreen(DummyData.empty),
                     ItemSlider(
                         name: LanguageModel.favourites[LanguageModel.currentLanguage],
                         icon: Icons.star,

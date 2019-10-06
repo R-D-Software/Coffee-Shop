@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Exceptions/RenaoException.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
 
@@ -80,22 +81,22 @@ class Temperature {
   Color color;
 
   Temperature.iceCold() {
-    temperature = "Ice cold";
+    temperature = LanguageModel.iceCold[LanguageModel.currentLanguage];
     color = Colors.lightBlueAccent;
   }
 
   Temperature.cold() {
-    temperature = "Cold";
+    temperature = LanguageModel.cold[LanguageModel.currentLanguage];
     color = Colors.blueAccent;
   }
 
   Temperature.warm() {
-    temperature = "Warm";
+    temperature = LanguageModel.warm[LanguageModel.currentLanguage];
     color = Colors.redAccent;
   }
 
   Temperature.hot() {
-    temperature = "Hot";
+    temperature = LanguageModel.hot[LanguageModel.currentLanguage];
     color = Colors.red;
   }
 }

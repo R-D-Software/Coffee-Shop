@@ -3,23 +3,28 @@ import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/language.dart';
 
-class User {
-  final String userID;
-  final String firstName;
-  final String email;
-  final String profilePictureURL;
-  Language userDefinedLanguage;
-  List<String> favouriteItems = new List<String>();
-  //List<FavouriteItem> favItems = new List<FavouriteItem>();
-
-  User(
-      {this.userID,
-      this.firstName,
-      this.email,
-      this.profilePictureURL,
-      this.userDefinedLanguage,
-      //this.favItems,
-      this.favouriteItems});
+class User 
+{
+    final String userID;
+    final String firstName;
+    final String email;
+    final String profilePictureURL;
+    int completedQuestPart = 7;
+    Language userDefinedLanguage;
+    List<String> favouriteItems = new List<String>();
+    //List<FavouriteItem> favItems = new List<FavouriteItem>();
+  
+    User(
+    {
+        this.userID,
+        this.firstName,
+        this.email,
+        this.profilePictureURL,
+        this.userDefinedLanguage,
+        //this.favItems,
+        this.favouriteItems,
+        this.completedQuestPart
+    });
 
   Map<String, Object> toJson() {
     //DONT DELETE IT YET
@@ -30,29 +35,30 @@ class User {
             boj.add({"itemID": item.itemID, "temperature": item.temperature, "sugar": item.sugar});
         }*/
 
-    return {
-      'userID': userID,
-      'firstName': firstName,
-      'email': email == null ? '' : email,
-      'profilePictureURL': profilePictureURL,
-      'userDefinedLanguage': _getUserDefinedLanguageToString(),
-      'favouriteItems': favouriteItems,
-      'appIdentifier': 'Renao'
-    };
-  }
+        return{
+        'userID': userID,
+        'firstName': firstName,
+        'email': email == null ? '' : email,
+        'profilePictureURL': profilePictureURL,
+        'userDefinedLanguage': _getUserDefinedLanguageToString(),
+        'favouriteItems': favouriteItems,
+        'completedQuestPart': completedQuestPart,
+        'appIdentifier': 'Renao'
+        };
+    }
 
-  factory User.fromJson(Map<String, Object> doc) {
-    User user = new User(
-      userID: doc['userID'],
-      firstName: doc['firstName'],
-      email: doc['email'],
-      userDefinedLanguage:
-          _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
-      profilePictureURL: doc['profilePictureURL'],
-      favouriteItems: doc["favouriteItems"] != null
-          ? List.from(doc["favouriteItems"])
-          : new List<String>(),
-    );
+    factory User.fromJson(Map<String, Object> doc) 
+    {
+        User user = new User
+        (
+            userID: doc['userID'],
+            firstName: doc['firstName'],
+            email: doc['email'],
+            userDefinedLanguage: _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
+            profilePictureURL: doc['profilePictureURL'],
+            favouriteItems: doc["favouriteItems"] != null ? List.from(doc["favouriteItems"]) : new List<String>(),
+            completedQuestPart: doc["completedQuestPart"],
+        );
 
     return user;
   }
