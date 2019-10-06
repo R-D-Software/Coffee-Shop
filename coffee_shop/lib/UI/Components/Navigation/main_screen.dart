@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
+import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/cart_item_counter.dart';
 import 'package:coffee_shop/UI/Screens/cart_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -14,11 +18,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> {
-  int currentTab = 0;
+  static int currentTab = 0;
   HomeScreen homeScreen = HomeScreen();
   QuestScreen questScreen = QuestScreen();
   CartScreen cartScreen = CartScreen();
   List<Widget> pages;
+  String userID;
 
   Widget currentPage;
 
@@ -26,8 +31,7 @@ class MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     pages = [homeScreen, questScreen, cartScreen];
-    currentPage = homeScreen;
-    setSharedPrefs();
+    currentPage = pages[currentTab];
   }
 
   @override
@@ -37,6 +41,7 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(currentTab);
     SystemChrome.setEnabledSystemUIOverlays([]);
     final BottomNavigationBar navBar = BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -76,40 +81,46 @@ class MainScreenState extends State<MainScreen> {
           children: <Widget>[
             new Icon(
               Icons.shopping_cart,
-              color: Colors.white,
             ),
-            Positioned(
-                bottom: 10,
-                left: 10,
-                child: Stack(
-                  children: <Widget>[
-                    Icon(Icons.brightness_1,
-                        size: 15.0, color: Colors.red[700]),
-                    Positioned(
-                        top: 3.5,
-                        right: 3,
-                        child: Center(
-                          child: Text(
-                            '1',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        )),
-                  ],
-                )),
+            StreamBuilder(
+                stream: UserDB.getCurrentUser().asStream(),
+                builder: (context, userSnapshot) {
+                  return StreamBuilder(
+                      stream: CartItemDB.fetchCartItems(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null)
+                          return Container(
+                            width: 0,
+                            height: 0,
+                          );
+
+                        QuerySnapshot shopItems = snapshot.data as QuerySnapshot;
+                        List<ShopItem> cartItems = [];
+
+                        for (DocumentSnapshot doc in shopItems.documents) {
+                          ShopItem item = DecideItemType.getItemByClassFromFireStore(doc);
+                          cartItems.add(item);
+                        }
+
+                        return buildCartItemCounter(cartItems);
+                      });
+                }),
           ],
         ),
       ),
     ];
   }
 
-  void setSharedPrefs() {
-    SharedPreferences.getInstance().then((prefs) async {
-      var user = await UserDB.getCurrentUser();
-      String userID = (prefs.getString('userID') ?? user.userID);
-      prefs.setString('userID', userID);
-    });
+  Widget buildCartItemCounter(List<ShopItem> cartItems) {
+    if (cartItems.isEmpty) {
+      return Container(
+        width: 0,
+        height: 0,
+      );
+    } else if (cartItems.length < 10) {
+      return CartItemCounter.smallerThan10(cartItems.length);
+    } else {
+      return CartItemCounter.biggerThan10(cartItems.length);
+    }
   }
 }

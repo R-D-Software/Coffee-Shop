@@ -1,8 +1,5 @@
-import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
-import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 enum Language
@@ -189,7 +186,7 @@ class LanguageModel
     {
         Language.ENGLISH: "Date",
         Language.HUNGARIAN: "Nap"
-    };    
+    };
 
     static Future init(BuildContext context) async 
     {

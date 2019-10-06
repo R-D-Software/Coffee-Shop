@@ -18,21 +18,18 @@ class CoffeeItemViewScreen extends StatelessWidget {
   double height = 0;
   String itemID;
   int sugar;
-  Temperature temperature = Temperature.hot();
+  Temperature temperature;
+  String _buttonLabel = LanguageModel.add[LanguageModel.currentLanguage];
 
   int leavingCounter = 0;
 
-  CoffeeItemViewScreen({this.sugar = 2, this.temperature}) {}
+  CoffeeItemViewScreen({this.sugar = 2, this.temperature});
+
+  CoffeeItemViewScreen.withData(this._item);
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> routeArgs =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
-    itemID = routeArgs["itemID"];
-
-    if (itemID == null) {
-      return Container();
-    }
+    initializeData(context);
 
     MediaQueryData mData = MediaQuery.of(context);
 
@@ -55,8 +52,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
                 stream: ShopItemDB.getShopItemByID(itemID),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active ||
-                      snapshot.connectionState == ConnectionState.waiting)
-                    leavingCounter++;
+                      snapshot.connectionState == ConnectionState.waiting) leavingCounter++;
 
                   if (leavingCounter == 2) {
                     return makeItemViewBody(snapshot, context);
@@ -69,68 +65,79 @@ class CoffeeItemViewScreen extends StatelessWidget {
         ));
   }
 
-  Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context) {
-    _item = snapshot.data;
+  void initializeData(BuildContext context) {
+    final Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+    itemID = routeArgs['itemID'];
+    _item = routeArgs["item"];
+    if (_item != null) {
+      CoffeeItem coffeeItem = _item as CoffeeItem;
+      sugar = coffeeItem.sugar;
+    }
+    if (routeArgs["buttonLabel"] != null) {
+      _buttonLabel = routeArgs["buttonLabel"];
+    }
+    temperature = Temperature.hot();
+  }
 
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context) {
+    if (_item == null) {
+      _item = snapshot.data;
+    }
+
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Icon(Icons.keyboard_arrow_left),
-              StrokedText(
-                text: _item.name,
-                color: Colors.white,
-                size: 25,
-              ),
-              Icon(Icons.keyboard_arrow_right),
-            ],
+          Icon(Icons.keyboard_arrow_left),
+          StrokedText(
+            text: _item.name,
+            color: Colors.white,
+            size: 25,
           ),
-          Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 25),
-                  width: height * 0.35,
-                  height: height * 0.35,
-                  decoration: new BoxDecoration(
-                      boxShadow: [
-                        new BoxShadow(
-                          color: Colors.red,
-                          spreadRadius: 2,
-                          offset: new Offset(-5.0, 10.0),
-                        )
-                      ],
-                      border: Border.all(
-                          color: Theme.of(context).primaryColor, width: 14),
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: new NetworkImage(_item.imageUrl)))),
-              FavouriteStar(itemID: itemID),
-            ],
-          ),
+          Icon(Icons.keyboard_arrow_right),
+        ],
+      ),
+      Stack(
+        alignment: Alignment.topCenter,
+        children: <Widget>[
           Container(
-            margin: EdgeInsets.only(bottom: 0),
-            child: StrokedText(
+              margin: EdgeInsets.only(top: 20, bottom: 25),
+              width: height * 0.35,
+              height: height * 0.35,
+              decoration: new BoxDecoration(
+                  boxShadow: [
+                    new BoxShadow(
+                      color: Colors.red,
+                      spreadRadius: 2,
+                      offset: new Offset(-5.0, 10.0),
+                    )
+                  ],
+                  border: Border.all(color: Theme.of(context).primaryColor, width: 14),
+                  shape: BoxShape.circle,
+                  image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
+          FavouriteStar(itemID: itemID),
+        ],
+      ),
+      Container(
+        margin: EdgeInsets.only(bottom: 0),
+        child: StrokedText(
               text: LanguageModel.sugar[LanguageModel.currentLanguage],
-              color: Colors.white,
-              size: 25,
-            ),
-          ),
-          SugarChooser(),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: StrokedText(
+          color: Colors.white,
+          size: 25,
+        ),
+      ),
+      SugarChooser(_item, _setSugar),
+      Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: StrokedText(
               text: LanguageModel.temperature[LanguageModel.currentLanguage],
-              color: Colors.white,
-              size: 25,
-            ),
-          ),
-          TemperatureChooser(),
-          _addButton,
-        ]);
+          color: Colors.white,
+          size: 25,
+        ),
+      ),
+      TemperatureChooser(_item, _setTemperature),
+      _addButton,
+    ]);
   }
 
   Container _getAddButton(BuildContext context) {
@@ -147,13 +154,12 @@ class CoffeeItemViewScreen extends StatelessWidget {
           ),
           elevation: 5,
           onPressed: () {
-            var coffeeItem = CoffeeItem(
-                shopItem: _item, temperature: Temperature.hot(), sugar: 2);
-            CartItemDB.addItemToCart(coffeeItem);
+            var coffeeItem = CoffeeItem(shopItem: _item, temperature: temperature, sugar: sugar);
+            CartItemDB.modifyOrAddItemToCart(coffeeItem, _buttonLabel);
 			Fluttertoast.showToast(
 				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
-				toastLength: Toast.LENGTH_SHORT,
 				gravity: ToastGravity.BOTTOM,
+				toastLength: Toast.LENGTH_SHORT,
 				timeInSecForIos: 1,
 				backgroundColor: Color.fromRGBO(231, 82, 100, 1),
 				textColor: Colors.white,
@@ -162,11 +168,19 @@ class CoffeeItemViewScreen extends StatelessWidget {
             Navigator.of(context).pop();             
           },
           child: Text(
-            "ADD",
+            _buttonLabel,
             style: TextStyle(fontSize: 25, color: Colors.white),
           ),
         ),
       ),
     );
+  }
+
+  void _setSugar(int _sugar) {
+    this.sugar = _sugar;
+  }
+
+  void _setTemperature(Temperature _temperature) {
+    this.temperature = _temperature;
   }
 }

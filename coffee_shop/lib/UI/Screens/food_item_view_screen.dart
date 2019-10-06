@@ -15,17 +15,14 @@ class FoodItemViewScreen extends StatelessWidget {
   Container _addButton;
   double height = 0;
   String itemID;
+  String _buttonLabel = LanguageModel.add[LanguageModel.currentLanguage];
 
   int leavingCounter = 0;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> routeArgs = ModalRoute.of(context).settings.arguments as Map<String, String>;
-    itemID = routeArgs["itemID"];
-
-    if (itemID == null) {
-      return Container();
-    }
+    final Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+    initializeData(routeArgs);
 
     MediaQueryData mData = MediaQuery.of(context);
 
@@ -61,8 +58,18 @@ class FoodItemViewScreen extends StatelessWidget {
         ));
   }
 
+  void initializeData(Map<String, dynamic> routeArgs) {
+    itemID = routeArgs['itemID'];
+    _item = routeArgs["item"];
+    if (routeArgs["buttonLabel"] != null) {
+      _buttonLabel = routeArgs["buttonLabel"];
+    }
+  }
+
   Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context) {
-    _item = snapshot.data;
+    if (_item == null) {
+      _item = snapshot.data;
+    }
 
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
       Row(
@@ -117,7 +124,7 @@ class FoodItemViewScreen extends StatelessWidget {
           elevation: 5,
           onPressed: () {
             var foodItem = FoodItem(shopItem: _item);
-            CartItemDB.addItemToCart(foodItem);
+            CartItemDB.modifyOrAddItemToCart(foodItem, _buttonLabel);
             Fluttertoast.showToast(
 				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
 				toastLength: Toast.LENGTH_SHORT,
@@ -130,7 +137,7 @@ class FoodItemViewScreen extends StatelessWidget {
             Navigator.of(context).pop(); 
           },
           child: Text(
-            "ADD",
+            _buttonLabel,
             style: TextStyle(fontSize: 25, color: Colors.white),
           ),
         ),
