@@ -9,6 +9,7 @@ import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart'
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CoffeeItemViewScreen extends StatelessWidget {
   ShopItem _item;
@@ -120,7 +121,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
       Container(
         margin: EdgeInsets.only(bottom: 0),
         child: StrokedText(
-          text: "Sugar",
+              text: LanguageModel.sugar[LanguageModel.currentLanguage],
           color: Colors.white,
           size: 25,
         ),
@@ -129,7 +130,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
       Container(
         margin: EdgeInsets.only(bottom: 10),
         child: StrokedText(
-          text: "Temperature",
+              text: LanguageModel.temperature[LanguageModel.currentLanguage],
           color: Colors.white,
           size: 25,
         ),
@@ -155,7 +156,16 @@ class CoffeeItemViewScreen extends StatelessWidget {
           onPressed: () {
             var coffeeItem = CoffeeItem(shopItem: _item, temperature: temperature, sugar: sugar);
             CartItemDB.modifyOrAddItemToCart(coffeeItem, _buttonLabel);
-            Navigator.of(context).pop();
+			Fluttertoast.showToast(
+				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
+				gravity: ToastGravity.BOTTOM,
+				toastLength: Toast.LENGTH_SHORT,
+				timeInSecForIos: 1,
+				backgroundColor: Color.fromRGBO(231, 82, 100, 1),
+				textColor: Colors.white,
+				fontSize: 16.0
+			);
+            Navigator.of(context).pop();             
           },
           child: Text(
             _buttonLabel,

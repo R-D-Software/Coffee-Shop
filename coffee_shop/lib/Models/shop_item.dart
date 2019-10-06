@@ -48,4 +48,18 @@ class ShopItem {
   factory ShopItem.fromDocument(DocumentSnapshot doc, String documentID) {
     return ShopItem.fromJson(doc.data, documentID);
   }
+
+    ShopItem asReward() 
+    {
+        return new ShopItem
+        (
+            documentID: this.documentID,
+            name: this.name,
+            price: 0,
+            imageUrl: this.imageUrl,
+            description: this.description,
+            itemType: this.itemType,
+            onSale: this.onSale,
+        );
+    }
 }

@@ -7,6 +7,7 @@ import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dar
 import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FoodItemViewScreen extends StatelessWidget {
   ShopItem _item;
@@ -124,7 +125,16 @@ class FoodItemViewScreen extends StatelessWidget {
           onPressed: () {
             var foodItem = FoodItem(shopItem: _item);
             CartItemDB.modifyOrAddItemToCart(foodItem, _buttonLabel);
-            Navigator.pop(context);
+            Fluttertoast.showToast(
+				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
+				toastLength: Toast.LENGTH_SHORT,
+				gravity: ToastGravity.BOTTOM,
+				timeInSecForIos: 1,
+				backgroundColor: Color.fromRGBO(231, 82, 100, 1),
+				textColor: Colors.white,
+				fontSize: 16.0
+			);
+            Navigator.of(context).pop(); 
           },
           child: Text(
             _buttonLabel,

@@ -25,6 +25,15 @@ class CartItemDB {
         .setData(item.toJson());
   }
 
+    static addRewardItemToCart(ShopItem item) {
+    Firestore.instance
+        .collection("users")
+        .document(StaticData.currentUser.userID)
+        .collection("cart_items")
+        .document()
+        .setData(item.asReward().toJson());
+  }
+
   static modifyItemInCart(ShopItem item) {
     Firestore.instance
         .collection("users")

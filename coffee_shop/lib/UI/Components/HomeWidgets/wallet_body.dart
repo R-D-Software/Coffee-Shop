@@ -36,6 +36,11 @@ class WalletBody extends StatelessWidget
                                 _navigationWidgetBuilder(context),
                                 SizedBox(height: 20,),
                                 balance,
+								Container
+								(
+									child: StrokedText(text: LanguageModel.purchaseHistory[LanguageModel.currentLanguage], size: 20),
+									margin: EdgeInsets.all(10),
+								),
                                 PurchaseHistoryComponent
                                 (
                                     height: deviceHeight 
@@ -44,6 +49,7 @@ class WalletBody extends StatelessWidget
                                     - 25  /*NavigationHeight*/
                                     - 20  /*SizedBox*/ 
                                     - 30  /*BalanceHeight*/ 
+									- 34  /*purchase history text height*/
                                     - 42  /*AdditionalHeight because of default spaces between widgets*/ 
                                     - (65 - 15) /*ButtonHeight*/
                                 ),
