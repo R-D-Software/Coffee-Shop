@@ -167,6 +167,30 @@ class LanguageModel
         Language.HUNGARIAN: " hozzáadásra került"
     }; 	
 
+    static Map<Language, String> time = const
+    {
+        Language.ENGLISH: "Time",
+        Language.HUNGARIAN: "Időpont"
+    }; 	
+
+    static Map<Language, String> order = const
+    {
+        Language.ENGLISH: "Order",
+        Language.HUNGARIAN: "Megrendel"
+    }; 
+
+    static Map<Language, String> selectedPlace = const
+    {
+        Language.ENGLISH: "Selected Place",
+        Language.HUNGARIAN: "Kiválasztott Hely"
+    }; 
+
+    static Map<Language, String> date = const
+    {
+        Language.ENGLISH: "Date",
+        Language.HUNGARIAN: "Nap"
+    };    
+
     static Future init(BuildContext context) async 
     {
         User user;
@@ -242,10 +266,26 @@ class LanguageModel
             break;
 
             case Language.HUNGARIAN:
-               return "Rendelj még " + missingParts.toString() + " " + itemName + "t és egyet ingyen vihetsz!";
+                return "Rendelj még " + missingParts.toString() + " " + itemName + "t és egyet ingyen vihetsz!";
             break;
         }
+    }
 
-        
+    static total(int total) 
+    {
+        switch (currentLanguage)
+            {
+                case Language.NOTHING:
+                    return "Total: " + total.toString();
+                break;
+                
+                case Language.ENGLISH:
+                    return "Total: " + total.toString();
+                break;
+
+                case Language.HUNGARIAN:
+                    return "Végösszeg: " + total.toString();
+                break;
+            }
     }
 }
