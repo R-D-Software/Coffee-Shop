@@ -11,7 +11,7 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     LanguageModel.init(context);
     return new StreamBuilder<FirebaseUser>(
       stream: FirebaseAuth.instance.onAuthStateChanged,

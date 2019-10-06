@@ -1,6 +1,7 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/food_item.dart';
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
@@ -13,17 +14,14 @@ class FoodItemViewScreen extends StatelessWidget {
   Container _addButton;
   double height = 0;
   String itemID;
+  String _buttonLabel = LanguageModel.add[LanguageModel.currentLanguage];
 
   int leavingCounter = 0;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> routeArgs = ModalRoute.of(context).settings.arguments as Map<String, String>;
-    itemID = routeArgs["itemID"];
-
-    if (itemID == null) {
-      return Container();
-    }
+    final Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+    initializeData(routeArgs);
 
     MediaQueryData mData = MediaQuery.of(context);
 
@@ -59,8 +57,18 @@ class FoodItemViewScreen extends StatelessWidget {
         ));
   }
 
+  void initializeData(Map<String, dynamic> routeArgs) {
+    itemID = routeArgs['itemID'];
+    _item = routeArgs["item"];
+    if (routeArgs["buttonLabel"] != null) {
+      _buttonLabel = routeArgs["buttonLabel"];
+    }
+  }
+
   Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context) {
-    _item = snapshot.data;
+    if (_item == null) {
+      _item = snapshot.data;
+    }
 
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
       Row(
@@ -115,10 +123,11 @@ class FoodItemViewScreen extends StatelessWidget {
           elevation: 5,
           onPressed: () {
             var foodItem = FoodItem(shopItem: _item);
-            CartItemDB.addItemToCart(foodItem);
+            CartItemDB.modifyOrAddItemToCart(foodItem, _buttonLabel);
+            Navigator.pop(context);
           },
           child: Text(
-            "ADD",
+            _buttonLabel,
             style: TextStyle(fontSize: 25, color: Colors.white),
           ),
         ),

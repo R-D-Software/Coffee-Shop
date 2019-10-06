@@ -2,7 +2,6 @@ import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/home_body.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBarTitle: LanguageModel.home[LanguageModel.currentLanguage],
         scaffoldBody: HomeScreenBody(),
       ),
-      decoration: RenaoBoxDecoration.builder(context),     
+      decoration: RenaoBoxDecoration.builder(context),
     );
   }
 }

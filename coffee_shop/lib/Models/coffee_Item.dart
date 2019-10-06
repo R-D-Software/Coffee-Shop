@@ -4,6 +4,7 @@ import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
 
 class CoffeeItem extends ShopItem {
+  String shopItemParentDocumentId;
   Temperature temperature;
   int sugar;
 
@@ -58,16 +59,16 @@ class CoffeeItem extends ShopItem {
 
 Temperature _setTemperature(String temperature) {
   switch (temperature) {
-    case 'hot':
+    case 'Hot':
       return Temperature.hot();
       break;
-    case 'warm':
+    case 'Warm':
       return Temperature.warm();
       break;
-    case 'cold':
+    case 'Cold':
       return Temperature.cold();
       break;
-    case 'ice cold':
+    case 'Ice cold':
       return Temperature.iceCold();
       break;
   }
@@ -79,22 +80,22 @@ class Temperature {
   Color color;
 
   Temperature.iceCold() {
-    temperature = "ice cold";
+    temperature = "Ice cold";
     color = Colors.lightBlueAccent;
   }
 
   Temperature.cold() {
-    temperature = "cold";
+    temperature = "Cold";
     color = Colors.blueAccent;
   }
 
   Temperature.warm() {
-    temperature = "warm";
+    temperature = "Warm";
     color = Colors.redAccent;
   }
 
   Temperature.hot() {
-    temperature = "hot";
+    temperature = "Hot";
     color = Colors.red;
   }
 }
