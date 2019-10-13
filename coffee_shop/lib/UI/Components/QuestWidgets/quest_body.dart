@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
+import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/quest.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
@@ -111,10 +113,11 @@ class QuestBody extends StatelessWidget
                     ShopItem rewardItem;
                     
                     await ShopItemDB.getShopItemByID(quest.questItemID).first.then((item)=> rewardItem = item);
-                    
+
                     if(rewardItem.itemType == "coffee")
                     {
-                       //Navigator.of(context).pushNamed("/main/itemview/coffee") 
+                        Navigator.of(context).pushNamed("/main/itemview/" + rewardItem.itemType,
+                            arguments: {"item": rewardItem.asReward().toCoffeItem(2, Temperature.warm()), "buttonLabel": LanguageModel.add[LanguageModel.currentLanguage]});        
                     }
                     else if (rewardItem.itemType == "food")
                     {
