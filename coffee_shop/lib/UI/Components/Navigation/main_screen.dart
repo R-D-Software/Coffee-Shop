@@ -41,7 +41,6 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentTab);
     SystemChrome.setEnabledSystemUIOverlays([]);
     final BottomNavigationBar navBar = BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
