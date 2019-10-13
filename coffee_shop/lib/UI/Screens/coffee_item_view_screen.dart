@@ -121,7 +121,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
       Container(
         margin: EdgeInsets.only(bottom: 0),
         child: StrokedText(
-              text: LanguageModel.sugar[LanguageModel.currentLanguage],
+          text: LanguageModel.sugar[LanguageModel.currentLanguage],
           color: Colors.white,
           size: 25,
         ),
@@ -130,7 +130,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
       Container(
         margin: EdgeInsets.only(bottom: 10),
         child: StrokedText(
-              text: LanguageModel.temperature[LanguageModel.currentLanguage],
+          text: LanguageModel.temperature[LanguageModel.currentLanguage],
           color: Colors.white,
           size: 25,
         ),
@@ -156,16 +156,8 @@ class CoffeeItemViewScreen extends StatelessWidget {
           onPressed: () {
             var coffeeItem = CoffeeItem(shopItem: _item, temperature: temperature, sugar: sugar);
             CartItemDB.modifyOrAddItemToCart(coffeeItem, _buttonLabel);
-			Fluttertoast.showToast(
-				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
-				gravity: ToastGravity.BOTTOM,
-				toastLength: Toast.LENGTH_SHORT,
-				timeInSecForIos: 1,
-				backgroundColor: Color.fromRGBO(231, 82, 100, 1),
-				textColor: Colors.white,
-				fontSize: 16.0
-			);
-            Navigator.of(context).pop();             
+            showToast(_buttonLabel);
+            Navigator.of(context).pop();
           },
           child: Text(
             _buttonLabel,
@@ -174,6 +166,19 @@ class CoffeeItemViewScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showToast(String buttonLabel) {
+    if (buttonLabel == LanguageModel.add[LanguageModel.currentLanguage]) {
+      Fluttertoast.showToast(
+          msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
+          gravity: ToastGravity.BOTTOM,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIos: 1,
+          backgroundColor: Color.fromRGBO(231, 82, 100, 1),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   void _setSugar(int _sugar) {

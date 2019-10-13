@@ -58,21 +58,14 @@ class CoffeeItem extends ShopItem {
 }
 
 Temperature _setTemperature(String temperature) {
-  switch (temperature) {
-    case 'Hot':
-      return Temperature.hot();
-      break;
-    case 'Warm':
-      return Temperature.warm();
-      break;
-    case 'Cold':
-      return Temperature.cold();
-      break;
-    case 'Ice cold':
-      return Temperature.iceCold();
-      break;
-  }
-  return Temperature.hot();
+  if (temperature == LanguageModel.hot[Language.ENGLISH] || temperature == LanguageModel.hot[Language.HUNGARIAN])
+    return Temperature.hot();
+  else if (temperature == LanguageModel.warm[Language.ENGLISH] || temperature == LanguageModel.warm[Language.HUNGARIAN])
+    return Temperature.warm();
+  else if (temperature == LanguageModel.cold[Language.ENGLISH] || temperature == LanguageModel.cold[Language.HUNGARIAN])
+    return Temperature.cold();
+  else
+    return Temperature.iceCold();
 }
 
 class Temperature {
