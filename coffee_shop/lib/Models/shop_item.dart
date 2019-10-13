@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/UI/Screens/coffee_item_view_screen.dart';
 import 'package:flutter/foundation.dart';
+
+import 'coffee_Item.dart';
 
 class ShopItem {
   final String documentID;
@@ -61,5 +64,10 @@ class ShopItem {
             itemType: this.itemType,
             onSale: this.onSale,
         );
+    }
+
+    CoffeeItem toCoffeItem(int sugar, Temperature temperature)
+    {
+        return CoffeeItem(shopItem: this, temperature: temperature, sugar: sugar);
     }
 }
