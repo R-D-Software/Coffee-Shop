@@ -1,30 +1,52 @@
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_number_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
 
-class CartBottomSheet extends StatelessWidget 
+class OrderPageScreen extends StatelessWidget 
 {
     DateTime orderDate;
-    CartBottomSheet(@required this.orderDate);
-
+    AppBar _appBar = AppBar();
+    
     @override
     Widget build(BuildContext context) 
     {
-        return Container
+        _initializeData(context);
+
+        return Scaffold
         (
-            child: Wrap
+        appBar: _appBar,
+        body: SingleChildScrollView
+        (
+            scrollDirection: Axis.vertical,
+            child: Container
             (
-                children: <Widget>
-                [
-                    _getDateWidget(),
-                    _getTimeWidget(context),
-                    _getPlaceWidget(),
-                    _getOrderButton(context),
-                ],
+                decoration: RenaoBoxDecoration.builder(context),
+                height: MediaQuery.of(context).size.height - _appBar.preferredSize.height,
+                child: Container
+                (
+                    child: Column
+                    (
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>
+                        [
+                            _getDateWidget(),
+                            _getTimeWidget(context),
+                            _getPlaceWidget(),
+                            _getOrderButton(context),
+                        ],
+                    ),
+                ),
+                width: double.infinity,
             ),
-        );
+        ));
+    }
+
+    void _initializeData(BuildContext context) 
+    {
+        final Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
+        orderDate = routeArgs['orderDate'];
     }
 
     Widget _getDateWidget()

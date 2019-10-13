@@ -11,6 +11,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'UI/Screens/coffee_item_view_screen.dart';
 import 'UI/Screens/food_item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
+import 'UI/Screens/order_page_screen.dart';
 import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
 
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/main/wallet': (BuildContext context) => WalletScreen(),
         "/main/settings": (BuildContext context) => SettingsScreen(),
         '/quest': (BuildContext context) => QuestScreen(),
+        '/main/cart/order_page_screen': (BuildContext context) => OrderPageScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),

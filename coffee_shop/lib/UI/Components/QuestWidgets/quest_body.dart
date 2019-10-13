@@ -14,6 +14,7 @@ import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/QuestWidgets/animated_present.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../stroked_text.dart';
 
@@ -100,15 +101,19 @@ class QuestBody extends StatelessWidget
             return Container();
         }
 
-        return Container
-        (
-            child: RenaoFlatButton
-            (
-                title: LanguageModel.addToCart[LanguageModel.currentLanguage],
-                fontSize: 30,
-                fontWeight: FontWeight.w700,
-                textColor: Colors.white,
-                onPressed: () async
+        return Container(
+            alignment: Alignment.bottomCenter,
+            child: ButtonTheme(
+                buttonColor: Color.fromRGBO(231, 82, 100, 1),
+                minWidth: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.height * 0.065,
+                child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                elevation: 5,
+                onPressed:() async
                 {
                     ShopItem rewardItem;
                     
@@ -122,13 +127,14 @@ class QuestBody extends StatelessWidget
                     else if (rewardItem.itemType == "food")
                     {
                         CartItemDB.addRewardItemToCart(rewardItem);
-                    }
+                    }           
                 },
-                splashColor: Colors.black12,
-                borderColor: Colors.white,
-                borderWidth: 2,
-                color: Colors.red[300],
-            )
+                child: Text(
+                    LanguageModel.addToCart[LanguageModel.currentLanguage],
+                    style: TextStyle(fontSize: 25, color: Colors.white),
+                ),
+                ),
+            ),
         );
     }
 
