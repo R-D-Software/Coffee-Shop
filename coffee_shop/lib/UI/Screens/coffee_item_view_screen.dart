@@ -4,12 +4,12 @@ import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/sugar_chooser.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/temperature_chooser.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CoffeeItemViewScreen extends StatelessWidget {
   ShopItem _item;
@@ -156,7 +156,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
           onPressed: () {
             var coffeeItem = CoffeeItem(shopItem: _item, temperature: temperature, sugar: sugar);
             CartItemDB.modifyOrAddItemToCart(coffeeItem, _buttonLabel);
-            showToast(_buttonLabel);
+            RenaoToast.itemAdded(_item.name, _buttonLabel);
             Navigator.of(context).pop();
           },
           child: Text(
@@ -166,19 +166,6 @@ class CoffeeItemViewScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void showToast(String buttonLabel) {
-    if (buttonLabel == LanguageModel.add[LanguageModel.currentLanguage]) {
-      Fluttertoast.showToast(
-          msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
-          gravity: ToastGravity.BOTTOM,
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIos: 1,
-          backgroundColor: Color.fromRGBO(231, 82, 100, 1),
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
   }
 
   void _setSugar(int _sugar) {
