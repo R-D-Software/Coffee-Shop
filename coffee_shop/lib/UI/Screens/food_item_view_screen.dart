@@ -71,42 +71,38 @@ class FoodItemViewScreen extends StatelessWidget {
       _item = snapshot.data;
     }
 
-    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Icon(Icons.keyboard_arrow_left),
-          StrokedText(
-            text: _item.name,
-            color: Colors.white,
-            size: 25,
-          ),
-          Icon(Icons.keyboard_arrow_right),
-        ],
-      ),
-      Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          Container(
-              margin: EdgeInsets.only(top: 20, bottom: 25),
-              width: height * 0.35,
-              height: height * 0.35,
-              decoration: new BoxDecoration(
-                  boxShadow: [
-                    new BoxShadow(
-                      color: Colors.red,
-                      spreadRadius: 2,
-                      offset: new Offset(-5.0, 10.0),
-                    )
-                  ],
-                  border: Border.all(color: Theme.of(context).primaryColor, width: 14),
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
-          FavouriteStar(itemID: itemID),
-        ],
-      ),
-      _addButton,
-    ]);
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20),
+      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        StrokedText(
+          text: _item.name,
+          color: Colors.white,
+          size: 25,
+        ),
+        Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            Container(
+                margin: EdgeInsets.only(top: 20, bottom: 25),
+                width: height * 0.35,
+                height: height * 0.35,
+                decoration: new BoxDecoration(
+                    boxShadow: [
+                      new BoxShadow(
+                        color: Colors.red,
+                        spreadRadius: 2,
+                        offset: new Offset(-5.0, 10.0),
+                      )
+                    ],
+                    border: Border.all(color: Theme.of(context).primaryColor, width: 14),
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
+            FavouriteStar(itemID: itemID),
+          ],
+        ),
+        _addButton,
+      ]),
+    );
   }
 
   Container _getAddButton(BuildContext context) {
