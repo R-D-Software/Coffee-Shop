@@ -4,18 +4,26 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:infinite_listview/infinite_listview.dart';
 
 class RenaoNumberPicker extends StatefulWidget 
 {
     final int initialValue;
     final List<int> numbers;
+    final Color textColor;
+    final double listViewWidth;
+    int currentValue;
+    Function setValue;
+    Function afterBuildCallback;
 
     RenaoNumberPicker
     (
         {
             @required this.initialValue,
-            @required this.numbers
+            @required this.numbers,
+            this.textColor,
+            this.setValue,
+            this.afterBuildCallback,
+            this.listViewWidth
         }
     );
 
@@ -33,6 +41,8 @@ class _RenaoNumberPickerState extends State<RenaoNumberPicker> with SingleTicker
     {
         super.initState();
         _controller = AnimationController(vsync: this);
+        _currentValue = widget.initialValue;
+        widget.setValue(_currentValue);
     }
 
     @override
@@ -45,17 +55,27 @@ class _RenaoNumberPickerState extends State<RenaoNumberPicker> with SingleTicker
     @override
     Widget build(BuildContext context) 
     {
-        _currentValue = widget.initialValue;
-      
+        
+        if(widget.afterBuildCallback != null)
+        {
+            WidgetsBinding.instance.addPostFrameCallback(widget.afterBuildCallback);
+        }
+
         return NumberPicker.integer
         (
             initialList: widget.numbers,
-            listViewWidth: MediaQuery.of(context).size.width*0.45,
+            listViewWidth: widget.listViewWidth,
             initialValue: widget.initialValue,
             itemExtent: 60,
-            //onChanged: (newValue) => setState(() => _currentValue = newValue)
-            onChanged: (newValue) => setState(() => print(newValue))
+            textColor: widget.textColor,
+            onChanged: (newValue) => setState(() => onValueChange(newValue))
         );
+    }
+
+    void onValueChange(int newVal)
+    {
+        _currentValue = newVal;
+        widget.setValue(_currentValue);
     }
 }
 
@@ -85,6 +105,7 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.textColor,
   })  : assert(initialValue != null),
         assert(step > 0),
         assert(scrollDirection != null),
@@ -104,6 +125,8 @@ class NumberPicker extends StatelessWidget {
 
   //initial list
   final List<int> initialList;
+
+  final Color textColor;
 
   ///inidcates how many decimal places to show
   /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
@@ -210,7 +233,14 @@ class NumberPicker extends StatelessWidget {
     List<Widget> listWidgets = 
     [
         Container(),
-        ...initialList.map((number) => Text(_toDateFormatNumber(number))),
+        ...initialList.map((number) => Text
+        (
+            _toDateFormatNumber(number),
+            style: TextStyle
+            (
+                color: textColor
+            ),
+        )),
         Container(),
     ];
 
@@ -233,7 +263,6 @@ class NumberPicker extends StatelessWidget {
                 controller: intScrollController,
                 itemExtent: itemExtent,
                 itemCount: listItemCount,
-                cacheExtent: _calculateCacheExtent(listItemCount),
                 itemBuilder: (BuildContext context, int index) 
                 {
                     return Center(child: listWidgets[index]);
@@ -270,8 +299,8 @@ class NumberPicker extends StatelessWidget {
         if (_userStoppedScrolling(notification, intScrollController)) 
         {
             animateIntToIndex(intIndexOfMiddleElement);
+            onChanged(intValueInTheMiddle);
         }
-        onChanged(intValueInTheMiddle);
     }
 
     return true;

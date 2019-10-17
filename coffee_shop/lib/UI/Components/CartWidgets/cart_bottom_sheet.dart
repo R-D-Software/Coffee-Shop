@@ -117,6 +117,29 @@ class CartBottomSheet extends StatelessWidget
 
     Widget _getOrderButton(BuildContext context)
     {
+        return Container(
+            alignment: Alignment.bottomCenter,
+            child: ButtonTheme(
+                buttonColor: Color.fromRGBO(231, 82, 100, 1),
+                minWidth: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.height * 0.065,
+                child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+                elevation: 0,
+                onPressed:()
+                {
+                            
+                },
+                child: Text(
+                    LanguageModel.order[LanguageModel.currentLanguage],
+                    style: TextStyle(fontSize: 25, color: Colors.white),
+                ),
+                ),
+            ),
+        );
         return Padding
         (
             padding: EdgeInsets.all(25),

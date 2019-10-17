@@ -7,6 +7,25 @@ enum Language { NOTHING, ENGLISH, HUNGARIAN }
 class LanguageModel {
   static Language currentLanguage = Language.ENGLISH;
 
+  static List<String> daysInEnglish = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+  static List<String> daysInHungarian = [
+    "Hétfő",
+    "Kedd",
+    "Szerda",
+    "Csütörtök",
+    "Péntek",
+    "Szombat",
+    "Vasárnap"
+  ];
+
   static Map<Language, String> noOrder = const {
     Language.ENGLISH: "No Order",
     Language.HUNGARIAN: "Nincs Megrendelés"
@@ -167,23 +186,22 @@ class LanguageModel {
   static Map<Language, String> iceCold = const {
     Language.ENGLISH: "Ice cold",
     Language.HUNGARIAN: "Jég hideg"
-  };  
-  
+  };
+
   static Map<Language, String> cold = const {
     Language.ENGLISH: "Cold",
     Language.HUNGARIAN: "Hideg"
-  }; 
+  };
 
   static Map<Language, String> warm = const {
     Language.ENGLISH: "Warm",
     Language.HUNGARIAN: "Meleg"
-  }; 
+  };
 
   static Map<Language, String> hot = const {
     Language.ENGLISH: "Hot",
     Language.HUNGARIAN: "Forró"
-  }; 
-
+  };
 
   static Future init(BuildContext context) async {
     User user;
@@ -276,6 +294,22 @@ class LanguageModel {
 
       case Language.HUNGARIAN:
         return "Végösszeg: " + total.toString();
+        break;
+    }
+  }
+
+  static String dayName(int i) {
+    switch (currentLanguage) {
+      case Language.NOTHING:
+        return daysInEnglish[i];
+        break;
+
+      case Language.ENGLISH:
+        return daysInEnglish[i];
+        break;
+
+      case Language.HUNGARIAN:
+        return daysInHungarian[i];
         break;
     }
   }

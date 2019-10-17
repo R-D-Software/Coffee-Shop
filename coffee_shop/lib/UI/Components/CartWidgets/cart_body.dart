@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/order_date_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
@@ -22,6 +23,9 @@ class CartBody extends StatefulWidget {
 }
 
 class _CartBodyState extends State<CartBody> {
+
+    List<DateTime> holidays;
+
   @override
   void initState() {
     super.initState();
@@ -111,44 +115,55 @@ class _CartBodyState extends State<CartBody> {
         });
   }
 
-  int getTotal(List<ShopItem> cartItems) {
-    int total = 0;
-    for (ShopItem item in cartItems) {
-      total += item.price;
-    }
-    return total;
-  }
-
-  DateTime getNextSelectableDate(DateTime today) {
-    int daysToNextWeek = 8 - today.weekday;
-    return today.add(new Duration(days: daysToNextWeek));
-  }
-
-  bool selectableDate(DateTime selected) => (selected.weekday < 6);
-
-  void pickDate() async {
-    DateTime today = DateTime.now();
-    DateTime initialDate = DateTime.now();
-    DateTime nextWeek = today.add(new Duration(days: 7));
-
-    if (!selectableDate(today)) {
-      initialDate = getNextSelectableDate(today);
+    int getTotal(List<ShopItem> cartItems) {
+        int total = 0;
+        for (ShopItem item in cartItems) {
+        total += item.price;
+        }
+        return total;
     }
 
-    DateTime orderDate = await showDatePicker(
-        context: context,
-        firstDate: today,
-        initialDate: initialDate,
-        lastDate: nextWeek,
-        selectableDayPredicate: selectableDate);
+    bool selectableDate(DateTime selected)
+    {
+        for(DateTime date in holidays)
+        {
+            if(selected.year == date.year
+                && selected.month == date.month
+                && selected.day == date.day)
+                return false;
+        }
+        return selected.weekday < 6;
+    }
 
-    orderDate != null
-        ? showBottomSheet(
+    DateTime getInitialDate(DateTime selected)
+    {
+        if(selectableDate(selected))
+        {
+            return selected;
+        }
+        else
+        {
+            return getInitialDate(selected.add(new Duration(days:1)));
+        }
+    }
+
+    void pickDate() async 
+    {
+        holidays = await OrderDateDB.getHolidays();
+        DateTime today = DateTime.now();
+        DateTime initialDate = getInitialDate(DateTime.now());
+        DateTime nextMonth = today.add(new Duration(days: 30));
+
+        print(initialDate);
+
+        DateTime orderDate = await showDatePicker(
             context: context,
-            elevation: 3,
-            builder: (BuildContext context) {
-              return CartBottomSheet(orderDate);
-            })
-        : null;
-  }
+            firstDate: today,
+            initialDate: initialDate,
+            lastDate: nextMonth,
+            selectableDayPredicate: selectableDate);
+
+        if (orderDate != null)
+            Navigator.of(context).pushNamed("/main/cart/order_page_screen", arguments: {"orderDate": orderDate});
+    }
 }

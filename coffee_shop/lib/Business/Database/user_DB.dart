@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,4 +60,21 @@ class UserDB
     {
         Firestore.instance.collection("users").document(userID).updateData({"favouriteItems": FieldValue.arrayUnion([itemID])});
     }
+
+    static void updateSelectedShop(String shopID) 
+    {
+        Firestore.instance.collection("users").document(StaticData.currentUser.userID).updateData({"selectedShop": shopID});
+        StaticData.currentUser.selectedShop = shopID;
+    }
+
+    static Stream<Shop> getCurrentUserSelectedShop() 
+    {
+        return Firestore.instance
+            .collection("shops").document(StaticData.currentUser.selectedShop)
+            .snapshots()
+            .map((DocumentSnapshot snapshot) {
+                print(snapshot);
+                return Shop.fromDocument(snapshot);
+        });
+    }   
 }

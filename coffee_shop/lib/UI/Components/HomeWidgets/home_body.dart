@@ -24,7 +24,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(); //Penis Ring
           } else {
-            return makeHomeBody(snapshot);
+            return _makeHomeBody(snapshot);
           }
         });
   }
@@ -33,10 +33,12 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     Navigator.of(context).pushNamed("/main/favourites");
   }
 
-  Widget makeHomeBody(AsyncSnapshot snapshot) {
+  Widget _makeHomeBody(AsyncSnapshot snapshot) {
     List<ShopItem> coffeeItems = new List<ShopItem>();
     List<ShopItem> sandwichItems = new List<ShopItem>();
     List<ShopItem> dealItems = new List<ShopItem>();
+
+    if(snapshot.data == null) return Container();
 
     for (DocumentSnapshot ds in snapshot.data.documents) {
       ShopItem currentItem = ShopItem.fromDocument(ds, ds.documentID);
@@ -56,10 +58,10 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       }
     }
 
-    return buildItemSliders(coffeeItems, sandwichItems, dealItems);
+    return _buildItemSliders(coffeeItems, sandwichItems, dealItems);
   }
 
-  Widget buildItemSliders(List<ShopItem> coffeeItems,
+  Widget _buildItemSliders(List<ShopItem> coffeeItems,
       List<ShopItem> sandwichItems, List<ShopItem> dealItems) 
       {
     return StreamBuilder(
@@ -80,7 +82,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 QuerySnapshot items = snapshot1.data as QuerySnapshot;
                 List<ShopItem> favouriteItems = new List<ShopItem>();
 
-                if (items == null && user.favouriteItems != null) return Container();
+                if (items == null || user.favouriteItems == null) return Container();
 
                 for (String itemID in user.favouriteItems) 
                 {
