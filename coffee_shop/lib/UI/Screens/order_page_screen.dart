@@ -1,14 +1,33 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/shops_DB.dart';
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
-import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
-import 'package:coffee_shop/UI/Components/CustomWidgets/renao_number_picker.dart';
+import 'package:coffee_shop/UI/Components/OrderPageWidgets/timepicker_component.dart';
+import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class OrderPageScreen extends StatelessWidget 
+class OrderPageScreen extends StatefulWidget 
+{
+    @override
+    _OrderPageScreenState createState() => _OrderPageScreenState();
+}
+
+class _OrderPageScreenState extends State<OrderPageScreen> 
 {
     DateTime orderDate;
-    AppBar _appBar = AppBar();
-    
+    Shop currentShop;
+    TimePickerComponent timePicker;
+
+    @override
+    void initState()
+    {
+        super.initState();
+    }
+
     @override
     Widget build(BuildContext context) 
     {
@@ -16,14 +35,74 @@ class OrderPageScreen extends StatelessWidget
 
         return Scaffold
         (
-        appBar: _appBar,
-        body: SingleChildScrollView
+            appBar: AppBar
+            (
+                actions: <Widget>
+                [
+                    _buildOrderDateHeader(context, orderDate)
+                ],
+            ),
+            body: StreamBuilder
+            (
+                stream: UserDB.getCurrentUserSelectedShop(),
+                builder: (context, snapshot)
+                {
+                    if(snapshot.connectionState == ConnectionState.waiting)
+                    {
+                        return Container();
+                    }
+                    else
+                    {
+                        currentShop = (snapshot.data as Shop);
+                        return StreamBuilder
+                        (
+                            stream: ShopsDB.getCrowdedTimes(currentShop.docID, (orderDate.year.toString() + "." + orderDate.month.toString()), orderDate.day.toString()).asStream(),
+                            builder: (context, snap)
+                            {
+                                if(snap.connectionState == ConnectionState.waiting)
+                                {
+                                    return Container();
+                                }
+                                else
+                                {
+                                    return _buildBody(context, (snap.data as DocumentSnapshot).data);
+                                }
+                            }
+                        );
+                    }
+                },
+            ),
+        );
+    }
+
+    Widget _buildOrderDateHeader(BuildContext context, DateTime orderDate)
+    {
+        return Padding
+        (
+            padding: EdgeInsets.only(right: 8),
+            child: Center
+            (
+                child: Text
+                (
+                    orderDate.year.toString() + "." + orderDate.month.toString() + "." + orderDate.day.toString() + " " + _getDayFromWeekDay(orderDate.weekday),
+                    style: TextStyle
+                    (
+                        fontSize: 22,
+                    ),
+                ),
+            ),
+        );
+    }
+
+    Widget _buildBody(BuildContext context, Map<String,dynamic> notSelectableDates)
+    {
+        return SingleChildScrollView
         (
             scrollDirection: Axis.vertical,
             child: Container
             (
                 decoration: RenaoBoxDecoration.builder(context),
-                height: MediaQuery.of(context).size.height - _appBar.preferredSize.height,
+                height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height,
                 child: Container
                 (
                     child: Column
@@ -31,16 +110,15 @@ class OrderPageScreen extends StatelessWidget
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>
                         [
-                            _getDateWidget(),
-                            _getTimeWidget(context),
-                            _getPlaceWidget(),
+                            _getPlaceWidget(context),
+                            _getTimeWidget(context, notSelectableDates),
                             _getOrderButton(context),
                         ],
                     ),
                 ),
                 width: double.infinity,
             ),
-        ));
+        );
     }
 
     void _initializeData(BuildContext context) 
@@ -49,140 +127,158 @@ class OrderPageScreen extends StatelessWidget
         orderDate = routeArgs['orderDate'];
     }
 
-    Widget _getDateWidget()
+    @override
+    void didUpdateWidget(OrderPageScreen oldWidget) {
+        super.didUpdateWidget(oldWidget);
+        setState(() {});
+    }
+
+    String _getDayFromWeekDay(int day)
     {
+        return LanguageModel.dayName(day-1);       
+    }
+
+    Widget _getTimeWidget(BuildContext context, Map<String,dynamic> notSelectableDates)
+    {
+        timePicker = TimePickerComponent(notSelectableDates);
+        
         return Padding
         (
             padding: EdgeInsets.all(10),
-            child: Row
+            child: timePicker,
+        );
+    }
+
+    Widget _getPlaceWidget(BuildContext context)
+    {
+        return GestureDetector
+        (
+            onTap: () async 
+            {
+                await Navigator.of(context).pushNamed("/main/cart/order_page_screen/placechanger");              
+                setState((){});
+            },
+            child: Container
             (
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>
-                [
-                    Text
+                height: MediaQuery.of(context).size.width * 0.80,
+                child: Card
+                (
+                    shape: RoundedRectangleBorder
                     (
-                        LanguageModel.date[LanguageModel.currentLanguage],
-                        style: TextStyle
-                        (
-                            fontSize: 20,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(40))
                     ),
-                    GestureDetector
+                    child: Stack
                     (
-                        child: Text(orderDate.year.toString() + "." +  _toDateFormatNumber(orderDate.month) + "." + _toDateFormatNumber(orderDate.day)),
-                        onTap: ()
-                        {
-                            print("Tapics");
-                        },
-                    ),
-                ],
+                        children: <Widget>
+                        [
+                            ClipRRect
+                            (
+                                borderRadius: new BorderRadius.circular(40.0),
+                                child: Image.network
+                                (
+                                    currentShop.imageURL,
+                                    height: MediaQuery.of(context).size.width * 0.80,
+                                    width: MediaQuery.of(context).size.width * 0.80,
+                                ),
+                            ),
+                            
+                            _buildPlaceHeader(context),
+                        ],
+                    ),  
+                ),
             ),
         );
     }
 
-    Widget _getTimeWidget(BuildContext context)
+    Future _navigateTo(String latitude, String longitude) async 
     {
-        return Padding
-        (
-            padding: EdgeInsets.all(10),
-            child: Row
-            (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>
-                [
-                    RenaoNumberPicker
-                    (
-                        numbers: [1,3,6,7,8],
-                        initialValue: 8,
-                    ),
-                    Text(":"),
-                    RenaoNumberPicker
-                    (
-                        initialValue: 0,
-                        numbers: [0,1,3,6,7,8,45]
-                    ),
-                ],
-            ),
-        );
+        String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+        if (await canLaunch(googleUrl)) 
+        {
+            await launch(googleUrl);
+        } 
+        else 
+        {
+            throw 'Could not open the map.';
+        }
     }
 
-    Widget _getPlaceWidget()
+    Widget _buildPlaceHeader(BuildContext context)
     {
-        return Padding
+        return GestureDetector
         (
-            padding: EdgeInsets.all(10),
-            child: Row
+            onTap: ()
+            {
+                _navigateTo(currentShop.latitude, currentShop.longitude);
+            },
+            child: Container
             (
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>
-                [
-                    Text
+                decoration: BoxDecoration
+                (
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+                    color: Colors.grey.withOpacity(0.8),
+                ),
+                height: 40,
+                width: MediaQuery.of(context).size.width * 0.80,
+                alignment: Alignment.center,
+                child: SizedBox
+                (
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    child: Row
                     (
-                        LanguageModel.selectedPlace[LanguageModel.currentLanguage],
-                        style: TextStyle
-                        (
-                            fontSize: 20,
-                        ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>
+                        [
+                            Expanded
+                            ( 
+                                child: AutoSizeText
+                                (
+                                    currentShop.toString().toUpperCase(),
+                                    style: TextStyle
+                                    (
+                                        color: Colors.white
+                                    ),
+                                    maxFontSize: 20,
+                                    minFontSize: 10,
+                                    maxLines: 1,
+                                ),
+                            ),
+                            
+                            Icon(Icons.navigation,color: Colors.blue,),
+                        ],
                     ),
-                    GestureDetector
-                    (
-                        child: Text("BDFCKP"),
-                        onTap: ()
-                        {
-                            print("TABB");
-                        },
-                    ),
-                ],
+                )
             ),
         );
     }
 
     Widget _getOrderButton(BuildContext context)
     {
-        return Container(
-            alignment: Alignment.bottomCenter,
-            child: ButtonTheme(
-                buttonColor: Color.fromRGBO(231, 82, 100, 1),
-                minWidth: MediaQuery.of(context).size.width - 20,
-                height: MediaQuery.of(context).size.height * 0.065,
-                child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                elevation: 0,
-                onPressed:()
-                {
-                            
-                },
-                child: Text(
-                    LanguageModel.order[LanguageModel.currentLanguage],
-                    style: TextStyle(fontSize: 25, color: Colors.white),
-                ),
-                ),
-            ),
-        );
-        return Padding
-        (
-            padding: EdgeInsets.all(25),
-            child: Center
-            (
-                child: RenaoFlatButton
-                (
-                    title: LanguageModel.order[LanguageModel.currentLanguage],
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    textColor: Colors.white,
-                    onPressed: () 
-                    {
-                        
-                    },
-                    splashColor: Colors.black12,
-                    borderColor: Colors.white,
-                    borderWidth: 2,
-                    color: Theme.of(context).accentColor,
-                )
-            ),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              alignment: Alignment.bottomCenter,
+              child: ButtonTheme(
+                  buttonColor: Color.fromRGBO(231, 82, 100, 1),
+                  minWidth: MediaQuery.of(context).size.width - 20,
+                  height: MediaQuery.of(context).size.height * 0.065,
+                  child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  elevation: 0,
+                  onPressed:()
+                  {
+                              
+                  },
+                  child: Text(
+                      LanguageModel.order[LanguageModel.currentLanguage],
+                      style: TextStyle(fontSize: 25, color: Colors.white),
+                  ),
+                  ),
+              ),
+          ),
         );
     }
 

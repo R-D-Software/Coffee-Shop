@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Business/validator.dart';
 import 'package:coffee_shop/Models/language.dart';
@@ -154,6 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _signUp({String email, String password, BuildContext context}) async {
+    String firstShop = await ShopsDB.getFirstShop();
     if (Validator.validateEmail(email) &&
         Validator.validatePassword(password)) {
       try {
@@ -161,7 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _changeBlackVisible();
         await Auth.signUp(email, password).then((uID) {
           Auth.addUser(
-              new User(userID: uID, email: email, profilePictureURL: '', userDefinedLanguage: Language.NOTHING, completedQuestPart: 0, favouriteItems: [], ));
+              new User(userID: uID, email: email, profilePictureURL: '', userDefinedLanguage: Language.NOTHING, completedQuestPart: 0, favouriteItems: [], selectedShop: firstShop));
           onBackPress();
         });
       } catch (e) {
