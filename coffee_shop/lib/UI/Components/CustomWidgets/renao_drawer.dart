@@ -1,6 +1,9 @@
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/DrawerComponents/drawer_list_tile.dart';
+import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
+import 'package:coffee_shop/UI/Screens/settings.dart';
+import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,14 +79,14 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
   }
 
   void _moveToFavouritesScreen() {
-    Navigator.of(context).pushNamed("/main/favourites");
+    Navigator.of(context).pushNamed(FavouriteListScreen.route);
   }
 
   void _moveToWalletScreen() {
-    Navigator.of(context).pushNamed("/main/wallet");
+    Navigator.of(context).pushNamed(WalletScreen.route);
   }
 
   void _moveToSettingsScreen() {
-    Navigator.of(context).pushNamed("/main/settings");
+    Navigator.of(context).pushNamed(SettingsScreen.route);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,8 @@ class FoodItem extends ShopItem {
             price: shopItem.price,
             description: shopItem.description,
             itemType: "food",
-            onSale: shopItem.onSale);
+            onSale: shopItem.onSale,
+            parentID: shopItem.parentID);
 
   Map<String, Object> toJson() {
     return {
@@ -22,8 +25,14 @@ class FoodItem extends ShopItem {
       'description': description,
       'itemType': itemType,
       'onSale': onSale,
+      'parentID': parentID,
       'appIdentifier': 'Renao',
     };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this);
   }
 
   factory FoodItem.fromJson(Map<String, Object> doc, String documentID) {
@@ -36,6 +45,7 @@ class FoodItem extends ShopItem {
         description: doc['description'],
         onSale: doc['onSale'],
         itemType: doc['itemType'],
+        parentID: doc['parentID'],
       ),
     );
     return item;

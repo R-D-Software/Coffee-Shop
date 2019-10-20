@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/UI/Components/Navigation/main_screen.dart';
 import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
@@ -42,18 +43,19 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/root': (BuildContext context) => RootScreen(),
-        '/signin': (BuildContext context) => LogInScreen(),
-        '/signup': (BuildContext context) => SignUpScreen(),
-        '/main': (BuildContext context) => HomeScreen(),
-        '/main/itemview/coffee': (BuildContext context) => CoffeeItemViewScreen(),
-        '/main/itemview/food': (BuildContext context) => FoodItemViewScreen(),
-        '/main/favourites': (BuildContext context) => FavouriteListScreen(),
-        '/main/wallet': (BuildContext context) => WalletScreen(),
-        "/main/settings": (BuildContext context) => SettingsScreen(),
-        '/quest': (BuildContext context) => QuestScreen(),
-        '/main/cart/order_page_screen': (BuildContext context) => OrderPageScreen(),
-        '/main/cart/order_page_screen/placechanger': (BuildContext context) => PlaceChangerScreen(),
+        RootScreen.route: (BuildContext context) => RootScreen(),
+        LogInScreen.route: (BuildContext context) => LogInScreen(),
+        SignUpScreen.route: (BuildContext context) => SignUpScreen(),
+        HomeScreen.route: (BuildContext context) => HomeScreen(),
+        MainScreen.route: (BuildContext context) => MainScreen(),
+        CoffeeItemViewScreen.route: (BuildContext context) => CoffeeItemViewScreen(),
+        FoodItemViewScreen.route: (BuildContext context) => FoodItemViewScreen(),
+        FavouriteListScreen.route: (BuildContext context) => FavouriteListScreen(),
+        WalletScreen.route: (BuildContext context) => WalletScreen(),
+        SettingsScreen.route: (BuildContext context) => SettingsScreen(),
+        QuestScreen.route: (BuildContext context) => QuestScreen(),
+        OrderPageScreen.route: (BuildContext context) => OrderPageScreen(),
+        PlaceChangerScreen.route: (BuildContext context) => PlaceChangerScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),

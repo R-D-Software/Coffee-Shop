@@ -12,6 +12,7 @@ import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
 class CoffeeItemViewScreen extends StatelessWidget {
+  static const String route = '/main/itemview/coffee';
   ShopItem _item;
   AppBar _appBar = AppBar();
   Container _addButton;

@@ -5,6 +5,7 @@ import 'package:coffee_shop/UI/Components/HomeWidgets/wallet_body.dart';
 import 'package:flutter/material.dart';
 
 class WalletScreen extends StatefulWidget {
+  static const String route = '/main/wallet';
   @override
   _WalletScreenState createState() => _WalletScreenState();
 }

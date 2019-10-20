@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
-import 'package:coffee_shop/Models/dummy_data.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/user.dart';
+import 'package:coffee_shop/UI/Components/HomeWidgets/current_order_on_home_screen_widget.dart';
+import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'cart_on_homescreen.dart';
 import 'item_slider.dart';
 
 class HomeScreenBody extends StatefulWidget {
@@ -30,7 +29,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
   }
 
   void favouriteIconClick() {
-    Navigator.of(context).pushNamed("/main/favourites");
+    Navigator.of(context).pushNamed(FavouriteListScreen.route);
   }
 
   Widget _makeHomeBody(AsyncSnapshot snapshot) {
@@ -66,8 +65,9 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
       {
     return StreamBuilder(
         stream: UserDB.getCurrentUser().asStream(),
-        builder: (context, snapshot) 
+        builder: (context, snapshot)
         {
+          CurrentOrderOnHomeScreenWidget orderWidget = CurrentOrderOnHomeScreenWidget();
           if (snapshot.connectionState == ConnectionState.waiting) 
           {
             return Container();
@@ -97,15 +97,15 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                 }
                 return ListView(
                   children: <Widget>[
-                    //CartOnHomeScreen(DummyData.empty),
+                    orderWidget,
                     ItemSlider(
                         name: LanguageModel.favourites[LanguageModel.currentLanguage],
                         icon: Icons.star,
                         items: favouriteItems,
                         onIconClick: favouriteIconClick),
+                    ItemSlider(name: LanguageModel.todaysDeals[LanguageModel.currentLanguage], items: dealItems),
                     ItemSlider(name: LanguageModel.coffee[LanguageModel.currentLanguage], items: coffeeItems),
                     ItemSlider(name: LanguageModel.sandwich[LanguageModel.currentLanguage], items: sandwichItems),
-                    ItemSlider(name: LanguageModel.todaysDeals[LanguageModel.currentLanguage], items: dealItems),
                   ],
                 );
               });

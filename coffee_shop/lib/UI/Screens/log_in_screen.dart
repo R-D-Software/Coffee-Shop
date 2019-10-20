@@ -7,6 +7,7 @@ import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 
 class LogInScreen extends StatefulWidget {
+  static String route = '/signin';
   _LogInScreenState createState() => _LogInScreenState();
 }
 

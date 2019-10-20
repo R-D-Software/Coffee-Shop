@@ -1,17 +1,23 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/order_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
+import 'package:coffee_shop/Business/MapNavigator/google_navigator.dart';
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/shops.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
 import 'package:coffee_shop/UI/Components/OrderPageWidgets/timepicker_component.dart';
-import 'package:coffee_shop/UI/Components/stroked_text.dart';
+import 'package:coffee_shop/UI/Screens/place_changer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderPageScreen extends StatefulWidget 
 {
+    static const String route = '/main/cart/order_page_screen';
     @override
     _OrderPageScreenState createState() => _OrderPageScreenState();
 }
@@ -21,6 +27,11 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     DateTime orderDate;
     Shop currentShop;
     TimePickerComponent timePicker;
+    List<ShopItem> items;
+    int totalPrice;
+    int startTime;
+    int endTime;
+    int minutesAfterOrder;
 
     @override
     void initState()
@@ -124,7 +135,12 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     void _initializeData(BuildContext context) 
     {
         final Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
-        orderDate = routeArgs['orderDate'];
+        orderDate = routeArgs['orderDate'] as DateTime;
+        items = routeArgs['items'] as List<ShopItem>;
+        totalPrice = routeArgs['totalPrice'] as int;
+        startTime = routeArgs['startTime'] as int;
+        endTime = routeArgs['endTime'] as int;
+        minutesAfterOrder = routeArgs['minutesAfterOrder'] as int;
     }
 
     @override
@@ -140,7 +156,15 @@ class _OrderPageScreenState extends State<OrderPageScreen>
 
     Widget _getTimeWidget(BuildContext context, Map<String,dynamic> notSelectableDates)
     {
-        timePicker = TimePickerComponent(notSelectableDates);
+        timePicker = TimePickerComponent
+        (
+            notSelectableDates: notSelectableDates, 
+            currentShop: currentShop, 
+            date: orderDate,
+            startTime: startTime, 
+            endTime: endTime, 
+            minutesAfterOrder: minutesAfterOrder
+        );
         
         return Padding
         (
@@ -155,7 +179,7 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         (
             onTap: () async 
             {
-                await Navigator.of(context).pushNamed("/main/cart/order_page_screen/placechanger");              
+                await Navigator.of(context).pushNamed(PlaceChangerScreen.route);              
                 setState((){});
             },
             child: Container
@@ -190,26 +214,13 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         );
     }
 
-    Future _navigateTo(String latitude, String longitude) async 
-    {
-        String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-        if (await canLaunch(googleUrl)) 
-        {
-            await launch(googleUrl);
-        } 
-        else 
-        {
-            throw 'Could not open the map.';
-        }
-    }
-
     Widget _buildPlaceHeader(BuildContext context)
     {
         return GestureDetector
         (
             onTap: ()
             {
-                _navigateTo(currentShop.latitude, currentShop.longitude);
+                GoogleNavigator.navigate(currentShop.latitude, currentShop.longitude);
             },
             child: Container
             (
@@ -254,32 +265,57 @@ class _OrderPageScreenState extends State<OrderPageScreen>
 
     Widget _getOrderButton(BuildContext context)
     {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-              alignment: Alignment.bottomCenter,
-              child: ButtonTheme(
-                  buttonColor: Color.fromRGBO(231, 82, 100, 1),
-                  minWidth: MediaQuery.of(context).size.width - 20,
-                  height: MediaQuery.of(context).size.height * 0.065,
-                  child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  elevation: 0,
-                  onPressed:()
-                  {
-                              
-                  },
-                  child: Text(
-                      LanguageModel.order[LanguageModel.currentLanguage],
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                  ),
-                  ),
-              ),
-          ),
+        return Padding
+        (
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                alignment: Alignment.bottomCenter,
+                child: ButtonTheme(
+                    buttonColor: Color.fromRGBO(231, 82, 100, 1),
+                    minWidth: MediaQuery.of(context).size.width - 20,
+                    height: MediaQuery.of(context).size.height * 0.065,
+                    child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    elevation: 0,
+                    onPressed:()
+                    {
+                        _order(context);
+                    },
+                    child: Text(
+                        LanguageModel.order[LanguageModel.currentLanguage],
+                        style: TextStyle(fontSize: 25, color: Colors.white),
+                    ),
+                    ),
+                ),
+            ),
         );
+    }
+
+    void _order(BuildContext context) async
+    {
+        bool result = await OrderDB.placeOrder
+        (
+            timePicker: timePicker,
+            currentUser: StaticData.currentUser,
+            currentShop: currentShop,
+            yearMonth: orderDate.year.toString() + "." + _toDateFormatNumber(orderDate.month),
+            day: _toDateFormatNumber(orderDate.day),
+            cartItems: items
+        );
+
+        Navigator.of(context).pop();
+
+        if(result)
+        {
+            RenaoToast.orderSuccessful();
+        }
+        else
+        {
+            RenaoToast.orderDeclined();
+        }
     }
 
     String _toDateFormatNumber(int number)

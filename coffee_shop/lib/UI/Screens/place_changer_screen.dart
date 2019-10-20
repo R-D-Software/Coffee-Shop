@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 
 class PlaceChangerScreen extends StatelessWidget 
 {
+    static const String route = "/main/cart/order_page_screen/placechanger";
+
     @override
     Widget build(BuildContext context) 
     {
-        //_initializeData(context);
-
         return Scaffold
         (
             appBar: AppBar(),

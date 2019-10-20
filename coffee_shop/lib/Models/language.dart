@@ -203,6 +203,21 @@ class LanguageModel {
     Language.HUNGARIAN: "Forró"
   };
 
+  static Map<Language, String> orderSuccessful = const {
+    Language.ENGLISH: "Order Successful",
+    Language.HUNGARIAN: "Rendelés felvéve"
+  };  
+
+  static Map<Language, String> orderDeclined = const {
+    Language.ENGLISH: "Order declined, please select another time",
+    Language.HUNGARIAN: "A rendelés meghíusult, kérlek válassz másik időpontot"
+  };   
+
+  static Map<Language, String> orders = const {
+    Language.ENGLISH: "Orders",
+    Language.HUNGARIAN: "Rendelések"
+  };   
+
   static Future init(BuildContext context) async {
     User user;
     await UserDB.getCurrentUser().then((u) {

@@ -10,6 +10,7 @@ import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
 class FoodItemViewScreen extends StatelessWidget {
+  static const String route = '/main/itemview/food';
   ShopItem _item;
   AppBar _appBar = AppBar();
   Container _addButton;
