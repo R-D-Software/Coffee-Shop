@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Exceptions/RenaoException.dart';
 import 'package:coffee_shop/Models/language.dart';
@@ -8,7 +10,10 @@ class CoffeeItem extends ShopItem {
   Temperature temperature;
   int sugar;
 
-  CoffeeItem({@required ShopItem shopItem, @required this.temperature, @required this.sugar})
+  CoffeeItem(
+      {@required ShopItem shopItem,
+      @required this.temperature,
+      @required this.sugar})
       : super(
             documentID: shopItem.documentID,
             imageUrl: shopItem.imageUrl,
@@ -16,7 +21,8 @@ class CoffeeItem extends ShopItem {
             price: shopItem.price,
             description: shopItem.description,
             itemType: "coffee",
-            onSale: shopItem.onSale);
+            onSale: shopItem.onSale,
+            parentID: shopItem.parentID);
 
   Map<String, Object> toJson() {
     return {
@@ -28,8 +34,14 @@ class CoffeeItem extends ShopItem {
       'onSale': onSale,
       'appIdentifier': 'Renao',
       'temperature': temperature.temperature,
-      'sugar': sugar
+      'sugar': sugar,
+      'parentID': parentID
     };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this);
   }
 
   factory CoffeeItem.fromJson(Map<String, Object> doc, String documentID) {
@@ -45,6 +57,7 @@ class CoffeeItem extends ShopItem {
         description: doc['description'],
         onSale: doc['onSale'],
         itemType: doc['itemType'],
+        parentID: doc['parentID'],
       ),
       temperature: _setTemperature(doc['temperature']),
       sugar: doc['sugar'],
@@ -58,21 +71,17 @@ class CoffeeItem extends ShopItem {
 }
 
 Temperature _setTemperature(String temperature) {
-  switch (temperature) {
-    case 'Hot':
-      return Temperature.hot();
-      break;
-    case 'Warm':
-      return Temperature.warm();
-      break;
-    case 'Cold':
-      return Temperature.cold();
-      break;
-    case 'Ice cold':
-      return Temperature.iceCold();
-      break;
-  }
-  return Temperature.hot();
+  if (temperature == LanguageModel.hot[Language.ENGLISH] ||
+      temperature == LanguageModel.hot[Language.HUNGARIAN])
+    return Temperature.hot();
+  else if (temperature == LanguageModel.warm[Language.ENGLISH] ||
+      temperature == LanguageModel.warm[Language.HUNGARIAN])
+    return Temperature.warm();
+  else if (temperature == LanguageModel.cold[Language.ENGLISH] ||
+      temperature == LanguageModel.cold[Language.HUNGARIAN])
+    return Temperature.cold();
+  else
+    return Temperature.iceCold();
 }
 
 class Temperature {

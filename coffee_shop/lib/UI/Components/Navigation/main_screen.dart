@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class MainScreen extends StatefulWidget {
+  static const String route = '/main';
   @override
   MainScreenState createState() => new MainScreenState();
 }

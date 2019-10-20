@@ -4,12 +4,13 @@ import 'package:coffee_shop/Models/food_item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class FoodItemViewScreen extends StatelessWidget {
+  static const String route = '/main/itemview/food';
   ShopItem _item;
   AppBar _appBar = AppBar();
   Container _addButton;
@@ -71,42 +72,38 @@ class FoodItemViewScreen extends StatelessWidget {
       _item = snapshot.data;
     }
 
-    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Icon(Icons.keyboard_arrow_left),
-          StrokedText(
-            text: _item.name,
-            color: Colors.white,
-            size: 25,
-          ),
-          Icon(Icons.keyboard_arrow_right),
-        ],
-      ),
-      Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          Container(
-              margin: EdgeInsets.only(top: 20, bottom: 25),
-              width: height * 0.35,
-              height: height * 0.35,
-              decoration: new BoxDecoration(
-                  boxShadow: [
-                    new BoxShadow(
-                      color: Colors.red,
-                      spreadRadius: 2,
-                      offset: new Offset(-5.0, 10.0),
-                    )
-                  ],
-                  border: Border.all(color: Theme.of(context).primaryColor, width: 14),
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
-          FavouriteStar(itemID: itemID),
-        ],
-      ),
-      _addButton,
-    ]);
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20),
+      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        StrokedText(
+          text: _item.name,
+          color: Colors.white,
+          size: 25,
+        ),
+        Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            Container(
+                margin: EdgeInsets.only(top: 20, bottom: 25),
+                width: height * 0.35,
+                height: height * 0.35,
+                decoration: new BoxDecoration(
+                    boxShadow: [
+                      new BoxShadow(
+                        color: Colors.red,
+                        spreadRadius: 2,
+                        offset: new Offset(-5.0, 10.0),
+                      )
+                    ],
+                    border: Border.all(color: Theme.of(context).primaryColor, width: 14),
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
+            FavouriteStar(itemID: itemID),
+          ],
+        ),
+        _addButton,
+      ]),
+    );
   }
 
   Container _getAddButton(BuildContext context) {
@@ -125,16 +122,8 @@ class FoodItemViewScreen extends StatelessWidget {
           onPressed: () {
             var foodItem = FoodItem(shopItem: _item);
             CartItemDB.modifyOrAddItemToCart(foodItem, _buttonLabel);
-            Fluttertoast.showToast(
-				msg: _item.name + LanguageModel.toastAddToCart[LanguageModel.currentLanguage],
-				toastLength: Toast.LENGTH_SHORT,
-				gravity: ToastGravity.BOTTOM,
-				timeInSecForIos: 1,
-				backgroundColor: Color.fromRGBO(231, 82, 100, 1),
-				textColor: Colors.white,
-				fontSize: 16.0
-			);
-            Navigator.of(context).pop(); 
+            RenaoToast.itemAdded(_item.name, _buttonLabel);
+            Navigator.of(context).pop();
           },
           child: Text(
             _buttonLabel,

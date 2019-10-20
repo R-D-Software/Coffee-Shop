@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 class CartListItem extends StatelessWidget {
   final ShopItem item;
   final double height = 100;
+  final Function refreshFunction;
 
-  CartListItem({@required this.item});
+  CartListItem({@required this.item, @required this.refreshFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +52,9 @@ class CartListItem extends StatelessWidget {
       margin: EdgeInsets.only(right: 10, top: 20),
       child: IconButton(
         icon: Icon(Icons.delete),
-        onPressed: () {
-          CartItemDB.deleteItemFromCart(item);
+        onPressed: () async {
+          await CartItemDB.deleteItemFromCart(item);
+          refreshFunction();
         },
         padding: EdgeInsets.all(10),
         iconSize: 40,

@@ -32,6 +32,7 @@ class _TemperatureChooserState extends State<TemperatureChooser> {
 
   @override
   void initState() {
+    super.initState();
     if (widget._item is CoffeeItem) {
       CoffeeItem coffeeItem = widget._item as CoffeeItem;
       temperature = coffeeItem.temperature;
@@ -39,7 +40,7 @@ class _TemperatureChooserState extends State<TemperatureChooser> {
         _value = 0;
       } else if (temperature.temperature == Temperature.cold().temperature) {
         _value = 37;
-      } else if (temperature.temperature == Temperature.cold().temperature) {
+      } else if (temperature.temperature == Temperature.warm().temperature) {
         _value = 63;
       } else {
         _value = 100;
@@ -64,9 +65,9 @@ class _TemperatureChooserState extends State<TemperatureChooser> {
         onChanged: (double newValue) {
           setState(() {
             _value = newValue.round();
-            widget._setTemparatureValueOnParentScreen(temperature);
           });
         },
+        onChangeEnd: widget._setTemparatureValueOnParentScreen(temperature),
       ),
     );
   }

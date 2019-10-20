@@ -38,6 +38,7 @@ class Shop{
   final String street;
   final String imageURL;
   final String docID;
+  final int maximumOrderPerMinute;
 
   Shop
   (
@@ -49,6 +50,7 @@ class Shop{
         @required this.street,
         @required this.imageURL,
         @required this.docID,
+        @required this.maximumOrderPerMinute,
     }
   );
 
@@ -60,6 +62,7 @@ class Shop{
       'place': place,
       'street': street,
       'imageURL': imageURL,
+      'maximumOrderPerMinute': maximumOrderPerMinute,
       'appIdentifier': 'Renao',
     };
   }
@@ -73,6 +76,7 @@ class Shop{
       place: doc['place'],
       street: doc['street'],
       imageURL: doc['imageURL'],
+      maximumOrderPerMinute: doc['maximumOrderPerMinute'],
       docID: docID,
     );
     return shop;

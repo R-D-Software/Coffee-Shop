@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 
 class FavouriteListScreen extends StatefulWidget 
 {
+    static const String route = '/main/favourites';
     @override
     _FavouriteListScreenState createState() => _FavouriteListScreenState();
 }

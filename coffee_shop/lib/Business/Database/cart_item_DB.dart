@@ -51,4 +51,22 @@ class CartItemDB {
         .document(shopItem.documentID)
         .delete();
   }
+
+    static void resetCartForUser() {
+
+        print("RESETTING");
+        Firestore.instance
+            .collection("users")
+            .document(StaticData.currentUser.userID)
+            .collection("cart_items").getDocuments().then((docs)
+            {
+                docs.documents.forEach((doc)
+                {
+                    Firestore.instance
+                        .collection("users")
+                        .document(StaticData.currentUser.userID)
+                        .collection("cart_items").document(doc.documentID).delete();
+                });
+            });
+    } 
 }

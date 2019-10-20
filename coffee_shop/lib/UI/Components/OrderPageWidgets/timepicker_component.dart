@@ -1,3 +1,5 @@
+import 'package:coffee_shop/Business/Database/order_DB.dart';
+import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_number_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -5,9 +7,14 @@ class TimePickerComponent extends StatefulWidget
 {
     int pickedHour = 8;
     int pickedMinute = 1;
+    final Shop currentShop;
+    final DateTime date;
     final Map<String,dynamic> notSelectableDates;
+    final int startTime;
+    final int endTime;
+    final int minutesAfterOrder;
 
-    TimePickerComponent(this.notSelectableDates);
+    TimePickerComponent({this.notSelectableDates, this.currentShop, this.date, this.startTime, this.endTime, this.minutesAfterOrder});
 
     @override
     _TimePickerComponentState createState() => _TimePickerComponentState();
@@ -36,8 +43,30 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
     @override
     Widget build(BuildContext context) 
     {
-        int startTime = 6;
-        int endTime = 14;
+        int minutesAfterOrder = widget.minutesAfterOrder;
+        int addMinutes = 0;
+        DateTime now = DateTime.now();
+        int startTime = widget.startTime;
+        int endTime = widget.endTime;
+
+        if(now.year == widget.date.year
+            && now.month == widget.date.month
+            && now.day == widget.date.day)
+        {
+            if(startTime < now.hour && (now.hour+1) < endTime)
+            {
+                if((60 - now.minute) <= minutesAfterOrder)
+                {
+                    startTime = now.hour+1;
+                    addMinutes = minutesAfterOrder - (60 - now.minute);
+                }
+                else
+                {
+                    startTime = now.hour;
+                    addMinutes = minutesAfterOrder;
+                }
+            }
+        }
 
         return Card
         (
@@ -92,7 +121,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                                     },
                                 ),
                                 Text(":", style: TextStyle(color: Colors.white),),
-                                _minutePicker(pickableMinutes)               
+                                _minutePicker(pickableMinutes, addMinutes)               
                             ],
                         ),
                     ],
@@ -101,9 +130,9 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
         );
     }
 
-    void _generateAvailableMinutesList(Duration s)
+    void _generateAvailableMinutesList(Duration s) async
     {
-        List<int> notPickableList = _getNotPickableMinutes(widget.pickedHour);
+        List<int> notPickableList = await OrderDB.getNotPickableMinutes(widget.pickedHour, widget.notSelectableDates, widget.currentShop);
         pickableMinutes = new List<int>();
 
         for(int i = 1; i < 60; i++)
@@ -114,30 +143,15 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
         setState(() {});
     }
 
-    List<int> _getNotPickableMinutes(int currentHour)
+    Widget _minutePicker(List<int> pickableList, int addMinutes) 
     {
-        List<int> notPickableMinutes = new List<int>();
-        String key = (currentHour < 10 ? "0" + currentHour.toString() : currentHour.toString());
-        
-        if(widget.notSelectableDates != null)
+        for(int i = 1; i < addMinutes; i++)
         {
-            if(widget.notSelectableDates.containsKey(key))
+            if(pickableMinutes.contains(i))
             {
-                for(String minute in widget.notSelectableDates[key].keys)
-                {
-                    if(widget.notSelectableDates[key][minute] > 0)
-                    {
-                        notPickableMinutes.add(int.parse(minute));
-                    }
-                }
+                pickableMinutes.remove(i);
             }
         }
-        
-        return notPickableMinutes;
-    }
-
-    Widget _minutePicker(List<int> pickableList) 
-    {
         return RenaoNumberPicker
         (
             initialValue: 0,

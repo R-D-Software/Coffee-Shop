@@ -1,15 +1,38 @@
 import 'dart:ui';
 
+import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/UI/Components/HomeWidgets/item_corner_painter.dart';
 import 'package:flutter/material.dart';
 class CartItemComponent extends StatelessWidget 
 {
-    final ShopItem item;
+    final String itemID;
+    final int orderNo;
+    final double itemSize;
 
-    CartItemComponent(this.item);
+    CartItemComponent(this.itemID, this.orderNo, this.itemSize);
 
     @override
     Widget build(BuildContext context) 
+    {
+        return StreamBuilder
+        (
+            stream: ShopItemDB.getShopItemByID(itemID),
+            builder: (context, snap)
+            {
+                if(snap.connectionState == ConnectionState.waiting)
+                {
+                    return Container();
+                }
+                else
+                {
+                    return _buildComponent(context, (snap.data as ShopItem));
+                }
+            },
+        );
+    }
+
+    Widget _buildComponent(BuildContext context, ShopItem item)
     {
         return Card
         (
@@ -20,25 +43,11 @@ class CartItemComponent extends StatelessWidget
             elevation: 4,
             child: Container
             (
-                child: GestureDetector
+                child: ItemCornerPainter
                 (
-                    child: Container
-                    (
-                        width: 44.0,
-                        height: 44.0,
-                        margin: EdgeInsets.all(7),
-                        child: Align
-                        (
-                            alignment: Alignment.topRight,
-                            child: Image.asset
-                            (
-                                "assets/images/minussign.png",
-                                width:24.0,
-                                height:24.0,
-                            )
-                        )
-                    ),
-                    onTap: () => {print("touched me")},
+                    orderNo: this.orderNo,
+                    itemSize: itemSize,
+                    radius: 16,
                 ),
                 decoration: BoxDecoration
                 (  
@@ -47,7 +56,7 @@ class CartItemComponent extends StatelessWidget
                         fit: BoxFit.cover,
                         image: NetworkImage
                         (
-                            this.item.imageUrl
+                            item.imageUrl
                         )
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(16.0))
