@@ -58,12 +58,6 @@ class _CartBodyState extends State<CartBody> {
     );
   }
 
-  Widget _getEmptyList() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[],
-    );
-  }
 
   Widget _buildScreen() {
     return StreamBuilder(
@@ -94,9 +88,48 @@ class _CartBodyState extends State<CartBody> {
 
     Widget _buildEmptyCart(BuildContext context)
     {
-        return Center
+		double width = MediaQuery.of(context).size.width;
+        return Container
         (
-            child: Text("lofaszvagy"),
+            child: Center
+            (
+                child: Column
+                (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>
+                    [
+                        ClipRRect
+                        (
+                            borderRadius: BorderRadius.circular(200.0),
+                            child: Card
+                            (
+                                elevation: 2,
+                                child: Image.asset("assets/images/kav.jpg", width: width*0.75,),
+                            ),
+                        ),
+                        SizedBox(height: 10,),
+                        StrokedText
+                        (
+                            text: LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
+                            size: 30,
+                        ),
+                        Container
+                        (
+                            margin: EdgeInsets.only(left: width*0.11, right: width*0.11, top: 25),
+                            child: Text
+                            (
+                                LanguageModel.addToCartDescription[LanguageModel.currentLanguage],
+                                textAlign: TextAlign.center,
+                                style: TextStyle
+                                (
+                                    color: Colors.white70
+                                ),
+                            ),
+                        ),
+                        SizedBox(height: width*0.07)
+                    ],
+                ),
+            ),
         );
     }
 
@@ -169,6 +202,7 @@ class _CartBodyState extends State<CartBody> {
     bool selectableDate(DateTime selected)
     {
         DateTime now = DateTime.now();
+		now = now.add(Duration(hours: -7));
 
         if(now.year == selected.year
             && now.month == selected.month
@@ -188,18 +222,21 @@ class _CartBodyState extends State<CartBody> {
                 && selected.day == date.day)
                 return false;
         }
+
         return selected.weekday < 6;
     }
 
     DateTime getInitialDate(DateTime selected)
     {
-        if(selectableDate(selected))
+		DateTime d = DateTime(selected.year, selected.month, selected.day);
+		print(d);
+        if(selectableDate(d))
         {
-            return selected;
+            return d;
         }
         else
         {
-            return getInitialDate(selected.add(new Duration(days:1)));
+            return getInitialDate(d.add(new Duration(days:1)));
         }
     }
 
@@ -211,7 +248,7 @@ class _CartBodyState extends State<CartBody> {
         DateTime nextMonth = today.add(new Duration(days: 30));
         DateTime orderDate = await showDatePicker(
             context: context,
-            firstDate: today,
+            firstDate: DateTime(today.year, today.month, today.day),
             initialDate: initialDate,
             lastDate: nextMonth,
             selectableDayPredicate: selectableDate);

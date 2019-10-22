@@ -130,12 +130,24 @@ class LanguageModel {
     Language.ENGLISH:
         "To add something to your favourite list, please tap on the star icon in the product view.",
     Language.HUNGARIAN:
-        "Ahhoz, hogy a kedvencek listához tudd adni egy terméket, a termék képe fölötti csillagra kell kattintanod."
+        "Ahhoz, hogy a kedvencek listához tudj adni egy terméket, a termék képe fölötti csillagra kell kattintanod."
   };
 
   static Map<Language, String> yourListIsEmpty = const {
     Language.ENGLISH: "Your list is empty",
     Language.HUNGARIAN: "A listád üres"
+  };
+
+  static Map<Language, String> addToCartDescription = const {
+    Language.ENGLISH:
+        "To add something to your cart, please tap on the \'Add to Cart\'",
+    Language.HUNGARIAN:
+        "Ahhoz, hogy a kosárhoz adj egy terméket, a terméknél lévő \'Kosárhoz\' gombra kell kattintanod."
+  };
+
+  static Map<Language, String> yourCartIsEmpty = const {
+    Language.ENGLISH: "Your cart is empty",
+    Language.HUNGARIAN: "A kosarad üres"
   };
 
   static Map<Language, String> addToCart = const {
