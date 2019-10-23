@@ -1,18 +1,22 @@
-import 'package:coffee_shop/Business/Database/order_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/MapNavigator/google_navigator.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/order.dart';
 import 'package:coffee_shop/Models/shops.dart';
+import 'package:coffee_shop/UI/Components/HomeWidgets/timeleft_widget.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
-import 'cart_item_component.dart';
+import 'order_item_component.dart';
 import 'header_painter.dart';
 
 class CurrentOrderOnHomeScreenWidget extends StatefulWidget {
-  @override
-  _CurrentOrderOnHomeScreenWidgetState createState() => _CurrentOrderOnHomeScreenWidgetState();
+    final List<Order> orders;
+    
+    CurrentOrderOnHomeScreenWidget(this.orders);
+
+    @override
+    _CurrentOrderOnHomeScreenWidgetState createState() => _CurrentOrderOnHomeScreenWidgetState();
 }
 
 class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScreenWidget> {
@@ -25,33 +29,14 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
     @override
     Widget build(BuildContext context) {
         _getPropertyValues();
-
-        return StreamBuilder
-        (
-            stream: OrderDB.getOrdersForCurrentUser().asStream(),
-            builder: (context, snapshot)
-            {
-                if(snapshot.connectionState == ConnectionState.waiting)
-                {
-                    return Container();
-                }
-                else
-                {
-                    List<Order> orders = (snapshot.data as List<Order>);
-
-                    if(orders.isEmpty)
-                    {
-                        return Container();
-                    }
-
-                    return _buildBody(context, orders);
-                }
-            },
-        );   
+        if(widget.orders.isNotEmpty)
+            return _buildBody(context, widget.orders);  
+        else
+            return Container();
     }
 
     Widget _buildBody(BuildContext context, List<Order> orders)
-    {
+    {       
         return Column
         (
             children: 
@@ -78,6 +63,10 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
                         scrollDirection: Axis.horizontal,
                         children: _getItems(orders),
                     )
+                ),
+                Center
+                (
+                    child: TimeLeftWidget(_getNearestOrder(orders))
                 )
             ]
         );
@@ -106,7 +95,7 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
                     Container
                     (
                         margin: EdgeInsets.only(right: 7),
-                        child: CartItemComponent(itemID, orders.indexOf(order), _itemSize),
+                        child: OrderItemComponent(itemID, orders.indexOf(order), _itemSize),
                         width: this._itemSize,
                         color: Colors.transparent,
                     )
@@ -148,20 +137,12 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
 
         for(Order order in orders)
         {
-            if(_stringToDate(retOrder).compareTo(_stringToDate(order)) > 0)
+            if(retOrder.toDateTime().compareTo(order.toDateTime()) > 0)
             {
                 retOrder = order;
             }
         }
         return retOrder;
-    }
-
-    DateTime _stringToDate(Order order)
-    {
-        String formattedString = order.date.toString() + "T" + order.time.toString() + "00";
-        formattedString = formattedString.replaceAll(RegExp("\\."), "");
-        formattedString = formattedString.replaceAll(RegExp(":"), "");
-        return DateTime.parse(formattedString);
     }
 
     void _navigatoToShop(Order order) async

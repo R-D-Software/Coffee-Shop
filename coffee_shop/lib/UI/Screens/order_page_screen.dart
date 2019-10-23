@@ -13,7 +13,6 @@ import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
 import 'package:coffee_shop/UI/Components/OrderPageWidgets/timepicker_component.dart';
 import 'package:coffee_shop/UI/Screens/place_changer_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class OrderPageScreen extends StatefulWidget 
 {
@@ -160,9 +159,7 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         (
             notSelectableDates: notSelectableDates, 
             currentShop: currentShop, 
-            date: orderDate,
-            startTime: startTime, 
-            endTime: endTime, 
+            date: orderDate, 
             minutesAfterOrder: minutesAfterOrder
         );
         

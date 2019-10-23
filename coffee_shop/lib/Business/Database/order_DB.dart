@@ -54,15 +54,15 @@ class OrderDB
     static Future<List<int>> getNotPickableMinutes(int currentHour, Map<String, dynamic> notSelectableDates, Shop currentShop) async
     {
         List<int> notPickableMinutes = new List<int>();
-        String key = (currentHour < 10 ? "0" + currentHour.toString() : currentHour.toString());
-        
+        int maxOrderAtMin = await ShopsDB.getMaximumOrderPerMinuteForShop(currentShop);
+
         if(notSelectableDates != null)
         {
-            if(notSelectableDates.containsKey(key))
+            if(notSelectableDates.containsKey(currentHour.toString()))
             {
-                for(String minute in notSelectableDates[key].keys)
+                for(String minute in (notSelectableDates[currentHour.toString()] as Map<dynamic, dynamic>).keys)
                 {
-                    if(notSelectableDates[key][minute] > await ShopsDB.getMaximumOrderPerMinuteForShop(currentShop))
+                    if(notSelectableDates[currentHour.toString()][minute] > maxOrderAtMin)
                     {
                         notPickableMinutes.add(int.parse(minute));
                     }
@@ -83,9 +83,15 @@ class OrderDB
         {
             res.documents.forEach((doc)
             {
-                orders.add(Order.fromJson(doc.data));
+                orders.add(Order.fromJson(doc.data, doc.documentID));
             });
         });
         return orders;
+    }
+
+    static void deleteOrder(String docID)
+    {
+        print(docID);
+        Firestore.instance.collection("orders").document(docID).delete();
     }
 }

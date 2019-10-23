@@ -10,6 +10,7 @@ class Order
     final String time;
     final String yearMonth;
     final String day;
+    final String docID;
 
     Order
     (
@@ -21,6 +22,7 @@ class Order
             @required this.time,
             @required this.yearMonth,
             @required this.day,
+            @required this.docID,
         }
     );
 
@@ -35,11 +37,12 @@ class Order
             'time': time,
             'yearMonth': yearMonth,
             'day': day,
+            'docID': docID,
             'appIdentifier': 'Renao'
         };
     }
 
-    factory Order.fromJson(Map<String, Object> doc) 
+    factory Order.fromJson(Map<String, Object> doc, String docID) 
     {
         Order order = new Order
         (
@@ -53,6 +56,7 @@ class Order
             time: doc['time'],
             yearMonth: doc['yearMonth'],
             day: doc['day'],
+            docID: docID,
         );
 
         return order;
@@ -60,6 +64,32 @@ class Order
 
     factory Order.fromDocument(DocumentSnapshot doc) 
     {
-        return Order.fromJson(doc.data);
+        return Order.fromJson(doc.data, doc.documentID);
+    }
+
+    DateTime toDateTime() 
+    {
+        String formattedString = date.toString() + "T" + _timeToMinute() + "";
+        formattedString = formattedString.replaceAll(RegExp("\\."), "");
+        formattedString = formattedString.replaceAll(RegExp(":"), "");
+        return DateTime.parse(formattedString);
+    }
+
+    String _timeToMinute()
+    {
+        String hour = time.split(":")[0];
+        String minute = time.split(":")[1];
+
+        if(hour.length == 1)
+        {
+            hour = "0" + hour;
+        }
+
+        if(minute.length == 1)
+        {
+            minute = "0" + minute;
+        }
+
+        return hour + ":" + minute + ":" + "00";
     }
 }
