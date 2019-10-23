@@ -4,17 +4,17 @@ import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/item_corner_painter.dart';
 import 'package:flutter/material.dart';
-class CartItemComponent extends StatelessWidget 
+class OrderItemComponent extends StatelessWidget 
 {
     final String itemID;
     final int orderNo;
     final double itemSize;
 
-    CartItemComponent(this.itemID, this.orderNo, this.itemSize);
+    OrderItemComponent(this.itemID, this.orderNo, this.itemSize);
 
     @override
     Widget build(BuildContext context) 
-    {
+    {       
         return StreamBuilder
         (
             stream: ShopItemDB.getShopItemByID(itemID),

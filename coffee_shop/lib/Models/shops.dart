@@ -39,6 +39,8 @@ class Shop{
   final String imageURL;
   final String docID;
   final int maximumOrderPerMinute;
+  final int closes;
+  final int opens;
 
   Shop
   (
@@ -51,19 +53,23 @@ class Shop{
         @required this.imageURL,
         @required this.docID,
         @required this.maximumOrderPerMinute,
+        @required this.closes,
+        @required this.opens,
     }
   );
 
   Map<String, Object> toJson() {
     return {
-      'buildingNumber': buildingNumber,
-      'latitude': latitude,
-      'longitude': longitude,
-      'place': place,
-      'street': street,
-      'imageURL': imageURL,
-      'maximumOrderPerMinute': maximumOrderPerMinute,
-      'appIdentifier': 'Renao',
+        'buildingNumber': buildingNumber,
+        'latitude': latitude,
+        'longitude': longitude,
+        'place': place,
+        'street': street,
+        'imageURL': imageURL,
+        'maximumOrderPerMinute': maximumOrderPerMinute,
+        'closes': closes,
+        'opens': opens,
+        'appIdentifier': 'Renao',
     };
   }
 
@@ -77,6 +83,8 @@ class Shop{
       street: doc['street'],
       imageURL: doc['imageURL'],
       maximumOrderPerMinute: doc['maximumOrderPerMinute'],
+      closes: doc['closes'],
+      opens: doc['opens'],
       docID: docID,
     );
     return shop;

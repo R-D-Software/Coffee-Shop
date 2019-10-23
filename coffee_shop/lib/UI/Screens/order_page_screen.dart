@@ -159,9 +159,7 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         (
             notSelectableDates: notSelectableDates, 
             currentShop: currentShop, 
-            date: orderDate,
-            startTime: startTime, 
-            endTime: endTime, 
+            date: orderDate, 
             minutesAfterOrder: minutesAfterOrder
         );
         

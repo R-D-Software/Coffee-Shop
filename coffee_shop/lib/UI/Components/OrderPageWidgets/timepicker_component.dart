@@ -5,16 +5,14 @@ import 'package:flutter/material.dart';
 
 class TimePickerComponent extends StatefulWidget 
 {
-    int pickedHour = 8;
+    int pickedHour = 6;
     int pickedMinute = 1;
     final Shop currentShop;
     final DateTime date;
     final Map<String,dynamic> notSelectableDates;
-    final int startTime;
-    final int endTime;
     final int minutesAfterOrder;
 
-    TimePickerComponent({this.notSelectableDates, this.currentShop, this.date, this.startTime, this.endTime, this.minutesAfterOrder});
+    TimePickerComponent({this.notSelectableDates, this.currentShop, this.date, this.minutesAfterOrder});
 
     @override
     _TimePickerComponentState createState() => _TimePickerComponentState();
@@ -46,8 +44,8 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
         int minutesAfterOrder = widget.minutesAfterOrder;
         int addMinutes = 0;
         DateTime now = DateTime.now();
-        int startTime = widget.startTime;
-        int endTime = widget.endTime;
+        int startTime = widget.currentShop.opens;
+        int endTime = widget.currentShop.closes;
 
         if(now.year == widget.date.year
             && now.month == widget.date.month
@@ -135,7 +133,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
         List<int> notPickableList = await OrderDB.getNotPickableMinutes(widget.pickedHour, widget.notSelectableDates, widget.currentShop);
         pickableMinutes = new List<int>();
 
-        for(int i = 1; i < 60; i++)
+        for(int i = 0; i < 60; i++)
         {
             if(!notPickableList.contains(i))
                 pickableMinutes.add(i);
@@ -145,7 +143,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
 
     Widget _minutePicker(List<int> pickableList, int addMinutes) 
     {
-        for(int i = 1; i < addMinutes; i++)
+        for(int i = 0; i < addMinutes; i++)
         {
             if(pickableMinutes.contains(i))
             {

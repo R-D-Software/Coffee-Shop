@@ -228,7 +228,22 @@ class LanguageModel {
   static Map<Language, String> orders = const {
     Language.ENGLISH: "Orders",
     Language.HUNGARIAN: "Rendelések"
-  };   
+  };
+     
+  static Map<Language, String> timeRemaining = const {
+    Language.ENGLISH: "Time remaining",
+    Language.HUNGARIAN: "Hátralévő idő"
+  };
+
+  static Map<Language, String> dayLetter = const {
+    Language.ENGLISH: "d",
+    Language.HUNGARIAN: "n"
+  };  
+
+  static Map<Language, String> orderIsReady = const {
+    Language.ENGLISH: "Order is ready",
+    Language.HUNGARIAN: "A rendelés kész"
+  };  
 
   static Future init(BuildContext context) async {
     User user;

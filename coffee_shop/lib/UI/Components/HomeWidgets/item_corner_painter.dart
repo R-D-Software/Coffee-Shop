@@ -70,7 +70,7 @@ class ItemCurvePainter extends CustomPainter
     {
         final List<Color> retColor = [Colors.orange, Colors.red, Colors.purple, Colors.blue, Colors.cyan];
 
-        if(orderNo > retColor.length)
+        if(orderNo >= retColor.length)
         {
             return Colors.black;
         }
