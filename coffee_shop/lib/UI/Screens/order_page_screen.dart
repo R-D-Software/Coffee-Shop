@@ -28,8 +28,6 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     TimePickerComponent timePicker;
     List<ShopItem> items;
     int totalPrice;
-    int startTime;
-    int endTime;
     int minutesAfterOrder;
 
     @override
@@ -137,8 +135,6 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         orderDate = routeArgs['orderDate'] as DateTime;
         items = routeArgs['items'] as List<ShopItem>;
         totalPrice = routeArgs['totalPrice'] as int;
-        startTime = routeArgs['startTime'] as int;
-        endTime = routeArgs['endTime'] as int;
         minutesAfterOrder = routeArgs['minutesAfterOrder'] as int;
     }
 
@@ -158,7 +154,8 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         timePicker = TimePickerComponent
         (
             notSelectableDates: notSelectableDates, 
-            currentShop: currentShop, 
+            currentShop: currentShop,
+
             date: orderDate, 
             minutesAfterOrder: minutesAfterOrder
         );

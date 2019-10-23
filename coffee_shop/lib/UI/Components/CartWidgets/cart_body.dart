@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/order_date_DB.dart';
+import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/shops.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
@@ -20,8 +23,8 @@ class CartBody extends StatefulWidget {
 
     double bottomBarHeight = 50;
     double bottomNavBarHeight = 112;
-    final int startTime = 6;
-    final int endTime = 17;
+    int startTime;
+    int endTime;
     final int minutesAfterOrder = 30;
 }
 
@@ -32,15 +35,30 @@ class _CartBodyState extends State<CartBody> {
   @override
   void initState() {
     super.initState();
-//    getCoffees();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: RenaoBoxDecoration.builder(context),
-        child: _buildScreen(),
+        decoration: RenaoBoxDecoration.builder(context),       
+        child: StreamBuilder
+        (
+            stream: ShopsDB.getShopByID(StaticData.currentUser.selectedShop).asStream(),
+            builder: (context, snap)
+            {
+                if(snap.connectionState == ConnectionState.waiting)
+                {
+                    return Container();
+                }
+                else
+                {
+                    widget.startTime = (snap.data as Shop).opens;
+                    widget.endTime = (snap.data as Shop).closes;
+                    return _buildScreen();
+                }
+            },
+        ),
       ),
     );
   }
@@ -200,9 +218,8 @@ class _CartBodyState extends State<CartBody> {
 
 
     bool selectableDate(DateTime selected)
-    {
+    { 
         DateTime now = DateTime.now();
-		now = now.add(Duration(hours: -7));
 
         if(now.year == selected.year
             && now.month == selected.month
@@ -210,7 +227,7 @@ class _CartBodyState extends State<CartBody> {
         {
             if(((widget.endTime-1) == now.hour && (60 - now.minute) < widget.minutesAfterOrder)
                 || now.hour >= widget.endTime)
-            {
+            {              
                 return false;
             }
         }
@@ -229,9 +246,8 @@ class _CartBodyState extends State<CartBody> {
     DateTime getInitialDate(DateTime selected)
     {
 		DateTime d = DateTime(selected.year, selected.month, selected.day);
-		print(d);
         if(selectableDate(d))
-        {
+        {           
             return d;
         }
         else
@@ -244,7 +260,7 @@ class _CartBodyState extends State<CartBody> {
     {
         holidays = await OrderDateDB.getHolidays();
         DateTime today = DateTime.now();
-        DateTime initialDate = getInitialDate(DateTime.now());
+        DateTime initialDate = getInitialDate(today);
         DateTime nextMonth = today.add(new Duration(days: 30));
         DateTime orderDate = await showDatePicker(
             context: context,
@@ -260,8 +276,6 @@ class _CartBodyState extends State<CartBody> {
                 "orderDate": orderDate,
                 "items": cartItems,
                 "totalPrice": getTotal(cartItems),
-                "startTime": widget.startTime,
-                "endTime": widget.endTime,
                 "minutesAfterOrder": widget.minutesAfterOrder
             });
         }  
