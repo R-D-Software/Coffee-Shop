@@ -30,7 +30,7 @@ class OrderDB
             time: timePicker.pickedHour.toString() + ":" + timePicker.pickedMinute.toString(),
             items: itemIDs
         );
-
+        
         Firestore.instance.collection("orders").add(order.toJson());
         ShopsDB.incrementUsedBoxesWithOrder(order);
         CartItemDB.resetCartForUser();

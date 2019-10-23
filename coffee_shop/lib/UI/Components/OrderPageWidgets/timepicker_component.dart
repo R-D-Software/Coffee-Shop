@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class TimePickerComponent extends StatefulWidget 
 {
-    int pickedHour = 6;
-    int pickedMinute = 1;
+    int pickedHour;
+    int pickedMinute;
     final Shop currentShop;
     final DateTime date;
     final Map<String,dynamic> notSelectableDates;
@@ -65,6 +65,9 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                 }
             }
         }
+        
+        widget.pickedHour = startTime;
+        widget.pickedMinute = 0;
 
         return Card
         (
