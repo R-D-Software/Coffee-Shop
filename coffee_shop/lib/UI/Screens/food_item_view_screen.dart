@@ -4,6 +4,7 @@ import 'package:coffee_shop/Models/food_item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_dialog.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
 import 'package:coffee_shop/UI/Components/ItemViewComponents/favourite_star.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
@@ -73,7 +74,7 @@ class FoodItemViewScreen extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
         StrokedText(
           text: _item.name,
@@ -99,6 +100,13 @@ class FoodItemViewScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
             FavouriteStar(itemID: itemID),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                margin: EdgeInsets.only(top: height * 0.35),
+                child: _buildInformationIcon(context),
+              ),
+            ),
           ],
         ),
         _addButton,
@@ -130,6 +138,24 @@ class FoodItemViewScreen extends StatelessWidget {
             style: TextStyle(fontSize: 25, color: Colors.white),
           ),
         ),
+      ),
+    );
+  }
+
+  Container _buildInformationIcon(BuildContext context) {
+    return Container(
+      child: RawMaterialButton(
+        onPressed: () {
+          RenaoDialog.showDialog(context: context, title: _item.name, description: _item.description);
+        },
+        child: Icon(
+          Icons.info,
+          color: Colors.blue,
+          size: 40.0,
+        ),
+        shape: CircleBorder(),
+        elevation: 2.0,
+        fillColor: Colors.white,
       ),
     );
   }

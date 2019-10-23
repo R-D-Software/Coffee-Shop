@@ -32,104 +32,83 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     int endTime;
     int minutesAfterOrder;
 
-    @override
-    void initState()
-    {
-        super.initState();
-    }
+  @override
+  void initState() {
+    super.initState();
+  }
 
-    @override
-    Widget build(BuildContext context) 
-    {
-        _initializeData(context);
+  @override
+  Widget build(BuildContext context) {
+    _initializeData(context);
 
-        return Scaffold
-        (
-            appBar: AppBar
-            (
-                actions: <Widget>
-                [
-                    _buildOrderDateHeader(context, orderDate)
-                ],
-            ),
-            body: StreamBuilder
-            (
-                stream: UserDB.getCurrentUserSelectedShop(),
-                builder: (context, snapshot)
-                {
-                    if(snapshot.connectionState == ConnectionState.waiting)
-                    {
-                        return Container();
-                    }
-                    else
-                    {
-                        currentShop = (snapshot.data as Shop);
-                        return StreamBuilder
-                        (
-                            stream: ShopsDB.getCrowdedTimes(currentShop.docID, (orderDate.year.toString() + "." + orderDate.month.toString()), orderDate.day.toString()).asStream(),
-                            builder: (context, snap)
-                            {
-                                if(snap.connectionState == ConnectionState.waiting)
-                                {
-                                    return Container();
-                                }
-                                else
-                                {
-                                    return _buildBody(context, (snap.data as DocumentSnapshot).data);
-                                }
-                            }
-                        );
-                    }
-                },
-            ),
-        );
-    }
+    return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[_buildOrderDateHeader(context, orderDate)],
+      ),
+      body: StreamBuilder(
+        stream: UserDB.getCurrentUserSelectedShop(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          } else {
+            currentShop = (snapshot.data as Shop);
+            return StreamBuilder(
+                stream: ShopsDB.getCrowdedTimes(currentShop.docID,
+                        (orderDate.year.toString() + "." + orderDate.month.toString()), orderDate.day.toString())
+                    .asStream(),
+                builder: (context, snap) {
+                  if (snap.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  } else {
+                    return _buildBody(context, (snap.data as DocumentSnapshot).data);
+                  }
+                });
+          }
+        },
+      ),
+    );
+  }
 
-    Widget _buildOrderDateHeader(BuildContext context, DateTime orderDate)
-    {
-        return Padding
-        (
-            padding: EdgeInsets.only(right: 8),
-            child: Center
-            (
-                child: Text
-                (
-                    orderDate.year.toString() + "." + orderDate.month.toString() + "." + orderDate.day.toString() + " " + _getDayFromWeekDay(orderDate.weekday),
-                    style: TextStyle
-                    (
-                        fontSize: 22,
-                    ),
-                ),
-            ),
-        );
-    }
+  Widget _buildOrderDateHeader(BuildContext context, DateTime orderDate) {
+    return Padding(
+      padding: EdgeInsets.only(right: 8),
+      child: Center(
+        child: Text(
+          orderDate.year.toString() +
+              "." +
+              orderDate.month.toString() +
+              "." +
+              orderDate.day.toString() +
+              " " +
+              _getDayFromWeekDay(orderDate.weekday),
+          style: TextStyle(
+            fontSize: 22,
+          ),
+        ),
+      ),
+    );
+  }
 
-    Widget _buildBody(BuildContext context, Map<String,dynamic> notSelectableDates)
-    {
-        return SingleChildScrollView
-        (
-            scrollDirection: Axis.vertical,
-            child: Container
-            (
-                decoration: RenaoBoxDecoration.builder(context),
-                height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height,
-                child: Container
-                (
-                    child: Column
-                    (
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>
-                        [
-                            _getPlaceWidget(context),
-                            _getTimeWidget(context, notSelectableDates),
-                            _getOrderButton(context),
-                        ],
-                    ),
-                ),
-                width: double.infinity,
-            ),
-        );
-    }
+  Widget _buildBody(BuildContext context, Map<String, dynamic> notSelectableDates) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        decoration: RenaoBoxDecoration.builder(context),
+        height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height,
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _getPlaceWidget(context),
+              _getTimeWidget(context, notSelectableDates),
+              _getOrderButton(context),
+            ],
+          ),
+        ),
+        width: double.infinity,
+      ),
+    );
+  }
 
     void _initializeData(BuildContext context) 
     {
@@ -142,16 +121,15 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         minutesAfterOrder = routeArgs['minutesAfterOrder'] as int;
     }
 
-    @override
-    void didUpdateWidget(OrderPageScreen oldWidget) {
-        super.didUpdateWidget(oldWidget);
-        setState(() {});
-    }
+  @override
+  void didUpdateWidget(OrderPageScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {});
+  }
 
-    String _getDayFromWeekDay(int day)
-    {
-        return LanguageModel.dayName(day-1);       
-    }
+  String _getDayFromWeekDay(int day) {
+    return LanguageModel.dayName(day - 1);
+  }
 
     Widget _getTimeWidget(BuildContext context, Map<String,dynamic> notSelectableDates)
     {
@@ -207,9 +185,14 @@ class _OrderPageScreenState extends State<OrderPageScreen>
                         ],
                     ),  
                 ),
-            ),
-        );
-    }
+              ),
+              _buildPlaceHeader(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
     Widget _buildPlaceHeader(BuildContext context)
     {
@@ -226,39 +209,15 @@ class _OrderPageScreenState extends State<OrderPageScreen>
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
                     color: Colors.grey.withOpacity(0.8),
                 ),
-                height: 40,
-                width: MediaQuery.of(context).size.width * 0.80,
-                alignment: Alignment.center,
-                child: SizedBox
-                (
-                    width: MediaQuery.of(context).size.width * 0.65,
-                    child: Row
-                    (
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>
-                        [
-                            Expanded
-                            ( 
-                                child: AutoSizeText
-                                (
-                                    currentShop.toString().toUpperCase(),
-                                    style: TextStyle
-                                    (
-                                        color: Colors.white
-                                    ),
-                                    maxFontSize: 20,
-                                    minFontSize: 10,
-                                    maxLines: 1,
-                                ),
-                            ),
-                            
-                            Icon(Icons.navigation,color: Colors.blue,),
-                        ],
-                    ),
-                )
+                Icon(
+                  Icons.navigation,
+                  color: Colors.blue,
+                ),
+              ],
             ),
-        );
-    }
+          )),
+    );
+  }
 
     Widget _getOrderButton(BuildContext context)
     {
@@ -319,9 +278,8 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     {
         String retval = number.toString();
 
-        if(number<10)
-            retval = "0" + number.toString();
+    if (number < 10) retval = "0" + number.toString();
 
-        return retval;
-    }
+    return retval;
+  }
 }
