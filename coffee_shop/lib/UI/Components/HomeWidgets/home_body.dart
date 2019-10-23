@@ -17,8 +17,8 @@ class HomeScreenBody extends StatefulWidget {
 }
 
 class _HomeScreenBodyState extends State<HomeScreenBody> {
- @override
-  Widget build(BuildContext context) {   
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder(
         stream: Firestore.instance.collection("shop_items").snapshots(),
         builder: (context, snapshot) {
@@ -39,7 +39,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     List<ShopItem> sandwichItems = new List<ShopItem>();
     List<ShopItem> dealItems = new List<ShopItem>();
 
-    if(snapshot.data == null) return Container();
+    if (snapshot.data == null) return Container();
 
     for (DocumentSnapshot ds in snapshot.data.documents) {
       ShopItem currentItem = ShopItem.fromDocument(ds, ds.documentID);
@@ -62,75 +62,71 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
     return _buildItemSliders(coffeeItems, sandwichItems, dealItems);
   }
 
-    Widget _buildItemSliders(List<ShopItem> coffeeItems,
-        List<ShopItem> sandwichItems, List<ShopItem> dealItems) 
-    {       
-        return StreamBuilder(
-            stream: UserDB.getCurrentUser().asStream(),
-            builder: (context, snapshot)
-            {         
-            if (snapshot.connectionState == ConnectionState.waiting) 
-            {
-                return Container();
-            }
+  Widget _buildItemSliders(List<ShopItem> coffeeItems,
+      List<ShopItem> sandwichItems, List<ShopItem> dealItems) {
+    return StreamBuilder(
+        stream: UserDB.getCurrentUser().asStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          }
 
-            User user = snapshot.data as User;
+          User user = snapshot.data as User;
 
-            return StreamBuilder(
-                stream: ShopItemDB.getShopItems(),
-                builder: (context1, snapshot1) 
-                {
-                    return StreamBuilder
-                    (
-                        stream: OrderDB.getOrdersForCurrentUser().asStream(),
-                        builder: (context, snapshot)
-                        {
-                            if(snapshot.connectionState == ConnectionState.waiting)
-                            {
-                                return Container();
-                            }
-                            else
-                            {
-                                List<Order> orders = (snapshot.data as List<Order>);
+          return StreamBuilder(
+            stream: ShopItemDB.getShopItems(),
+            builder: (context1, snapshot1) {
+              return StreamBuilder(
+                  stream: OrderDB.getOrdersForCurrentUser().asStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    } else {
+                      List<Order> orders = (snapshot.data as List<Order>);
 
-                                QuerySnapshot items = snapshot1.data as QuerySnapshot;
-                                List<ShopItem> favouriteItems = new List<ShopItem>();
+                      QuerySnapshot items = snapshot1.data as QuerySnapshot;
+                      List<ShopItem> favouriteItems = new List<ShopItem>();
 
-                                if (items == null || user.favouriteItems == null) 
-                                {
-                                    return Container();
-                                }
+                      if (items == null || user.favouriteItems == null) {
+                        return Container();
+                      }
 
-                                for (String itemID in user.favouriteItems) 
-                                {
-                                    for (DocumentSnapshot doc in items.documents) 
-                                    {
-                                        if (itemID == doc.documentID) 
-                                        {
-                                        favouriteItems
-                                            .add(ShopItem.fromDocument(doc, doc.documentID));
-                                        }
-                                    }
-                                }
+                      for (String itemID in user.favouriteItems) {
+                        for (DocumentSnapshot doc in items.documents) {
+                          if (itemID == doc.documentID) {
+                            favouriteItems.add(
+                                ShopItem.fromDocument(doc, doc.documentID));
+                          }
+                        }
+                      }
 
-                                return ListView(
-                                children: <Widget>[
-                                    CurrentOrderOnHomeScreenWidget(orders),
-                                    ItemSlider(
-                                        name: LanguageModel.favourites[LanguageModel.currentLanguage],
-                                        icon: Icons.star,
-                                        items: favouriteItems,
-                                        onIconClick: favouriteIconClick),
-                                    ItemSlider(name: LanguageModel.todaysDeals[LanguageModel.currentLanguage], items: dealItems),
-                                    ItemSlider(name: LanguageModel.coffee[LanguageModel.currentLanguage], items: coffeeItems),
-                                    ItemSlider(name: LanguageModel.sandwich[LanguageModel.currentLanguage], items: sandwichItems),
-                                ],
-                                );
-                            }
-                        });
-                    },
-                );   
-            }
-        );
-    }
+                      return ListView(
+                        children: <Widget>[
+                          CurrentOrderOnHomeScreenWidget(orders),
+                          ItemSlider(
+                              name: LanguageModel
+                                  .favourites[LanguageModel.currentLanguage],
+                              icon: Icons.star,
+                              items: favouriteItems,
+                              onIconClick: favouriteIconClick),
+                          ItemSlider(
+                              name: LanguageModel
+                                  .todaysDeals[LanguageModel.currentLanguage],
+                              items: dealItems),
+                          ItemSlider(
+                              name: LanguageModel
+                                  .coffee[LanguageModel.currentLanguage],
+                              items: coffeeItems),
+                          ItemSlider(
+                              name: LanguageModel
+                                  .sandwich[LanguageModel.currentLanguage],
+                              items: sandwichItems),
+                        ],
+                      );
+                    }
+                  });
+            },
+          );
+        });
+  }
 }
