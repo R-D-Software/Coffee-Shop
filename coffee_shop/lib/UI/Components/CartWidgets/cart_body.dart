@@ -31,6 +31,8 @@ class CartBody extends StatefulWidget {
 class _CartBodyState extends State<CartBody> {
 
     List<DateTime> holidays;
+    Shop selectedShop;
+    DateTime today = DateTime.now();//DateTime.parse("2019-10-25 18:19:00"); //FOR DEBUGGING;
 
   @override
   void initState() {
@@ -53,8 +55,9 @@ class _CartBodyState extends State<CartBody> {
                 }
                 else
                 {
-                    widget.startTime = (snap.data as Shop).opens;
-                    widget.endTime = (snap.data as Shop).closes;
+                    widget.startTime = (snap.data as Shop).opensHour;
+                    widget.endTime = (snap.data as Shop).closesHour;
+                    selectedShop = (snap.data as Shop);
                     return _buildScreen();
                 }
             },
@@ -216,21 +219,11 @@ class _CartBodyState extends State<CartBody> {
         setState(() {});
     }
 
-
+///TODO: Magic number eltüntetése
     bool selectableDate(DateTime selected)
-    { 
-        DateTime now = DateTime.now();
-
-        if(now.year == selected.year
-            && now.month == selected.month
-            && now.day == selected.day)
-        {
-            if(((widget.endTime-1) == now.hour && (60 - now.minute) < widget.minutesAfterOrder)
-                || now.hour >= widget.endTime)
-            {              
-                return false;
-            }
-        }
+    {
+        if(today.difference(selected).inMinutes.abs() < 30)
+            return false;
 
         for(DateTime date in holidays)
         {
@@ -239,35 +232,36 @@ class _CartBodyState extends State<CartBody> {
                 && selected.day == date.day)
                 return false;
         }
-
         return selected.weekday < 6;
     }
 
     DateTime getInitialDate(DateTime selected)
     {
-		DateTime d = DateTime(selected.year, selected.month, selected.day);
-        if(selectableDate(d))
+        if(selectableDate(selected) && selected.isAfter(today))
         {           
-            return d;
+            return DateTime(selected.year, selected.month, selected.day);
         }
         else
         {
-            return getInitialDate(d.add(new Duration(days:1)));
+            return getInitialDate(selected.add(new Duration(days:1)));
         }
     }
 
     void pickDate(List<ShopItem> cartItems) async 
     {
         holidays = await OrderDateDB.getHolidays();
-        DateTime today = DateTime.now();
-        DateTime initialDate = getInitialDate(today);
+        DateTime initialDate = getInitialDate(DateTime(today.year, today.month, today.day, selectedShop.closesHour, selectedShop.closesMinute));
         DateTime nextMonth = today.add(new Duration(days: 30));
         DateTime orderDate = await showDatePicker(
             context: context,
-            firstDate: DateTime(today.year, today.month, today.day),
+            firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
             initialDate: initialDate,
             lastDate: nextMonth,
-            selectableDayPredicate: selectableDate);
+            selectableDayPredicate: (selected)
+            {
+                selected = DateTime(selected.year, selected.month, selected.day, selectedShop.closesHour, selectedShop.closesMinute);
+                return selectableDate(selected);
+            });
 
         if (orderDate != null)
         {

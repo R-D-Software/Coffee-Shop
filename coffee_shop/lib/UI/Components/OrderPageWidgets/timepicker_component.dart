@@ -1,6 +1,7 @@
 import 'package:coffee_shop/Business/Database/order_DB.dart';
 import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_number_picker.dart';
+import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
 class TimePickerComponent extends StatefulWidget 
@@ -22,12 +23,19 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
 {
     AnimationController _controller;
     List<int> pickableMinutes = new List<int>();
+    List<int> pickableHours = new List<int>();
     bool initStateb = true;
+    int addMinute = 0;
+    bool cannotOrder = false;
+    RenaoNumberPicker hourPicker;
+    DateTime startDate;
+    DateTime closesDate;
 
     @override
     void initState() 
     {
-        super.initState();
+        super.initState(); 
+        _initData();    
         _controller = AnimationController(vsync: this);
     }
 
@@ -41,34 +49,18 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
     @override
     Widget build(BuildContext context) 
     {
-        int minutesAfterOrder = widget.minutesAfterOrder;
-        int addMinutes = 0;
-        DateTime now = DateTime.now();
-        int startTime = widget.currentShop.opens;
-        int endTime = widget.currentShop.closes;
-
-        if(now.year == widget.date.year
-            && now.month == widget.date.month
-            && now.day == widget.date.day)
+        if(cannotOrder)
         {
-            if(startTime < now.hour && (now.hour+1) < endTime)
-            {
-                if((60 - now.minute) <= minutesAfterOrder)
-                {
-                    startTime = now.hour+1;
-                    addMinutes = minutesAfterOrder - (60 - now.minute);
-                }
-                else
-                {
-                    startTime = now.hour;
-                    addMinutes = minutesAfterOrder;
-                }
-            }
+            return _buildCannotOrderBody(context);
         }
-        
-        widget.pickedHour = startTime;
-        widget.pickedMinute = 0;
+        else
+        {
+            return _buildBody(context);
+        }
+    }
 
+    Widget _buildBody(BuildContext context)
+    {
         return Card
         (
             color: Colors.brown,
@@ -105,10 +97,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                             [
                                 RenaoNumberPicker
                                 (
-                                    numbers: List.generate((endTime-startTime+1), (int index) 
-                                    {
-                                        return startTime+index;
-                                    }),
+                                    numbers: pickableHours,
                                     initialValue: widget.pickedHour,
                                     listViewWidth: MediaQuery.of(context).size.width*0.45,
                                     textColor: Colors.white,
@@ -122,13 +111,63 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                                     },
                                 ),
                                 Text(":", style: TextStyle(color: Colors.white),),
-                                _minutePicker(pickableMinutes, addMinutes)               
+                                _minutePicker(pickableMinutes, addMinute)               
                             ],
                         ),
                     ],
                 ),
             )
         );
+    }
+
+    Widget _buildCannotOrderBody(BuildContext context)
+    {
+        return Center
+        (
+            child: StrokedText(text: "You cannot order now :("),
+        );
+    }    
+
+    void _initData()
+    {
+        int minutesAfterOrder = widget.minutesAfterOrder;
+        DateTime now = DateTime.now();
+        int startHour = widget.currentShop.opensHour;
+        int endHour = widget.currentShop.closesHour;
+        int startMinutes = widget.currentShop.opensMinute;
+        int endMinute = widget.currentShop.closesMinute;
+        startDate = widget.date.add(Duration(hours: startHour, minutes: startMinutes));
+        closesDate = widget.date.add(Duration(hours: endHour, minutes: endMinute));
+        pickableHours = new List<int>();
+        //now = DateTime.parse("2019-10-25 05:00:00"); //FOR DEBUGGING
+
+        if(now.isBefore(startDate.add(Duration(seconds:10)))) // there is no <= with isBefore -> add 10 seconds to startDate
+        {
+            if(now.difference(startDate).inMinutes.abs() <= minutesAfterOrder)
+            {
+                startDate = now.add(Duration(minutes: (minutesAfterOrder)));               
+            }
+        }
+        else
+        {
+            if(now.difference(closesDate).inMinutes.abs() >= minutesAfterOrder)
+            {               
+                startDate = now.add(Duration(minutes: (minutesAfterOrder)));                
+            }
+            else
+            {
+                cannotOrder = true;
+            }
+        }
+
+        addMinute = startDate.minute;
+        widget.pickedHour = startDate.hour;
+        widget.pickedMinute = startDate.minute;
+
+        for(int i = startDate.hour; i < closesDate.hour+1; i++)
+        {
+            pickableHours.add(i);
+        }
     }
 
     void _generateAvailableMinutesList(Duration s) async
@@ -146,17 +185,31 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
 
     Widget _minutePicker(List<int> pickableList, int addMinutes) 
     {
-        for(int i = 0; i < addMinutes; i++)
-        {
-            if(pickableMinutes.contains(i))
+        if(widget.pickedHour <= startDate.hour)
+        {         
+            for(int i = 0; i < addMinutes; i++)
             {
-                pickableMinutes.remove(i);
+                if(pickableMinutes.contains(i))
+                {
+                    pickableMinutes.remove(i);
+                }
             }
         }
+        else if(widget.pickedHour == closesDate.hour)
+        {
+            for(int i = closesDate.minute+1; i <= 60; i++)
+            {
+                if(pickableMinutes.contains(i))
+                {
+                    pickableMinutes.remove(i);
+                }
+            }
+        }
+        
         return RenaoNumberPicker
         (
             initialValue: 0,
-            numbers: pickableList,
+            numbers: pickableMinutes,
             textColor: Colors.white,
             listViewWidth: MediaQuery.of(context).size.width*0.45,
             setValue: (int val)

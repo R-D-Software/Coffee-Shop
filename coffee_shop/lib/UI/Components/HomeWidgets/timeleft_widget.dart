@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Business/Database/order_DB.dart';
+import 'package:coffee_shop/Business/string_service.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/order.dart';
 import 'package:flutter/material.dart';
@@ -89,12 +90,12 @@ class _TimeLeftWidgetState extends State<TimeLeftWidget> with SingleTickerProvid
         timeFormat = LanguageModel.timeRemaining[LanguageModel.currentLanguage]
             + ": " +
             (days > 0 ? days.toString() + LanguageModel.dayLetter[LanguageModel.currentLanguage] : "") 
-            + " " +
-            (hour < 10 ? "0" + hour.toString(): hour.toString())
+            + " " + 
+            StringService.toDateFormatNumber(hour)
             + ":" + 
-            (remainingMinutes < 10 ? "0" + remainingMinutes.toString() : remainingMinutes.toString())
+            StringService.toDateFormatNumber(remainingMinutes)
             + ":" + 
-            (remainingSeconds < 10 ? "0" + remainingSeconds.toString() : remainingSeconds.toString());
+            StringService.toDateFormatNumber(remainingSeconds);
 
         return timeFormat;
     }

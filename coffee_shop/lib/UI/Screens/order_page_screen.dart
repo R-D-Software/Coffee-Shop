@@ -4,6 +4,7 @@ import 'package:coffee_shop/Business/Database/order_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Business/MapNavigator/google_navigator.dart';
+import 'package:coffee_shop/Business/string_service.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/shops.dart';
@@ -295,8 +296,8 @@ class _OrderPageScreenState extends State<OrderPageScreen>
             timePicker: timePicker,
             currentUser: StaticData.currentUser,
             currentShop: currentShop,
-            yearMonth: orderDate.year.toString() + "." + _toDateFormatNumber(orderDate.month),
-            day: _toDateFormatNumber(orderDate.day),
+            yearMonth: orderDate.year.toString() + "." + StringService.toDateFormatNumber(orderDate.month),
+            day: StringService.toDateFormatNumber(orderDate.day),
             cartItems: items
         );
 
@@ -310,15 +311,5 @@ class _OrderPageScreenState extends State<OrderPageScreen>
         {
             RenaoToast.orderDeclined();
         }
-    }
-
-    String _toDateFormatNumber(int number)
-    {
-        String retval = number.toString();
-
-        if(number<10)
-            retval = "0" + number.toString();
-
-        return retval;
     }
 }
