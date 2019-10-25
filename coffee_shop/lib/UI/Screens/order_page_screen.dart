@@ -293,6 +293,7 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     {
         bool result = await OrderDB.placeOrder
         (
+            context,
             timePicker: timePicker,
             currentUser: StaticData.currentUser,
             currentShop: currentShop,

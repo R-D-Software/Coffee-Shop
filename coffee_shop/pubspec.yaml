@@ -26,10 +26,12 @@ dependencies:
     sdk: flutter
   flutter_swiper: any
   firebase_auth: ^0.14.0+3
+  firebase_messaging: ^5.1.6
+  firebase_core: ^0.4.0+9
+  firebase_storage: ^3.0.6
+  cloud_firestore: ^0.12.9+4
   flutter_facebook_login: ^1.2.0
   shared_preferences: ^0.5.3+4
-  cloud_firestore: ^0.12.9+4
-  firebase_storage: ^3.0.6
   flutter_spinkit: "^2.1.0"
   font_awesome_flutter: ^8.5.0
   fireworks: ^0.9.3
@@ -41,7 +43,8 @@ dependencies:
   url_launcher: ^5.1.6
   auto_size_text: ^2.1.0
   dotted_border: ^1.0.3
-
+  flutter_local_notifications: ^0.8.4
+  path_provider: ^1.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -50,7 +53,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

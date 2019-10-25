@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Business/Database/user_DB.dart';
+import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -245,6 +246,11 @@ class LanguageModel {
     Language.HUNGARIAN: "A rendelés kész"
   };
 
+  static Map<Language, String> orderIsDue = const {
+    Language.ENGLISH: "Order due in 5 minutes",
+    Language.HUNGARIAN: "A rendelésed 5 perc és kész"
+  };
+
   static Future init(BuildContext context) async {
     User user;
     await UserDB.getCurrentUser().then((u) {
@@ -354,5 +360,20 @@ class LanguageModel {
         return daysInHungarian[i];
         break;
     }
+  }
+
+  static String orderReadyAt(String shopPlace, List<ShopItem> items) {
+    String retVal = shopPlace + " (";
+
+    for (ShopItem i in items) {
+      retVal += i.name;
+
+      if (items.last != i) {
+        retVal += ", ";
+      }
+    }
+    retVal += ")";
+
+    return retVal;
   }
 }
