@@ -30,6 +30,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
     RenaoNumberPicker hourPicker;
     DateTime startDate;
     DateTime closesDate;
+    bool buildMinutes = false;
 
     @override
     void initState() 
@@ -150,7 +151,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
         }
         else
         {
-            if(now.difference(closesDate).inMinutes.abs() >= minutesAfterOrder)
+            if(now.difference(closesDate).inMinutes.abs() >= (minutesAfterOrder-2))
             {               
                 startDate = now.add(Duration(minutes: (minutesAfterOrder)));                
             }
@@ -180,7 +181,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
             if(!notPickableList.contains(i))
                 pickableMinutes.add(i);
         }
-        setState(() {});
+        setState(() {buildMinutes = true;});
     }
 
     Widget _minutePicker(List<int> pickableList, int addMinutes) 
@@ -205,10 +206,14 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                 }
             }
         }
-        
+        if(!buildMinutes)
+        {
+            return Container();
+        }
+
         return RenaoNumberPicker
         (
-            initialValue: 0,
+            initialValue: pickableList.first,
             numbers: pickableMinutes,
             textColor: Colors.white,
             listViewWidth: MediaQuery.of(context).size.width*0.45,

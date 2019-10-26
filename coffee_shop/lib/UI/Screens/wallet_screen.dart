@@ -1,7 +1,6 @@
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
-import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
-import 'package:coffee_shop/UI/Components/HomeWidgets/wallet_body.dart';
+import 'package:coffee_shop/UI/Components/WalletWidgets/wallet_body.dart';
 import 'package:flutter/material.dart';
 
 class WalletScreen extends StatefulWidget {
