@@ -161,6 +161,12 @@ class LanguageModel {
     Language.HUNGARIAN: "Gratulálunk, nyertél!"
   };
 
+  static Map<Language, String> questCompleteAndOrdered = const {
+    Language.ENGLISH:
+        "Congratulation, You have completed the quest, and succesfully ordered it!",
+    Language.HUNGARIAN: "Gratulálunk, nyertél, és már meg is rendelted!"
+  };
+
   static Map<Language, String> toastAddToCart = const {
     Language.ENGLISH: " was added to your cart",
     Language.HUNGARIAN: " hozzáadásra került"

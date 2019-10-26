@@ -1,8 +1,11 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/food_item.dart';
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/Models/quest.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_dialog.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
@@ -18,7 +21,7 @@ class FoodItemViewScreen extends StatelessWidget {
   double height = 0;
   String itemID;
   String _buttonLabel = LanguageModel.add[LanguageModel.currentLanguage];
-
+  Quest quest;
   int leavingCounter = 0;
 
   @override
@@ -65,6 +68,9 @@ class FoodItemViewScreen extends StatelessWidget {
     _item = routeArgs["item"];
     if (routeArgs["buttonLabel"] != null) {
       _buttonLabel = routeArgs["buttonLabel"];
+    }
+    if (routeArgs["quest"] != null) {
+      quest = routeArgs["quest"];
     }
   }
 
@@ -131,6 +137,12 @@ class FoodItemViewScreen extends StatelessWidget {
             var foodItem = FoodItem(shopItem: _item);
             CartItemDB.modifyOrAddItemToCart(foodItem, _buttonLabel);
             RenaoToast.itemAdded(_item.name, _buttonLabel);
+
+            if(quest != null)
+            {           
+                QuestDB.setQuestStatus(StaticData.currentUser.userID, QuestStatus.ITEM_ADDED_TO_CART, quest.calendarWeek);
+            }
+            
             Navigator.of(context).pop();
           },
           child: Text(

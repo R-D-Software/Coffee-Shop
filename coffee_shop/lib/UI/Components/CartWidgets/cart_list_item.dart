@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
@@ -54,6 +55,7 @@ class CartListItem extends StatelessWidget {
         icon: Icon(Icons.delete),
         onPressed: () async {
           await CartItemDB.deleteItemFromCart(item);
+          QuestDB.changeQuestStatusIfNeededUpponDelete(item);
           refreshFunction();
         },
         padding: EdgeInsets.all(10),
@@ -79,7 +81,7 @@ class CartListItem extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                _buidItemHeader(context),
+                _buildItemHeader(context),
                 isCoffeeItem ? _buildItemBody() : Container(),
                 isCoffeeItem ? _getIcons(context) : Container(),
                 _buildItemFooter(context),
@@ -99,7 +101,7 @@ class CartListItem extends StatelessWidget {
     return StrokedText(text: "${item.price} Ft", color: Theme.of(context).primaryColor, size: 14);
   }
 
-  StrokedText _buidItemHeader(BuildContext context) {
+  StrokedText _buildItemHeader(BuildContext context) {
     return StrokedText(text: "${item.name}", color: Theme.of(context).primaryColor, size: 20);
   }
 
