@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/purchase_history_DB.dart';
 import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/notification_service.dart';
@@ -36,12 +37,12 @@ class OrderDB
             items: itemIDs
         );
         
-        await NotificationService.makeNotification
+        /*await NotificationService.makeNotification
         (
             LanguageModel.orderIsDue[LanguageModel.currentLanguage],
             LanguageModel.orderReadyAt(currentShop.toString(), cartItems),
             order.toDateTime()
-        );
+        );*/
 
         if(hasCredit)
         {
@@ -50,6 +51,7 @@ class OrderDB
             Firestore.instance.collection("orders").add(order.toJson());
             ShopsDB.incrementUsedBoxesWithOrder(order);
             CartItemDB.resetCartForUser();
+            PurchaseHistoryDB.addPurchaseForUser(StaticData.currentUser.userID, cartItems);
         }
 
         return true;
@@ -79,7 +81,7 @@ class OrderDB
             {
                 for(String minute in (notSelectableDates[currentHour.toString()] as Map<dynamic, dynamic>).keys)
                 {
-                    if(notSelectableDates[currentHour.toString()][minute] > maxOrderAtMin)
+                    if(notSelectableDates[currentHour.toString()][minute] >= maxOrderAtMin)
                     {
                         notPickableMinutes.add(int.parse(minute));
                     }
