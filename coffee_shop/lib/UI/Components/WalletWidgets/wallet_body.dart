@@ -30,25 +30,41 @@ class _WalletBodyState extends State<WalletBody> {
         return StreamBuilder
         (
             stream: UserDB.getCurrentUserSelectedShop(),
-            builder: (context, snap)
+            builder: (context, shopSnap)
             {
-                if(snap.connectionState == ConnectionState.waiting)
+                if(shopSnap.connectionState == ConnectionState.waiting)
                 {
                     return Container();
                 }
                 else
                 {
-                    return _buildBody(context, (snap.data as Shop));
+                    return StreamBuilder
+                    (
+                        stream: UserDB.getCurrentUserBalance().asStream(),
+                        builder: (context, balanceSnap)
+                        {
+                            if(balanceSnap.connectionState == ConnectionState.waiting)
+                            {
+                                return Container();
+                            }
+                            else
+                            {
+
+                                
+                                return _buildBody(context, (shopSnap.data as Shop), (balanceSnap.data as int));
+                            }
+                        },
+                    );
                 }
             },
         ); 
     }
 
-    Widget _buildBody(BuildContext context, Shop currentShop)
+    Widget _buildBody(BuildContext context, Shop currentShop, int ubalance)
     {
         double deviceHeight = MediaQuery.of(context).size.height;
         shopImage = _getPlaceWidget(context, currentShop);
-        balance = _balanceBuilder(context);
+        balance = _balanceBuilder(context, ubalance);
         button = _buttonBuilder(context);
 
         return Container
@@ -228,7 +244,7 @@ class _WalletBodyState extends State<WalletBody> {
         );
     }  
 
-    Widget _balanceBuilder(BuildContext context)
+    Widget _balanceBuilder(BuildContext context, int balance)
     {
         return Container
         (
@@ -253,7 +269,7 @@ class _WalletBodyState extends State<WalletBody> {
                         
                         StrokedText
                         (
-                            text: "500 HUF",
+                            text: balance.toString() + " HUF",
                             color: Color.fromRGBO(229, 138, 237,1),
                             size: 28
                         )
