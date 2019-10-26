@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Models/quest.dart';
 import 'package:coffee_shop/UI/Components/QuestWidgets/puzzle_piece.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,12 @@ import 'package:fireworks/fireworks.dart';
 
 class AnimatedPresent extends StatefulWidget 
 {
-    Quest quest;
-    double imageHeight;
-    List<PuzzlePiece> pieces = new List<PuzzlePiece>();
+    final Quest quest;
+    final double imageHeight;
     bool fireworks = true;
+    final QuestStatus questStatus;
 
-    AnimatedPresent({this.quest, this.imageHeight});
+    AnimatedPresent({this.quest, this.imageHeight, this.questStatus});
 
     @override
     _AnimatedPresentState createState() => _AnimatedPresentState();
@@ -22,13 +23,21 @@ class _AnimatedPresentState extends State<AnimatedPresent> with SingleTickerProv
 {
     AnimationController animationController;
     List<AnimationPerPiece> animations = new List<AnimationPerPiece>();
+    List<PuzzlePiece> pieces = new List<PuzzlePiece>();
+    bool showAnimation = true;
 
     @override
     void initState() 
     {
         super.initState();
 
-        widget.pieces = splitImage(Image.asset(widget.quest.imgPath), Size(50,50), widget.quest.numberOfPieciesRow, widget.quest.numberOfPieciesColumn);
+        if(widget.questStatus == QuestStatus.ITEM_ADDED_TO_CART 
+            || widget.questStatus == QuestStatus.ITEM_ORDERED) 
+        {
+            showAnimation = false;
+        }
+
+        pieces = splitImage(Image.asset(widget.quest.imgPath), Size(50,50), widget.quest.numberOfPieciesRow, widget.quest.numberOfPieciesColumn);
         animationController = AnimationController(vsync: this, duration: Duration(seconds: 2));
 
         for(int i = 0; i < (widget.quest.numberOfPieciesRow*widget.quest.numberOfPieciesColumn); i++)
@@ -69,6 +78,12 @@ class _AnimatedPresentState extends State<AnimatedPresent> with SingleTickerProv
     @override
     Widget build(BuildContext context) 
     {
+        int completedParts = widget.quest.completedParts;
+
+        if(completedParts > (widget.quest.numberOfPieciesColumn * widget.quest.numberOfPieciesRow))
+        {
+            completedParts = (widget.quest.numberOfPieciesColumn * widget.quest.numberOfPieciesRow);
+        }
         return Container
         (
             height: 260,
@@ -81,7 +96,7 @@ class _AnimatedPresentState extends State<AnimatedPresent> with SingleTickerProv
                     (
                         child: Opacity
                         (
-                            opacity: 0.2,
+                            opacity: (showAnimation) ? 0.2 : 1.0,
                             child: Container
                             (
                                 width: MediaQuery.of(context).size.width,
@@ -93,12 +108,16 @@ class _AnimatedPresentState extends State<AnimatedPresent> with SingleTickerProv
                             ),
                         ),
                     ),
-
-                    for(int i = 0; i < widget.quest.completedParts; i++) Transform.translate
-                    (
-                        offset: Offset(animations[i].animation1.value, animations[i].animation2.value),
-                        child: widget.pieces[i],
-                    ),
+                    if(showAnimation)
+                        for(int i = 0; i < completedParts; i++) Transform.translate
+                        (
+                            offset: Offset
+                            (
+                                animations[i].animation1.value,
+                                animations[i].animation2.value
+                            ),
+                            child: pieces[i],
+                        ),
                 ],
             ),
         );

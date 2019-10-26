@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/notification_service.dart';
 import 'package:coffee_shop/Models/language.dart';
@@ -16,6 +17,7 @@ class OrderDB
     ///Returns a logical value depending on the success of the order placement.
     static Future<bool> placeOrder(BuildContext context,{TimePickerComponent timePicker, User currentUser, Shop currentShop, String yearMonth, String day, List<ShopItem> cartItems}) async
     {
+        bool hasCredit = true;
         if(! await _canPlaceOrder(timePicker, currentShop, yearMonth, day))
         {
             return false;
@@ -41,9 +43,14 @@ class OrderDB
             order.toDateTime()
         );
 
-        //Firestore.instance.collection("orders").add(order.toJson());
-        //ShopsDB.incrementUsedBoxesWithOrder(order);
-        //CartItemDB.resetCartForUser();
+        if(hasCredit)
+        {
+            await QuestDB.addQuestCounterForUserIfLegit(cartItems);
+            QuestDB.changeQuestStatusIfNeeded(cartItems);
+            Firestore.instance.collection("orders").add(order.toJson());
+            ShopsDB.incrementUsedBoxesWithOrder(order);
+            CartItemDB.resetCartForUser();
+        }
 
         return true;
     }
@@ -101,7 +108,6 @@ class OrderDB
 
     static void deleteOrder(String docID)
     {
-        print(docID);
         Firestore.instance.collection("orders").document(docID).delete();
     }
 }

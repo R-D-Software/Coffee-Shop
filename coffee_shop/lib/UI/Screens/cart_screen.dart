@@ -1,3 +1,4 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/CartWidgets/cart_body.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_scaffold.dart';
@@ -9,7 +10,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: RenaoScaffold(
-          appBarTitle: "Cart",
+          appBarTitle: LanguageModel.cart[LanguageModel.currentLanguage],
           scaffoldBody: CartBody(),
         ),
         decoration: RenaoBoxDecoration.builder(context),
