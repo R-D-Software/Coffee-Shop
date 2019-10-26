@@ -87,5 +87,16 @@ class UserDB
         {
             QuestDB.setQuestStatus(u.userID, QuestStatus.ITEM_ACQUIRED_NOT_USED, calWeek);
         }
+    }
+
+    static Future<int> getCurrentUserBalance() async
+    {
+        DocumentSnapshot ds = await Firestore.instance.collection("user_balance").document(StaticData.currentUser.userID).get();
+        
+        if(ds == null)
+        {
+            return 0;
+        }
+        return ds.data["balance"];
     }   
 }
