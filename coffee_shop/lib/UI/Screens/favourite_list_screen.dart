@@ -6,6 +6,7 @@ import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_empty_list.dart';
 import 'package:coffee_shop/UI/Components/FavouriteListComponents/favourite_list_item.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
@@ -54,53 +55,6 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
         );
     }
 
-    Widget _getEmptyList()
-    {
-        double width = MediaQuery.of(context).size.width;
-        return Container
-        (
-            child: Center
-            (
-                child: Column
-                (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>
-                    [
-                        ClipRRect
-                        (
-                            borderRadius: BorderRadius.circular(200.0),
-                            child: Card
-                            (
-                                elevation: 2,
-                                child: Image.asset("assets/images/kav.jpg", width: width*0.75,),
-                            ),
-                        ),
-                        SizedBox(height: 10,),
-                        StrokedText
-                        (
-                            text: LanguageModel.yourListIsEmpty[LanguageModel.currentLanguage],
-                            size: 30,
-                        ),
-                        Container
-                        (
-                            margin: EdgeInsets.only(left: width*0.11, right: width*0.11, top: 25),
-                            child: Text
-                            (
-                                LanguageModel.addToFavourite[LanguageModel.currentLanguage],
-                                textAlign: TextAlign.center,
-                                style: TextStyle
-                                (
-                                    color: Colors.white70
-                                ),
-                            ),
-                        ),
-                        SizedBox(height: width*0.07)
-                    ],
-                ),
-            ),
-        );
-    }
-
     Widget makeFavListBody()
     {
         return StreamBuilder
@@ -138,7 +92,13 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
 
                         if(favouriteItems.isNotEmpty) 
                             return _getFavouriteList(favouriteItems);
-                        else return _getEmptyList();
+                        else 
+                        return RenaoEmptyList
+                        (
+                            imagePath: "assets/images/kav.jpg",
+                            textHeader: LanguageModel.yourListIsEmpty[LanguageModel.currentLanguage],
+                            textDescription: LanguageModel.addToFavourite[LanguageModel.currentLanguage],
+                        );
                     }
                 );
             }

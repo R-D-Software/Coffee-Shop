@@ -257,6 +257,11 @@ class LanguageModel {
     Language.HUNGARIAN: "A rendelésed 5 perc és kész"
   };
 
+  static Map<Language, String> box = const {
+    Language.ENGLISH: "Box",
+    Language.HUNGARIAN: "Doboz"
+  };  
+
   static Future init(BuildContext context) async {
     User user;
     await UserDB.getCurrentUser().then((u) {

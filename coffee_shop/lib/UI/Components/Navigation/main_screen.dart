@@ -5,6 +5,7 @@ import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/cart_item_counter.dart';
+import 'package:coffee_shop/UI/Screens/box_screen.dart';
 import 'package:coffee_shop/UI/Screens/cart_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
@@ -23,6 +24,7 @@ class MainScreenState extends State<MainScreen> {
   HomeScreen homeScreen = HomeScreen();
   QuestScreen questScreen = QuestScreen();
   CartScreen cartScreen = CartScreen();
+  BoxScreen boxScreen = BoxScreen();
   List<Widget> pages;
   String userID;
 
@@ -31,7 +33,7 @@ class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    pages = [homeScreen, questScreen, cartScreen];
+    pages = [homeScreen, questScreen, boxScreen, cartScreen];
     currentPage = pages[currentTab];
   }
 
@@ -74,6 +76,10 @@ class MainScreenState extends State<MainScreen> {
       BottomNavigationBarItem(
         icon: new Icon(Icons.loyalty),
         title: new Text(LanguageModel.quest[LanguageModel.currentLanguage]),
+      ),
+      BottomNavigationBarItem(
+        icon: new Icon(Icons.border_all),
+        title: new Text(LanguageModel.box[LanguageModel.currentLanguage]),
       ),
       BottomNavigationBarItem(
         title: Text(LanguageModel.cart[LanguageModel.currentLanguage]),
