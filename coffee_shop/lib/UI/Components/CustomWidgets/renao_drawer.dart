@@ -3,6 +3,7 @@ import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/DrawerComponents/drawer_list_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RenaoDrawer extends StatefulWidget {
@@ -20,25 +21,21 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
             child: Container(
               color: Color.fromRGBO(89, 62, 55, 1),
               child: ListView(
-                children: <Widget>[
-                  _buildUserAccountsDrawerHeader(user),
-                  ...listTiles
-                ],
+                children: <Widget>[_buildUserAccountsDrawerHeader(user), ...listTiles],
               ),
             ),
           );
         });
   }
 
-  UserAccountsDrawerHeader _buildUserAccountsDrawerHeader(
-      AsyncSnapshot<FirebaseUser> user) {
+  UserAccountsDrawerHeader _buildUserAccountsDrawerHeader(AsyncSnapshot<FirebaseUser> user) {
     return UserAccountsDrawerHeader(
       accountName: Text(user.data?.displayName ?? ""),
       accountEmail: Text(user.data?.email ?? ""),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(user.data?.photoUrl ??
-              'https://cdn.pixabay.com/photo/2017/12/01/18/16/coffe-2991458_960_720.jpg'),
+          image: NetworkImage(
+              user.data?.photoUrl ?? 'https://cdn.pixabay.com/photo/2017/12/01/18/16/coffe-2991458_960_720.jpg'),
           fit: BoxFit.cover,
         ),
       ),
@@ -58,6 +55,10 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
         iconData: Icons.account_balance_wallet,
         text: LanguageModel.wallet[LanguageModel.currentLanguage],
         action: _moveToWalletScreen));
+    listTiles.add(DrawerListTile(
+        iconData: FontAwesomeIcons.microsoft,
+        text: LanguageModel.postBox[LanguageModel.currentLanguage],
+        action: _moveToPostBoxScreen));
     listTiles.add(DrawerListTile(
         iconData: Icons.settings,
         text: LanguageModel.settings[LanguageModel.currentLanguage],
@@ -85,5 +86,9 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
 
   void _moveToSettingsScreen() {
     Navigator.of(context).pushNamed("/main/settings");
+  }
+
+  void _moveToPostBoxScreen() {
+    Navigator.of(context).pushNamed("/post_box");
   }
 }

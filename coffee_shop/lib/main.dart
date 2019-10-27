@@ -13,6 +13,7 @@ import 'UI/Screens/food_item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
 import 'UI/Screens/order_page_screen.dart';
 import 'UI/Screens/place_changer_screen.dart';
+import 'UI/Screens/post_box_screen.dart';
 import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/quest': (BuildContext context) => QuestScreen(),
         '/main/cart/order_page_screen': (BuildContext context) => OrderPageScreen(),
         '/main/cart/order_page_screen/placechanger': (BuildContext context) => PlaceChangerScreen(),
+        '/post_box': (BuildContext context) => PostBoxScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),
