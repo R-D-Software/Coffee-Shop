@@ -23,7 +23,7 @@ class StrokedText extends StatelessWidget
                 fontSize: this.size == null ? 20 : this.size,
                 fontFamily: Theme.of(context).textTheme.body1.fontFamily,
                 fontWeight: this.fontWeight == null ? FontWeight.normal : this.fontWeight,
-                shadows: <Shadow>
+                /*shadows: <Shadow>
                 [
                     Shadow
                     (
@@ -31,7 +31,7 @@ class StrokedText extends StatelessWidget
                         blurRadius: 6.0,
                         color: Colors.brown,
                     )
-                ]
+                ]*/
             ),
         );
     }

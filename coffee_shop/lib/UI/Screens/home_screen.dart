@@ -5,6 +5,7 @@ import 'package:coffee_shop/UI/Components/HomeWidgets/home_body.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String route = '/home';
   _HomeScreenState createState() => _HomeScreenState();
 }
 

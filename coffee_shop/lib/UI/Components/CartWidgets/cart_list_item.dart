@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
@@ -10,8 +11,9 @@ import 'package:flutter/material.dart';
 class CartListItem extends StatelessWidget {
   final ShopItem item;
   final double height = 100;
+  final Function refreshFunction;
 
-  CartListItem({@required this.item});
+  CartListItem({@required this.item, @required this.refreshFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +53,10 @@ class CartListItem extends StatelessWidget {
       margin: EdgeInsets.only(right: 10, top: 20),
       child: IconButton(
         icon: Icon(Icons.delete),
-        onPressed: () {
-          CartItemDB.deleteItemFromCart(item);
+        onPressed: () async {
+          await CartItemDB.deleteItemFromCart(item);
+          QuestDB.changeQuestStatusIfNeededUpponDelete(item);
+          refreshFunction();
         },
         padding: EdgeInsets.all(10),
         iconSize: 40,
@@ -77,7 +81,7 @@ class CartListItem extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                _buidItemHeader(context),
+                _buildItemHeader(context),
                 isCoffeeItem ? _buildItemBody() : Container(),
                 isCoffeeItem ? _getIcons(context) : Container(),
                 _buildItemFooter(context),
@@ -97,7 +101,7 @@ class CartListItem extends StatelessWidget {
     return StrokedText(text: "${item.price} Ft", color: Theme.of(context).primaryColor, size: 14);
   }
 
-  StrokedText _buidItemHeader(BuildContext context) {
+  StrokedText _buildItemHeader(BuildContext context) {
     return StrokedText(text: "${item.name}", color: Theme.of(context).primaryColor, size: 20);
   }
 

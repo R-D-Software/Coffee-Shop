@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class PostBoxScreen extends StatefulWidget {
+  static const String route = "/post_box";
   PostBoxScreen({Key key}) : super(key: key);
 
   @override

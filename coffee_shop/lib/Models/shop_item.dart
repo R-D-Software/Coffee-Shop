@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/UI/Screens/coffee_item_view_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +14,7 @@ class ShopItem {
   final String description;
   final String itemType;
   final bool onSale;
+  final String parentID;
 
   ShopItem({
     @required this.documentID,
@@ -21,6 +24,7 @@ class ShopItem {
     @required this.description,
     @required this.itemType,
     @required this.onSale,
+    @required this.parentID,
   });
 
   Map<String, Object> toJson() {
@@ -31,8 +35,14 @@ class ShopItem {
       'description': description,
       'itemType': itemType,
       'onSale': onSale,
+      'parentID': parentID,
       'appIdentifier': 'Renao'
     };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this);
   }
 
   factory ShopItem.fromJson(Map<String, Object> doc, String documentID) {
@@ -44,6 +54,7 @@ class ShopItem {
       description: doc['description'],
       itemType: doc['itemType'],
       onSale: doc['onSale'],
+      parentID: doc['parentID'],
     );
     return item;
   }
@@ -52,22 +63,20 @@ class ShopItem {
     return ShopItem.fromJson(doc.data, documentID);
   }
 
-    ShopItem asReward() 
-    {
-        return new ShopItem
-        (
-            documentID: this.documentID,
-            name: this.name,
-            price: 0,
-            imageUrl: this.imageUrl,
-            description: this.description,
-            itemType: this.itemType,
-            onSale: this.onSale,
-        );
-    }
+  ShopItem asReward() {
+    return new ShopItem(
+      documentID: this.documentID,
+      name: this.name,
+      price: 0,
+      imageUrl: this.imageUrl,
+      description: this.description,
+      itemType: this.itemType,
+      onSale: this.onSale,
+      parentID: this.parentID,
+    );
+  }
 
-    CoffeeItem toCoffeItem(int sugar, Temperature temperature)
-    {
-        return CoffeeItem(shopItem: this, temperature: temperature, sugar: sugar);
-    }
+  CoffeeItem toCoffeItem(int sugar, Temperature temperature) {
+    return CoffeeItem(shopItem: this, temperature: temperature, sugar: sugar);
+  }
 }

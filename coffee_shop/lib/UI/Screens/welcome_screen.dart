@@ -1,6 +1,8 @@
 import 'package:coffee_shop/Business/auth.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
+import 'package:coffee_shop/UI/Screens/log_in_screen.dart';
+import 'package:coffee_shop/UI/Screens/sign_up_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               fontWeight: FontWeight.w700,
               textColor: Colors.white,
               onPressed: () {
-                Navigator.of(context).pushNamed("/signin");
+                Navigator.of(context).pushNamed(LogInScreen.route);
               },
               splashColor: Colors.black12,
               borderColor: Theme.of(context).primaryColor,
@@ -84,7 +86,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               fontWeight: FontWeight.w700,
               textColor: Theme.of(context).primaryColor,
               onPressed: () {
-                Navigator.of(context).pushNamed("/signup");
+                Navigator.of(context).pushNamed(SignUpScreen.route);
               },
               splashColor: Colors.red,
               borderColor: Colors.black12,

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
@@ -73,8 +73,30 @@ class UserDB
             .collection("shops").document(StaticData.currentUser.selectedShop)
             .snapshots()
             .map((DocumentSnapshot snapshot) {
-                print(snapshot);
                 return Shop.fromDocument(snapshot);
         });
+    }
+
+    static Future<void> incrementCurrentUserQuestItemCountBy(int sumOfPoints, int requiredAmount, int calWeek) async
+    {
+        User u;     
+        Firestore.instance.collection("users").document(StaticData.currentUser.userID).updateData({"completedQuestPart": FieldValue.increment(sumOfPoints)});
+        QuestStatus qs = await QuestDB.getQuestStatusForUser(StaticData.currentUser.userID, calWeek);
+        await getCurrentUser().then((user) => u=user);
+        if(qs == QuestStatus.ITEM_NOT_ACQUIRED && u.completedQuestPart >= requiredAmount)
+        {
+            QuestDB.setQuestStatus(u.userID, QuestStatus.ITEM_ACQUIRED_NOT_USED, calWeek);
+        }
+    }
+
+    static Future<int> getCurrentUserBalance() async
+    {
+        DocumentSnapshot ds = await Firestore.instance.collection("user_balance").document(StaticData.currentUser.userID).get();
+        
+        if(ds == null)
+        {
+            return 0;
+        }
+        return ds.data["balance"];
     }   
 }

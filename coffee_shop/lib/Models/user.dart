@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/language.dart';
-import 'package:coffee_shop/Models/shops.dart';
 
 class User {
   final String userID;
@@ -13,7 +12,6 @@ class User {
   int completedQuestPart = 7;
   Language userDefinedLanguage;
   List<String> favouriteItems = [];
-  //List<FavouriteItem> favItems = new List<FavouriteItem>();
 
   User(
       {this.userID,
@@ -21,20 +19,11 @@ class User {
       this.email,
       this.profilePictureURL,
       this.userDefinedLanguage,
-      //this.favItems,
       this.favouriteItems,
       this.completedQuestPart,
       this.selectedShop});
 
   Map<String, Object> toJson() {
-    //DONT DELETE IT YET
-    /*List<Object> boj = new List<Object>();
-
-        for(FavouriteItem item in favItems)
-        {
-            boj.add({"itemID": item.itemID, "temperature": item.temperature, "sugar": item.sugar});
-        }*/
-
     return {
       'userID': userID,
       'firstName': firstName,
@@ -53,9 +42,12 @@ class User {
       userID: doc['userID'],
       firstName: doc['firstName'],
       email: doc['email'],
-      userDefinedLanguage: _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
+      userDefinedLanguage:
+          _getUserDefinedLanguageFromString(doc['userDefinedLanguage']),
       profilePictureURL: doc['profilePictureURL'],
-      favouriteItems: doc["favouriteItems"] != null ? List.from(doc["favouriteItems"]) : new List<String>(),
+      favouriteItems: doc["favouriteItems"] != null
+          ? List.from(doc["favouriteItems"])
+          : new List<String>(),
       completedQuestPart: doc["completedQuestPart"],
       selectedShop: doc["selectedShop"],
     );
@@ -68,7 +60,9 @@ class User {
     for (Object object in objects) {
       Map jsonData = Map.from(object);
       retVal.add(new FavouriteItem(
-          itemID: jsonData["itemID"], sugar: jsonData["sugar"], temperature: jsonData["temperature"]));
+          itemID: jsonData["itemID"],
+          sugar: jsonData["sugar"],
+          temperature: jsonData["temperature"]));
     }
 
     return retVal;

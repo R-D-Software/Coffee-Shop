@@ -1,8 +1,11 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
+import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
+import 'package:coffee_shop/Models/quest.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_dialog.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
@@ -13,6 +16,7 @@ import 'package:coffee_shop/UI/Components/stroked_text.dart';
 import 'package:flutter/material.dart';
 
 class CoffeeItemViewScreen extends StatelessWidget {
+  static const String route = '/main/itemview/coffee';
   ShopItem _item;
   AppBar _appBar = AppBar();
   Container _addButton;
@@ -21,6 +25,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
   int sugar;
   Temperature temperature;
   String _buttonLabel = LanguageModel.add[LanguageModel.currentLanguage];
+  Quest quest;
 
   int leavingCounter = 0;
 
@@ -77,6 +82,10 @@ class CoffeeItemViewScreen extends StatelessWidget {
     if (routeArgs["buttonLabel"] != null) {
       _buttonLabel = routeArgs["buttonLabel"];
     }
+    if (routeArgs["quest"] != null) {
+      quest = routeArgs["quest"];
+    }
+    
     temperature = Temperature.hot();
   }
 
@@ -179,6 +188,12 @@ class CoffeeItemViewScreen extends StatelessWidget {
             var coffeeItem = CoffeeItem(shopItem: _item, temperature: temperature, sugar: sugar);
             CartItemDB.modifyOrAddItemToCart(coffeeItem, _buttonLabel);
             RenaoToast.itemAdded(_item.name, _buttonLabel);
+
+            if(quest != null)
+            {
+                QuestDB.setQuestStatus(StaticData.currentUser.userID, QuestStatus.ITEM_ADDED_TO_CART, quest.calendarWeek);
+            }
+
             Navigator.of(context).pop();
           },
           child: Text(

@@ -4,6 +4,7 @@ import 'package:coffee_shop/UI/Components/QuestWidgets/quest_body.dart';
 import 'package:flutter/material.dart';
 
 class QuestScreen extends StatefulWidget {
+  static const String route = '/quest';
   @override
   _QuestScreenState createState() => _QuestScreenState();
 }

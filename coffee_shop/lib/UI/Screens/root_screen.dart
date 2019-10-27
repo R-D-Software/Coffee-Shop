@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RootScreen extends StatefulWidget {
+  static const String route = '/root';
+
   @override
   State<StatefulWidget> createState() => new _RootScreenState();
 }

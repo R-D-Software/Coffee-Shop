@@ -2,42 +2,66 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/order_date_DB.dart';
+import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
+import 'package:coffee_shop/Models/shops.dart';
+import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
+import 'package:coffee_shop/UI/Screens/order_page_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../stroked_text.dart';
-import 'cart_bottom_sheet.dart';
 import 'cart_list_item.dart';
 
 class CartBody extends StatefulWidget {
-  @override
-  _CartBodyState createState() => _CartBodyState();
+    @override
+    _CartBodyState createState() => _CartBodyState();
 
-  double bottomBarHeight = 50;
-  double bottomNavBarHeight = 112;
+    double bottomBarHeight = 50;
+    double bottomNavBarHeight = 112;
+    int startTime;
+    int endTime;
+    final int minutesAfterOrder = 30;
 }
 
 class _CartBodyState extends State<CartBody> {
 
     List<DateTime> holidays;
+    Shop selectedShop;
+    DateTime today = DateTime.now();//DateTime.parse("2019-10-25 18:19:00"); //FOR DEBUGGING;
 
   @override
   void initState() {
     super.initState();
-//    getCoffees();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: RenaoBoxDecoration.builder(context),
-        child: _buildScreen(),
+        decoration: RenaoBoxDecoration.builder(context),       
+        child: StreamBuilder
+        (
+            stream: ShopsDB.getShopByID(StaticData.currentUser.selectedShop).asStream(),
+            builder: (context, snap)
+            {
+                if(snap.connectionState == ConnectionState.waiting)
+                {
+                    return Container();
+                }
+                else
+                {
+                    widget.startTime = (snap.data as Shop).opensHour;
+                    widget.endTime = (snap.data as Shop).closesHour;
+                    selectedShop = (snap.data as Shop);
+                    return _buildScreen();
+                }
+            },
+        ),
       ),
     );
   }
@@ -49,18 +73,12 @@ class _CartBodyState extends State<CartBody> {
           margin: f == items.first
               ? EdgeInsets.only(top: 30)
               : EdgeInsets.only(top: 0),
-          child: CartListItem(item: f),
+          child: CartListItem(item: f, refreshFunction: refreshFunction),
         );
       }).toList(),
     );
   }
 
-  Widget _getEmptyList() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[],
-    );
-  }
 
   Widget _buildScreen() {
     return StreamBuilder(
@@ -69,7 +87,7 @@ class _CartBodyState extends State<CartBody> {
           if (snapshot.data == null) return RenaoWaitingRing();
 
           QuerySnapshot shopItems = snapshot.data as QuerySnapshot;
-          List<ShopItem> cartItems = [];
+          List<ShopItem> cartItems = new List<ShopItem>();
 
           for (DocumentSnapshot doc in shopItems.documents) {
             ShopItem item = DecideItemType.getItemByClassFromFireStore(doc);
@@ -78,42 +96,115 @@ class _CartBodyState extends State<CartBody> {
 
           if (shopItems == null) return Container();
 
-          return Column(
+          if(cartItems.isEmpty)
+          {
+              return _buildEmptyCart(context);
+          }
+          else
+          {
+              return _buildCartWithItems(context, cartItems);
+          }
+        });
+  }
+
+    Widget _buildEmptyCart(BuildContext context)
+    {
+		double width = MediaQuery.of(context).size.width;
+        return Container
+        (
+            child: Center
+            (
+                child: Column
+                (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>
+                    [
+                        ClipRRect
+                        (
+                            borderRadius: BorderRadius.circular(200.0),
+                            child: Card
+                            (
+                                elevation: 2,
+                                child: Image.asset("assets/images/kav.jpg", width: width*0.75,),
+                            ),
+                        ),
+                        SizedBox(height: 10,),
+                        StrokedText
+                        (
+                            text: LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
+                            size: 30,
+                        ),
+                        Container
+                        (
+                            margin: EdgeInsets.only(left: width*0.11, right: width*0.11, top: 25),
+                            child: Text
+                            (
+                                LanguageModel.addToCartDescription[LanguageModel.currentLanguage],
+                                textAlign: TextAlign.center,
+                                style: TextStyle
+                                (
+                                    color: Colors.white70
+                                ),
+                            ),
+                        ),
+                        SizedBox(height: width*0.07)
+                    ],
+                ),
+            ),
+        );
+    }
+
+    Widget _buildCartWithItems(BuildContext context, List<ShopItem> cartItems)
+    {
+        return Column(
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height -
                     widget.bottomNavBarHeight -
                     widget.bottomBarHeight,
-                child: cartItems.isNotEmpty
-                    ? _getCartItems(cartItems)
-                    : _getEmptyList(),
+                child: _getCartItems(cartItems),
               ),
-              Container(
-                height: widget.bottomBarHeight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    StrokedText(
-                      text: LanguageModel.total(getTotal(cartItems)),
-                      size: 20,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    RenaoFlatButton(
-                      title: LanguageModel.time[LanguageModel.currentLanguage],
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      textColor: Theme.of(context).primaryColor,
-                      onPressed: pickDate,
-                      borderColor: Colors.black12,
-                      borderWidth: 2,
-                    ),
-                  ],
-                ),
-              ),
+              _getBottomBar(context, cartItems),
             ],
           );
-        });
-  }
+    }
+
+    Widget _getBottomBar(BuildContext context, List<ShopItem> cartItems)
+    {
+        if(cartItems.isEmpty)
+        {
+            return Container();
+        }
+
+        return Container
+        (
+            height: widget.bottomBarHeight,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>
+                [
+                    StrokedText(
+                        text: LanguageModel.total(getTotal(cartItems)),
+                        size: 20,
+                        color: Theme.of(context).primaryColor,
+                    ),
+                    RenaoFlatButton
+                    (
+                        title: LanguageModel.time[LanguageModel.currentLanguage],
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,    
+                        textColor: Theme.of(context).primaryColor,
+                        onPressed: ()
+                        {
+                            pickDate(cartItems);
+                        },
+                        borderColor: Colors.black12,
+                        borderWidth: 2,
+                    )
+                ],
+            ),
+        );
+    }
 
     int getTotal(List<ShopItem> cartItems) {
         int total = 0;
@@ -123,8 +214,17 @@ class _CartBodyState extends State<CartBody> {
         return total;
     }
 
+    void refreshFunction()
+    {
+        setState(() {});
+    }
+
+///TODO: Magic number eltüntetése
     bool selectableDate(DateTime selected)
     {
+        if(today.difference(selected).inMinutes.abs() < 30)
+            return false;
+
         for(DateTime date in holidays)
         {
             if(selected.year == date.year
@@ -137,9 +237,9 @@ class _CartBodyState extends State<CartBody> {
 
     DateTime getInitialDate(DateTime selected)
     {
-        if(selectableDate(selected))
-        {
-            return selected;
+        if(selectableDate(selected) && selected.isAfter(today))
+        {           
+            return DateTime(selected.year, selected.month, selected.day);
         }
         else
         {
@@ -147,23 +247,31 @@ class _CartBodyState extends State<CartBody> {
         }
     }
 
-    void pickDate() async 
+    void pickDate(List<ShopItem> cartItems) async 
     {
         holidays = await OrderDateDB.getHolidays();
-        DateTime today = DateTime.now();
-        DateTime initialDate = getInitialDate(DateTime.now());
+        DateTime initialDate = getInitialDate(DateTime(today.year, today.month, today.day, selectedShop.closesHour, selectedShop.closesMinute));
         DateTime nextMonth = today.add(new Duration(days: 30));
-
-        print(initialDate);
-
         DateTime orderDate = await showDatePicker(
             context: context,
-            firstDate: today,
+            firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
             initialDate: initialDate,
             lastDate: nextMonth,
-            selectableDayPredicate: selectableDate);
+            selectableDayPredicate: (selected)
+            {
+                selected = DateTime(selected.year, selected.month, selected.day, selectedShop.closesHour, selectedShop.closesMinute);
+                return selectableDate(selected);
+            });
 
         if (orderDate != null)
-            Navigator.of(context).pushNamed("/main/cart/order_page_screen", arguments: {"orderDate": orderDate});
+        {
+            Navigator.of(context).pushNamed(OrderPageScreen.route, arguments: 
+            {
+                "orderDate": orderDate,
+                "items": cartItems,
+                "totalPrice": getTotal(cartItems),
+                "minutesAfterOrder": widget.minutesAfterOrder
+            });
+        }  
     }
 }

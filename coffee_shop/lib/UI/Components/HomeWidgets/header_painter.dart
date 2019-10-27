@@ -93,17 +93,6 @@ class CurvePainter extends CustomPainter
             begin: Alignment.topLeft
         );
 
-        /*LinearGradient grad = LinearGradient
-        (
-            colors: <Color>
-            [
-                Colors.brown,
-                Theme.of(context).accentColor
-            ],
-            end: Alignment.bottomRight,
-            begin: Alignment.topLeft
-        );*/
-
         paint.shader = grad.createShader(Rect.fromLTWH(0, 0, width, maxHeight));
         canvas.drawPath(path, paint);
     }

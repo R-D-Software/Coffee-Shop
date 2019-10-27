@@ -1,4 +1,5 @@
 import 'package:coffee_shop/Business/Database/user_DB.dart';
+import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class LanguageModel {
 
   static Map<Language, String> wallet = const {Language.ENGLISH: "Wallet", Language.HUNGARIAN: "Pénztárca"};
 
-  static Map<Language, String> postBox = const {Language.ENGLISH: "Cabin", Language.HUNGARIAN: "Szekrény"};
+  static Map<Language, String> postBox = const {Language.ENGLISH: "Cabins", Language.HUNGARIAN: "Szekrények"};
 
   static Map<Language, String> favourites = const {Language.ENGLISH: "Favourites", Language.HUNGARIAN: "Kedvencek"};
 
@@ -70,7 +71,7 @@ class LanguageModel {
   static Map<Language, String> addToFavourite = const {
     Language.ENGLISH: "To add something to your favourite list, please tap on the star icon in the product view.",
     Language.HUNGARIAN:
-        "Ahhoz, hogy a kedvencek listához tudd adni egy terméket, a termék képe fölötti csillagra kell kattintanod."
+        "Ahhoz, hogy a kedvencek listához tudj adni egy terméket, a termék képe fölötti csillagra kell kattintanod."
   };
 
   static Map<Language, String> yourListIsEmpty = const {
@@ -78,11 +79,27 @@ class LanguageModel {
     Language.HUNGARIAN: "A listád üres"
   };
 
+  static Map<Language, String> addToCartDescription = const {
+    Language.ENGLISH: "To add something to your cart, please tap on the \'Add to Cart\'",
+    Language.HUNGARIAN:
+        "Ahhoz, hogy a kosárhoz adj egy terméket, a terméknél lévő \'Kosárhoz\' gombra kell kattintanod."
+  };
+
+  static Map<Language, String> yourCartIsEmpty = const {
+    Language.ENGLISH: "Your cart is empty",
+    Language.HUNGARIAN: "A kosarad üres"
+  };
+
   static Map<Language, String> addToCart = const {Language.ENGLISH: "Add to Cart", Language.HUNGARIAN: "Kosárba"};
 
   static Map<Language, String> questComplete = const {
     Language.ENGLISH: "Congratulation, You have completed the quest!",
     Language.HUNGARIAN: "Gratulálunk, nyertél!"
+  };
+
+  static Map<Language, String> questCompleteAndOrdered = const {
+    Language.ENGLISH: "Congratulation, You have completed the quest, and succesfully ordered it!",
+    Language.HUNGARIAN: "Gratulálunk, nyertél, és már meg is rendelted!"
   };
 
   static Map<Language, String> toastAddToCart = const {
@@ -112,6 +129,35 @@ class LanguageModel {
   static Map<Language, String> warm = const {Language.ENGLISH: "Warm", Language.HUNGARIAN: "Meleg"};
 
   static Map<Language, String> hot = const {Language.ENGLISH: "Hot", Language.HUNGARIAN: "Forró"};
+
+  static Map<Language, String> orderSuccessful = const {
+    Language.ENGLISH: "Order Successful",
+    Language.HUNGARIAN: "Rendelés felvéve"
+  };
+
+  static Map<Language, String> orderDeclined = const {
+    Language.ENGLISH: "Order declined, please select another time",
+    Language.HUNGARIAN: "A rendelés meghíusult, kérlek válassz másik időpontot"
+  };
+
+  static Map<Language, String> orders = const {Language.ENGLISH: "Orders", Language.HUNGARIAN: "Rendelések"};
+
+  static Map<Language, String> timeRemaining = const {
+    Language.ENGLISH: "Time remaining",
+    Language.HUNGARIAN: "Hátralévő idő"
+  };
+
+  static Map<Language, String> dayLetter = const {Language.ENGLISH: "d", Language.HUNGARIAN: "n"};
+
+  static Map<Language, String> orderIsReady = const {
+    Language.ENGLISH: "Order is ready",
+    Language.HUNGARIAN: "A rendelés kész"
+  };
+
+  static Map<Language, String> orderIsDue = const {
+    Language.ENGLISH: "Order due in 5 minutes",
+    Language.HUNGARIAN: "A rendelésed 5 perc és kész"
+  };
 
   static Future init(BuildContext context) async {
     User user;
@@ -209,5 +255,20 @@ class LanguageModel {
         return daysInHungarian[i];
         break;
     }
+  }
+
+  static String orderReadyAt(String shopPlace, List<ShopItem> items) {
+    String retVal = shopPlace + " (";
+
+    for (ShopItem i in items) {
+      retVal += i.name;
+
+      if (items.last != i) {
+        retVal += ", ";
+      }
+    }
+    retVal += ")";
+
+    return retVal;
   }
 }

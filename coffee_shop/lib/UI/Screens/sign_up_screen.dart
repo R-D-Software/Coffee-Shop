@@ -12,6 +12,7 @@ import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 
 class SignUpScreen extends StatefulWidget {
+  static const String route = '/signup';
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 

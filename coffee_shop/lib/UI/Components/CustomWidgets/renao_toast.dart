@@ -15,4 +15,26 @@ class RenaoToast {
           fontSize: 16.0);
     }
   }
+
+  RenaoToast.orderSuccessful() {
+      Fluttertoast.showToast(
+          msg: LanguageModel.orderSuccessful[LanguageModel.currentLanguage],
+          gravity: ToastGravity.BOTTOM,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIos: 1,
+          backgroundColor: Color.fromRGBO(231, 82, 100, 1),
+          textColor: Colors.white,
+          fontSize: 16.0);   
+  }
+
+    RenaoToast.orderDeclined() {
+      Fluttertoast.showToast(
+          msg: LanguageModel.orderDeclined[LanguageModel.currentLanguage],
+          gravity: ToastGravity.BOTTOM,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIos: 3,
+          backgroundColor: Color.fromRGBO(231, 82, 100, 1),
+          textColor: Colors.white,
+          fontSize: 16.0);   
+  }
 }

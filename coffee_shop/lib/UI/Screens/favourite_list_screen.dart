@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
-import 'package:coffee_shop/Models/dummy_data.dart';
-import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/static_data.dart';
@@ -14,6 +12,7 @@ import 'package:flutter/material.dart';
 
 class FavouriteListScreen extends StatefulWidget 
 {
+    static const String route = '/main/favourites';
     @override
     _FavouriteListScreenState createState() => _FavouriteListScreenState();
 }
