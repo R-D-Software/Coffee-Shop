@@ -3,6 +3,7 @@ import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/purchase_history_DB.dart';
 import 'package:coffee_shop/Business/Database/quest_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
+import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Business/notification_service.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/order.dart';
@@ -19,13 +20,18 @@ class OrderDB
     static Future<bool> placeOrder(BuildContext context,{TimePickerComponent timePicker, User currentUser, Shop currentShop, String yearMonth, String day, List<ShopItem> cartItems}) async
     {
         bool hasCredit = true;
+        List<String> itemIDs = cartItems.map((f){return f.parentID;}).toList();
+        //String freeBox = await ShopsDB.freeBoxAtShop(currentShop.docID, currentUser.userID, yearMonth, day, timePicker.pickedHour, timePicker.pickedMinute);
+
         if(! await _canPlaceOrder(timePicker, currentShop, yearMonth, day))
         {
             return false;
         }
-
-        List<String> itemIDs = cartItems.map((f){return f.parentID;}).toList();
-
+        /*if(freeBox == "-1")
+        {
+            return false;
+        }*/
+        
         Order order = Order
         (
             shopID: currentShop.docID, 
@@ -34,21 +40,27 @@ class OrderDB
             day: day,
             date: yearMonth + "." + day,
             time: timePicker.pickedHour.toString() + ":" + timePicker.pickedMinute.toString(),
-            items: itemIDs
+            items: itemIDs,
+            box: "-1",
         );
+        if(order == null)
+        {
+            return false;
+        }
         
-        /*await NotificationService.makeNotification
+        await NotificationService.makeNotification
         (
             LanguageModel.orderIsDue[LanguageModel.currentLanguage],
             LanguageModel.orderReadyAt(currentShop.toString(), cartItems),
             order.toDateTime()
-        );*/
+        );
 
         if(hasCredit)
         {
             await QuestDB.addQuestCounterForUserIfLegit(cartItems);
+            DocumentReference df = await Firestore.instance.collection("orders").add(order.toJson());
             QuestDB.changeQuestStatusIfNeeded(cartItems);
-            Firestore.instance.collection("orders").add(order.toJson());
+            UserDB.addOrderToCurrentUser(df.documentID);
             ShopsDB.incrementUsedBoxesWithOrder(order);
             CartItemDB.resetCartForUser();
             PurchaseHistoryDB.addPurchaseForUser(StaticData.currentUser.userID, cartItems);
@@ -95,21 +107,29 @@ class OrderDB
     static Future<List<Order>> getOrdersForCurrentUser() async
     {
         List<Order> orders = new List<Order>();
+        User u = await UserDB.getCurrentUser();
 
-        Query q = Firestore.instance.collection("orders").where("userID", isEqualTo: StaticData.currentUser.userID);
-        
-        await q.getDocuments().then((res)
-        {
-            res.documents.forEach((doc)
+        for(String orderID in u.currentOrders)
+        {       
+            DocumentSnapshot doc = await Firestore.instance.collection("orders").document(orderID).snapshots().first;
+            if(doc.data != null)
             {
-                orders.add(Order.fromJson(doc.data, doc.documentID));
-            });
-        });
+                Order order = Order.fromJson(doc.data, doc.documentID);
+                if(order != null)
+                    orders.add(order);
+            }
+        }
+
         return orders;
     }
 
     static void deleteOrder(String docID)
     {
         Firestore.instance.collection("orders").document(docID).delete();
+    }
+
+    static Stream<DocumentSnapshot> getOrder(String docID) 
+    {
+        return Firestore.instance.document("orders/" + docID).snapshots();
     }
 }

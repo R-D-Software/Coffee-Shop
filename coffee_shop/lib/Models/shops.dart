@@ -44,6 +44,7 @@ class Shop{
   final int opensHour;
   final int closesMinute;
   final int opensMinute;
+  final List<String> boxes;
 
   Shop
   (
@@ -60,6 +61,7 @@ class Shop{
         @required this.opensHour,
         @required this.closesMinute,
         @required this.opensMinute,
+        @required this.boxes,
     }
   );
 
@@ -74,6 +76,7 @@ class Shop{
         'maximumOrderPerMinute': maximumOrderPerMinute,
         'closes': StringService.toDateFormatNumber(closesHour) + ":" + StringService.toDateFormatNumber(closesMinute),
         'opens': StringService.toDateFormatNumber(opensHour) + ":" + StringService.toDateFormatNumber(opensMinute),
+        'boxes': boxes,
         'appIdentifier': 'Renao',
     };
   }
@@ -98,7 +101,11 @@ class Shop{
       opensHour: opensHour,
       opensMinute: opensMinute,
       docID: docID,
+      boxes: doc["boxes"] != null
+          ? List.from(doc["boxes"])
+          : new List<String>()
     );
+
     return shop;
   }
 

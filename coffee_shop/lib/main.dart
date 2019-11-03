@@ -14,7 +14,6 @@ import 'UI/Screens/food_item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
 import 'UI/Screens/order_page_screen.dart';
 import 'UI/Screens/place_changer_screen.dart';
-import 'UI/Screens/post_box_screen.dart';
 import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
 
@@ -57,7 +56,6 @@ class MyApp extends StatelessWidget {
         QuestScreen.route: (BuildContext context) => QuestScreen(),
         OrderPageScreen.route: (BuildContext context) => OrderPageScreen(),
         PlaceChangerScreen.route: (BuildContext context) => PlaceChangerScreen(),
-        PostBoxScreen.route: (BuildContext context) => PostBoxScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),

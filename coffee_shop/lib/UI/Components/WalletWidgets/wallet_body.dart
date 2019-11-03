@@ -29,7 +29,7 @@ class _WalletBodyState extends State<WalletBody> {
     {
         return StreamBuilder
         (
-            stream: UserDB.getCurrentUserSelectedShop(),
+            stream: UserDB.getCurrentUserSelectedShop().asStream(),
             builder: (context, shopSnap)
             {
                 if(shopSnap.connectionState == ConnectionState.waiting)

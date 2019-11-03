@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/order_DB.dart';
@@ -18,6 +20,9 @@ import 'package:flutter/material.dart';
 class OrderPageScreen extends StatefulWidget 
 {
     static const String route = '/main/cart/order_page_screen';
+    bool buttonAvailable = true;
+    Timer t;
+
     @override
     _OrderPageScreenState createState() => _OrderPageScreenState();
 }
@@ -38,6 +43,16 @@ class _OrderPageScreenState extends State<OrderPageScreen>
     }
 
     @override
+    void dispose()
+    {
+        if(widget.t != null)
+        {
+            widget.t.cancel();
+        }
+        super.dispose();
+    }
+
+    @override
     Widget build(BuildContext context) 
     {
         _initializeData(context);
@@ -53,7 +68,7 @@ class _OrderPageScreenState extends State<OrderPageScreen>
             ),
             body: StreamBuilder
             (
-                stream: UserDB.getCurrentUserSelectedShop(),
+                stream: UserDB.getCurrentUserSelectedShop().asStream(),
                 builder: (context, snapshot)
                 {
                     if(snapshot.connectionState == ConnectionState.waiting)
@@ -277,7 +292,15 @@ class _OrderPageScreenState extends State<OrderPageScreen>
                     elevation: 0,
                     onPressed:()
                     {
+                        if(widget.buttonAvailable)
+                        {
+                            widget.buttonAvailable = false;
+                            widget.t = Timer(Duration(seconds: 30), (){setState(() {
+                                widget.buttonAvailable = true;
+                            });});                                                             
+                            timePicker.stopClock();
                         _order(context);
+                        }                       
                     },
                     child: Text(
                         LanguageModel.order[LanguageModel.currentLanguage],

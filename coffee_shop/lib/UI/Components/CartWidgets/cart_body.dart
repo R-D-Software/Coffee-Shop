@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
@@ -8,6 +10,7 @@ import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_box_decoration.dart';
+import 'package:coffee_shop/UI/Components/CustomWidgets/renao_empty_list.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_flat_button.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_waiting_ring.dart';
 import 'package:coffee_shop/UI/Screens/order_page_screen.dart';
@@ -98,7 +101,12 @@ class _CartBodyState extends State<CartBody> {
 
           if(cartItems.isEmpty)
           {
-              return _buildEmptyCart(context);
+              return RenaoEmptyList
+              (
+                  imagePath: "assets/images/kav.jpg",
+                  textHeader: LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
+                  textDescription: LanguageModel.addToCartDescription[LanguageModel.currentLanguage],
+              );
           }
           else
           {
@@ -106,53 +114,6 @@ class _CartBodyState extends State<CartBody> {
           }
         });
   }
-
-    Widget _buildEmptyCart(BuildContext context)
-    {
-		double width = MediaQuery.of(context).size.width;
-        return Container
-        (
-            child: Center
-            (
-                child: Column
-                (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>
-                    [
-                        ClipRRect
-                        (
-                            borderRadius: BorderRadius.circular(200.0),
-                            child: Card
-                            (
-                                elevation: 2,
-                                child: Image.asset("assets/images/kav.jpg", width: width*0.75,),
-                            ),
-                        ),
-                        SizedBox(height: 10,),
-                        StrokedText
-                        (
-                            text: LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
-                            size: 30,
-                        ),
-                        Container
-                        (
-                            margin: EdgeInsets.only(left: width*0.11, right: width*0.11, top: 25),
-                            child: Text
-                            (
-                                LanguageModel.addToCartDescription[LanguageModel.currentLanguage],
-                                textAlign: TextAlign.center,
-                                style: TextStyle
-                                (
-                                    color: Colors.white70
-                                ),
-                            ),
-                        ),
-                        SizedBox(height: width*0.07)
-                    ],
-                ),
-            ),
-        );
-    }
 
     Widget _buildCartWithItems(BuildContext context, List<ShopItem> cartItems)
     {
@@ -195,7 +156,7 @@ class _CartBodyState extends State<CartBody> {
                         fontWeight: FontWeight.w700,    
                         textColor: Theme.of(context).primaryColor,
                         onPressed: ()
-                        {
+                        {                                                            
                             pickDate(cartItems);
                         },
                         borderColor: Colors.black12,

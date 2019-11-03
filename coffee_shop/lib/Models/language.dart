@@ -159,6 +159,51 @@ class LanguageModel {
     Language.HUNGARIAN: "A rendelésed 5 perc és kész"
   };
 
+  static Map<Language, String> box = const {
+    Language.ENGLISH: "Box",
+    Language.HUNGARIAN: "Doboz"
+  };  
+
+  static Map<Language, String> noCurrentOrders = const {
+    Language.ENGLISH: "You have no current orders",
+    Language.HUNGARIAN: "Jelenleg nincsenek rendeléseid"
+  };   
+
+  static Map<Language, String> pushThePicture = const {
+    Language.ENGLISH: "Tap on the picture to open the box",
+    Language.HUNGARIAN: "Nyomj a képre, hogy kinyisd a dobozt"
+  };   
+  
+  static Map<Language, String> youHaveNoBoxYet = const {
+    Language.ENGLISH: "You haven't been assigned a box",
+    Language.HUNGARIAN: "Még nem rendeltek dobozt a rendelésedhez"
+  };   
+
+  static Map<Language, String> openTheBox = const {
+    Language.ENGLISH: "Box opening",
+    Language.HUNGARIAN: "Doboz kinyitása"
+  };  
+  
+  static Map<Language, String> areYouSureToOpen = const {
+    Language.ENGLISH: "Are you ready to open the box? You have to be near the box to open it.",
+    Language.HUNGARIAN: "Biztos ki szeretnéd nyitni a dobozt? A nyitáshoz a közelében kell lenned."
+  };   
+  
+  static Map<Language, String> yes = const {
+    Language.ENGLISH: "Yes",
+    Language.HUNGARIAN: "Igen"
+  };    
+  
+  static Map<Language, String> no = const {
+    Language.ENGLISH: "No",
+    Language.HUNGARIAN: "Nem"
+  };   
+  
+  static Map<Language, String> grabYourGoods = const {
+    Language.ENGLISH: "Grab your goods from the box",
+    Language.HUNGARIAN: "Vedd el a termékeket a dobozból"
+  };         
+
   static Future init(BuildContext context) async {
     User user;
     await UserDB.getCurrentUser().then((u) {

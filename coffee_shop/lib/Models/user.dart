@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
-import 'package:coffee_shop/Models/favourite_item.dart';
 import 'package:coffee_shop/Models/language.dart';
+import 'package:flutter/foundation.dart';
 
 class User {
   final String userID;
@@ -12,16 +12,18 @@ class User {
   int completedQuestPart = 7;
   Language userDefinedLanguage;
   List<String> favouriteItems = [];
+  List<String> currentOrders = [];
 
   User(
-      {this.userID,
-      this.firstName,
-      this.email,
-      this.profilePictureURL,
-      this.userDefinedLanguage,
-      this.favouriteItems,
-      this.completedQuestPart,
-      this.selectedShop});
+      {@required this.userID,
+      @required this.firstName,
+      @required this.email,
+      @required this.profilePictureURL,
+      @required this.userDefinedLanguage,
+      @required this.favouriteItems,
+      @required this.completedQuestPart,
+      @required this.selectedShop,
+      @required this.currentOrders});
 
   Map<String, Object> toJson() {
     return {
@@ -33,6 +35,7 @@ class User {
       'favouriteItems': favouriteItems,
       'completedQuestPart': completedQuestPart,
       'selectedShop': selectedShop,
+      'currentOrders': currentOrders,
       'appIdentifier': 'Renao'
     };
   }
@@ -50,22 +53,11 @@ class User {
           : new List<String>(),
       completedQuestPart: doc["completedQuestPart"],
       selectedShop: doc["selectedShop"],
+      currentOrders: doc["currentOrders"] != null
+          ? List.from(doc["currentOrders"])
+          : new List<dynamic>()
     );
     return user;
-  }
-
-  static List<FavouriteItem> getFavouriteItems(List<Object> objects) {
-    List<FavouriteItem> retVal = new List<FavouriteItem>();
-
-    for (Object object in objects) {
-      Map jsonData = Map.from(object);
-      retVal.add(new FavouriteItem(
-          itemID: jsonData["itemID"],
-          sugar: jsonData["sugar"],
-          temperature: jsonData["temperature"]));
-    }
-
-    return retVal;
   }
 
   factory User.fromDocument(DocumentSnapshot doc) {

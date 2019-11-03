@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/string_service.dart';
 import 'package:coffee_shop/Models/order.dart';
 import 'package:coffee_shop/Models/shops.dart';
 
@@ -13,7 +14,7 @@ class ShopsDB
     {
         return Firestore.instance.collection("shop_order_times").document(shopID)
         .collection(yearMonth)
-        .document(day).get();
+        .document(StringService.toDateFormatString(day)).get();
     }
     
     static Future<String> getFirstShop() 
@@ -82,5 +83,35 @@ class ShopsDB
         {
             return Shop.fromDocument(shop);
         });
+    }
+
+    static Future<String> freeBoxAtShop(String shopID, String ownerID, String yearMonth, String day, int pickedHour, int pickedMinute) async 
+    {
+        Shop s = await getShopByID(shopID); 
+        String freeBox = "2";
+
+        DocumentSnapshot ds = await Firestore.instance.document('shops/' + shopID + "/box_times/" + yearMonth).get();
+        Map<dynamic,dynamic> boxTimes = (ds.data as Map<dynamic,dynamic>);
+
+        for(String boxID in s.boxes)
+        {
+            final DocumentReference boxRef = Firestore.instance.document('boxes/' + boxID);
+
+          /*  await Firestore.instance.runTransaction((Transaction tran){
+                tran.get(boxRef).then((DocumentSnapshot snap){
+                if(snap.exists)
+                {
+                    if((snap.data["empty"] as bool) == true)
+                    {
+                        freeBox = boxID;
+                        tran.update(boxRef, <String,dynamic>{"empty": false});
+                        tran.update(boxRef, <String,dynamic>{"ownerUserID": ownerID});
+                    }
+                }
+                });
+            });*/
+        }
+        
+        return freeBox;
     }          
 }   

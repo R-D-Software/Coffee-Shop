@@ -12,6 +12,12 @@ class TimePickerComponent extends StatefulWidget
     final DateTime date;
     final Map<String,dynamic> notSelectableDates;
     final int minutesAfterOrder;
+    bool stop = false;
+
+    void stopClock()
+    {
+        stop = true;
+    }
 
     TimePickerComponent({this.notSelectableDates, this.currentShop, this.date, this.minutesAfterOrder});
 
@@ -181,7 +187,8 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
             if(!notPickableList.contains(i))
                 pickableMinutes.add(i);
         }
-        setState(() {buildMinutes = true;});
+        if(!widget.stop)
+            setState(() {buildMinutes = true;});
     }
 
     Widget _minutePicker(List<int> pickableList, int addMinutes) 

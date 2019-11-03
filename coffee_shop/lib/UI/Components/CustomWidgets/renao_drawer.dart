@@ -6,7 +6,6 @@ import 'package:coffee_shop/UI/Screens/settings.dart';
 import 'package:coffee_shop/UI/Screens/wallet_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RenaoDrawer extends StatefulWidget {
@@ -59,10 +58,6 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
         text: LanguageModel.wallet[LanguageModel.currentLanguage],
         action: _moveToWalletScreen));
     listTiles.add(DrawerListTile(
-        iconData: FontAwesomeIcons.microsoft,
-        text: LanguageModel.postBox[LanguageModel.currentLanguage],
-        action: _moveToPostBoxScreen));
-    listTiles.add(DrawerListTile(
         iconData: Icons.settings,
         text: LanguageModel.settings[LanguageModel.currentLanguage],
         action: _moveToSettingsScreen));
@@ -89,9 +84,5 @@ class _RenaoDrawerState extends State<RenaoDrawer> {
 
   void _moveToSettingsScreen() {
     Navigator.of(context).pushNamed(SettingsScreen.route);
-  }
-
-  void _moveToPostBoxScreen() {
-    Navigator.of(context).pushNamed("/post_box");
   }
 }

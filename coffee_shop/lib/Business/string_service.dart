@@ -20,4 +20,13 @@ class StringService
 
         return res;
     }
+
+    static String toDateFormatString(String day) 
+    {
+        if(day.length == 1)
+        {
+            return ("0" + day);
+        }
+        return day;
+    }
 }
