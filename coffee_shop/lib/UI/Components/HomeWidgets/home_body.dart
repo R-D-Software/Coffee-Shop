@@ -78,11 +78,11 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
             builder: (context1, snapshot1) {
               return StreamBuilder(
                   stream: OrderDB.getOrdersForCurrentUser().asStream(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                  builder: (context, orderSnap) {
+                    if (orderSnap.connectionState == ConnectionState.waiting) {
                       return Container();
                     } else {
-                      List<Order> orders = (snapshot.data as List<Order>);
+                      List<Order> orders = (orderSnap.data as List<Order>);
 
                       QuerySnapshot items = snapshot1.data as QuerySnapshot;
                       List<ShopItem> favouriteItems = new List<ShopItem>();

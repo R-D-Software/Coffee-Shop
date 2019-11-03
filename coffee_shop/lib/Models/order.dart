@@ -10,7 +10,8 @@ class Order
     final String time;
     final String yearMonth;
     final String day;
-    final String docID;
+    final String orderID;
+    final String box;
 
     Order
     (
@@ -22,7 +23,8 @@ class Order
             @required this.time,
             @required this.yearMonth,
             @required this.day,
-            @required this.docID,
+            @required this.orderID,
+            @required this.box,
         }
     );
 
@@ -37,12 +39,12 @@ class Order
             'time': time,
             'yearMonth': yearMonth,
             'day': day,
-            'docID': docID,
+            'box': box,
             'appIdentifier': 'Renao'
         };
     }
 
-    factory Order.fromJson(Map<String, Object> doc, String docID) 
+    factory Order.fromJson(Map<String, Object> doc, String orderID) 
     {
         Order order = new Order
         (
@@ -56,7 +58,8 @@ class Order
             time: doc['time'],
             yearMonth: doc['yearMonth'],
             day: doc['day'],
-            docID: docID,
+            box: doc['box'],
+            orderID: orderID,
         );
 
         return order;
@@ -91,5 +94,18 @@ class Order
         }
 
         return hour + ":" + minute + ":" + "00";
+    }
+
+    static Order getNearestOrder(List<Order> orders)
+    {
+        Order retOrder = orders.first;
+        for(Order order in orders)
+        {
+            if(retOrder.toDateTime().compareTo(order.toDateTime()) > 0)
+            {
+                retOrder = order;
+            }
+        }
+        return retOrder;
     }
 }

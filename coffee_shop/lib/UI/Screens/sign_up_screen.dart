@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _changeBlackVisible();
         await Auth.signUp(email, password).then((uID) {
           Auth.addUser(
-              new User(userID: uID, email: email, profilePictureURL: '', userDefinedLanguage: Language.NOTHING, completedQuestPart: 0, favouriteItems: [], selectedShop: firstShop));
+              new User(userID: uID, email: email, profilePictureURL: '', firstName: "", userDefinedLanguage: Language.NOTHING, completedQuestPart: 0, favouriteItems: [], selectedShop: firstShop, currentOrders: []));
           onBackPress();
         });
       } catch (e) {

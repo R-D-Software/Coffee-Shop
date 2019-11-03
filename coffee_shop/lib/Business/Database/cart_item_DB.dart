@@ -53,8 +53,6 @@ class CartItemDB {
   }
 
     static void resetCartForUser() {
-
-        print("RESETTING");
         Firestore.instance
             .collection("users")
             .document(StaticData.currentUser.userID)

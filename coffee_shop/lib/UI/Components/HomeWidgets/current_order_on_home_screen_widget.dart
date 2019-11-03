@@ -29,6 +29,9 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
     @override
     Widget build(BuildContext context) {
         _getPropertyValues();
+
+        if(widget.orders == null)
+            return Container();
         if(widget.orders.isNotEmpty)
             return _buildBody(context, widget.orders);  
         else
@@ -51,7 +54,7 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
                     icon: Icons.navigation,
                     onIconClick: ()
                     {
-                        _navigatoToShop(_getNearestOrder(orders));
+                        _navigatoToShop(Order.getNearestOrder(orders));
                     },
                 ),
                 Container
@@ -66,7 +69,7 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
                 ),
                 Center
                 (
-                    child: TimeLeftWidget(_getNearestOrder(orders))
+                    child: TimeLeftWidget(Order.getNearestOrder(orders))
                 )
             ]
         );
@@ -129,20 +132,6 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
             ),
         )
         ];
-    }
-
-    Order _getNearestOrder(List<Order> orders)
-    {
-        Order retOrder = orders.first;
-
-        for(Order order in orders)
-        {
-            if(retOrder.toDateTime().compareTo(order.toDateTime()) > 0)
-            {
-                retOrder = order;
-            }
-        }
-        return retOrder;
     }
 
     void _navigatoToShop(Order order) async

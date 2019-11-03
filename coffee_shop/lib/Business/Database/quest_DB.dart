@@ -35,7 +35,7 @@ class QuestDB
         DocumentSnapshot ds = await getCurrentQuestData();
         int sumOfPoints = 0;
         int requiredAmount = ((ds["row"] as int) * (ds["column"]) as int);
-        
+
         for(ShopItem i in cartItems)
         {
             if(i.parentID == ds["questItemID"])
@@ -43,7 +43,6 @@ class QuestDB
                 sumOfPoints++;
             }
         }
-
         if(sumOfPoints != 0)
         {
             UserDB.incrementCurrentUserQuestItemCountBy(sumOfPoints, requiredAmount, ds["calendarWeek"]);

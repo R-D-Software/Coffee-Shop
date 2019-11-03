@@ -65,8 +65,6 @@ class _TimeLeftWidgetState extends State<TimeLeftWidget> with SingleTickerProvid
         var sub = countDownTimer.listen(null);
         sub.onData((duration) 
         {
-            if(duration.remaining.inSeconds <= 0) OrderDB.deleteOrder(orderToCome.docID);
-            
             setState(() { _current = duration.remaining.inSeconds; });
         });
 

@@ -4,6 +4,7 @@ import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/Models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class UserDB
 {
@@ -15,7 +16,6 @@ class UserDB
         {
             user = u;
         });
-
         StaticData.currentUser = user;
         return user;  
     }
@@ -67,14 +67,12 @@ class UserDB
         StaticData.currentUser.selectedShop = shopID;
     }
 
-    static Stream<Shop> getCurrentUserSelectedShop() 
+    static Future<Shop> getCurrentUserSelectedShop() async 
     {
-        return Firestore.instance
-            .collection("shops").document(StaticData.currentUser.selectedShop)
-            .snapshots()
-            .map((DocumentSnapshot snapshot) {
-                return Shop.fromDocument(snapshot);
-        });
+        DocumentSnapshot ds = await Firestore.instance.collection("shops").document(StaticData.currentUser.selectedShop).snapshots().first;         
+
+        return Shop.fromDocument(ds);
+
     }
 
     static Future<void> incrementCurrentUserQuestItemCountBy(int sumOfPoints, int requiredAmount, int calWeek) async
@@ -98,5 +96,22 @@ class UserDB
             return 0;
         }
         return ds.data["balance"];
-    }   
+    }
+
+    static void addOrderToCurrentUser(String orderID) 
+    {
+        Firestore.instance.collection("users").document(StaticData.currentUser.userID).updateData({"currentOrders": FieldValue.arrayUnion([orderID])});
+    }
+
+    static void removeOrderFromCurrentUser(String orderID) 
+    {
+        Firestore.instance.collection("users").document(StaticData.currentUser.userID).updateData({"currentOrders": FieldValue.arrayRemove([orderID])});
+    }
+
+    static Future updateToken() async 
+    {
+        FirebaseMessaging fcm = new FirebaseMessaging();
+        String token = await fcm.getToken();
+        Firestore.instance.collection("users").document(StaticData.currentUser.userID).updateData({"deviceToken": token});
+    }
 }
