@@ -28,7 +28,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     return Container
                     (
                         width: MediaQuery.of(context).size.width*0.98,
-                        height: widget.height,
+                        //height: widget.height,
                     );
                 }
                 else
@@ -41,7 +41,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     {
                         return Container();
                     }
-                    
+
                     for(PurchaseHistoryItem item in ph.items)
                     {
                         historyItems.add(_getHistoryElement(context, item));
@@ -50,7 +50,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     return Container
                     (
                         width: MediaQuery.of(context).size.width*0.98,
-                        height: widget.height,
+                        //height: widget.height,
                         child: ListView
                         (
                             children: historyItems.length == 0 ? [Container()] : historyItems

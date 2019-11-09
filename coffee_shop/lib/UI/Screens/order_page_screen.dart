@@ -126,7 +126,7 @@ class _OrderPageScreenState extends State<OrderPageScreen>
             child: Container
             (
                 decoration: RenaoBoxDecoration.builder(context),
-                height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height,
+                height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height - 29,
                 child: Container
                 (
                     child: Column

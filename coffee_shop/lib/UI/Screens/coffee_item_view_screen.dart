@@ -46,14 +46,11 @@ class CoffeeItemViewScreen extends StatelessWidget {
     }
 
     _addButton = _getAddButton(context);
-
+    
     return Scaffold(
         appBar: _appBar,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: RenaoBoxDecoration.builder(context),
-            height: height - _appBar.preferredSize.height,
+        body: Container(
+            decoration: RenaoBoxDecoration.builder(context),          
             child: StreamBuilder(
                 stream: ShopItemDB.getShopItemByID(itemID),
                 builder: (context, snapshot) {
@@ -68,7 +65,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
                 }),
             width: double.infinity,
           ),
-        ));
+        );
   }
 
   void initializeData(BuildContext context) {
@@ -96,7 +93,10 @@ class CoffeeItemViewScreen extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+      height: height - _appBar.preferredSize.height - 29,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
         StrokedText(
           text: _item.name,
           color: Colors.white,
@@ -130,6 +130,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: 50,),
         Container(
           margin: EdgeInsets.only(bottom: 0),
           child: StrokedText(
@@ -139,6 +140,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
           ),
         ),
         SugarChooser(_item, _setSugar),
+        SizedBox(height: 30,),
         Container(
           margin: EdgeInsets.only(bottom: 10),
           child: StrokedText(
@@ -148,9 +150,10 @@ class CoffeeItemViewScreen extends StatelessWidget {
           ),
         ),
         TemperatureChooser(_item, _setTemperature),
+        SizedBox(height: 20,),
         _addButton,
       ]),
-    );
+    ));
   }
 
   Container _buildInformationIcon(BuildContext context) {

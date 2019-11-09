@@ -51,7 +51,7 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
             (
                 margin: EdgeInsets.only(right: 7),
                 child: FavouriteListItem(item: f),
-            )).toList(),
+            ),).toList(),
         );
     }
 
@@ -91,7 +91,11 @@ class _FavouriteListScreenState extends State<FavouriteListScreen>
                         }
 
                         if(favouriteItems.isNotEmpty) 
-                            return _getFavouriteList(favouriteItems);
+                            return Container
+                            (
+                                height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height - 29,
+                                child: _getFavouriteList(favouriteItems)
+                            );
                         else 
                         return RenaoEmptyList
                         (

@@ -45,7 +45,7 @@ class FoodItemViewScreen extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: Container(
             decoration: RenaoBoxDecoration.builder(context),
-            height: height - _appBar.preferredSize.height,
+            height: height - _appBar.preferredSize.height - 29,
             child: StreamBuilder(
                 stream: ShopItemDB.getShopItemByID(itemID),
                 builder: (context, snapshot) {
