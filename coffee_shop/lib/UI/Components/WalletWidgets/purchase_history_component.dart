@@ -28,7 +28,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     return Container
                     (
                         width: MediaQuery.of(context).size.width*0.98,
-                        height: widget.height,
+                        //height: widget.height,
                     );
                 }
                 else
@@ -36,6 +36,11 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     List<Widget> historyItems = new List<Widget>();
 
                     PurchaseHistory ph = (snap.data as PurchaseHistory);
+
+                    if(ph == null)
+                    {
+                        return Container();
+                    }
 
                     for(PurchaseHistoryItem item in ph.items)
                     {
@@ -45,10 +50,10 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     return Container
                     (
                         width: MediaQuery.of(context).size.width*0.98,
-                        height: widget.height,
+                        //height: widget.height,
                         child: ListView
                         (
-                            children: historyItems
+                            children: historyItems.length == 0 ? [Container()] : historyItems
                         )
                     );
                 }

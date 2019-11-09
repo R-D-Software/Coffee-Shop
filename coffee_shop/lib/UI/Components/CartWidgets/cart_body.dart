@@ -120,9 +120,10 @@ class _CartBodyState extends State<CartBody> {
         return Column(
             children: <Widget>[
               Container(
-                height: MediaQuery.of(context).size.height -
-                    widget.bottomNavBarHeight -
-                    widget.bottomBarHeight,
+                height: MediaQuery.of(context).size.height
+                    - widget.bottomNavBarHeight 
+                    - widget.bottomBarHeight 
+                    - 29,
                 child: _getCartItems(cartItems),
               ),
               _getBottomBar(context, cartItems),

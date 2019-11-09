@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {    
     return Container
     (
-        child: RenaoScaffold(
+        child: RenaoScaffold(          
             appBarTitle: LanguageModel.home[LanguageModel.currentLanguage],
             scaffoldBody: HomeScreenBody(),
         ),
