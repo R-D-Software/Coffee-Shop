@@ -34,7 +34,19 @@ export const onOrderReady = functions.firestore.document("orders/{orderID}").onU
 			console.log('Error sending message:', error);
 		});
 
-		return db.doc("boxes/" + box).update({"empty": false, "ownerUserID": userID});
+		return db.doc("boxes/" + box).update({"empty": false, "ownerUserID": userID, "itemsRetrieved": false, "currentOrderID": change.after.id});
+	}
+
+	return change.after.ref;
+});
+
+export const onItemsRetreivedFromBox = functions.firestore.document("boxes/{boxID}").onUpdate(async (change, context) => 
+{
+	const itemsRetrieved : boolean = change.after.get("itemsRetrieved");
+
+	if(itemsRetrieved === true)
+	{
+		return db.doc("boxes/" + change.after.id).update({"ownerUserID": "-1", "currentOrderID": "-1", "itemsRetrieved": false});
 	}
 
 	return change.after.ref;

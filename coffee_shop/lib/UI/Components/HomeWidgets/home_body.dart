@@ -87,7 +87,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
                       QuerySnapshot items = snapshot1.data as QuerySnapshot;
                       List<ShopItem> favouriteItems = new List<ShopItem>();
 
-                      if (items == null || user.favouriteItems == null) {
+                      if (items == null || user.favouriteItems == null || user == null) {
                         return Container();
                       }
 
