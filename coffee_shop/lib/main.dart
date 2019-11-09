@@ -18,10 +18,9 @@ import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
 
 void main() {
-  //SystemChrome.setEnabledSystemUIOverlays([]);
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.white,
+    systemNavigationBarColor: Color.fromRGBO(76, 53, 47, 1),
   ));
   runApp(MyApp());
 }
@@ -29,6 +28,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
     Firestore.instance.settings(timestampsInSnapshotsEnabled: true);
     return MaterialApp(
       title: 'Renao',
@@ -48,19 +48,24 @@ class MyApp extends StatelessWidget {
         SignUpScreen.route: (BuildContext context) => SignUpScreen(),
         HomeScreen.route: (BuildContext context) => HomeScreen(),
         MainScreen.route: (BuildContext context) => MainScreen(),
-        CoffeeItemViewScreen.route: (BuildContext context) => CoffeeItemViewScreen(),
-        FoodItemViewScreen.route: (BuildContext context) => FoodItemViewScreen(),
-        FavouriteListScreen.route: (BuildContext context) => FavouriteListScreen(),
+        CoffeeItemViewScreen.route: (BuildContext context) =>
+            CoffeeItemViewScreen(),
+        FoodItemViewScreen.route: (BuildContext context) =>
+            FoodItemViewScreen(),
+        FavouriteListScreen.route: (BuildContext context) =>
+            FavouriteListScreen(),
         WalletScreen.route: (BuildContext context) => WalletScreen(),
         SettingsScreen.route: (BuildContext context) => SettingsScreen(),
         QuestScreen.route: (BuildContext context) => QuestScreen(),
         OrderPageScreen.route: (BuildContext context) => OrderPageScreen(),
-        PlaceChangerScreen.route: (BuildContext context) => PlaceChangerScreen(),
+        PlaceChangerScreen.route: (BuildContext context) =>
+            PlaceChangerScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),
           accentColor: Color.fromRGBO(171, 122, 91, 1),
-          textTheme: TextTheme(body1: TextStyle(fontFamily: "Roboto", fontSize: 20)),
+          textTheme:
+              TextTheme(body1: TextStyle(fontFamily: "Roboto", fontSize: 20)),
           iconTheme: IconThemeData(color: Colors.white, opacity: 1, size: 39)),
       home: RootScreen(),
     );

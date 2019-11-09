@@ -37,6 +37,11 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
 
                     PurchaseHistory ph = (snap.data as PurchaseHistory);
 
+                    if(ph == null)
+                    {
+                        return Container();
+                    }
+                    
                     for(PurchaseHistoryItem item in ph.items)
                     {
                         historyItems.add(_getHistoryElement(context, item));
@@ -48,7 +53,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                         height: widget.height,
                         child: ListView
                         (
-                            children: historyItems
+                            children: historyItems.length == 0 ? [Container()] : historyItems
                         )
                     );
                 }
