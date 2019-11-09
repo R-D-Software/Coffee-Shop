@@ -95,7 +95,7 @@ class _BoxBodyState extends State<BoxBody> {
                                 }
                                 else
                                 {
-                                    return _getOpenerWidget(snap, ds, context);
+                                    return _getOpenerWidget(snap, ds, context, currentOrder);
                                 }
                             }
                         },
@@ -115,13 +115,13 @@ class _BoxBodyState extends State<BoxBody> {
                 children: <Widget>
                 [
                     StrokedText(text:LanguageModel.youHaveNoBoxYet[LanguageModel.currentLanguage]),
-                    _getApproppriateImage(false, context, "-1", 0.3),                               
+                    _getApproppriateImage(false, context, "-1", "-1", 0.3),                               
                 ],
             ),
         );
     }
 
-    Widget _getOpenerWidget(AsyncSnapshot snap, DocumentSnapshot ds, BuildContext context)
+    Widget _getOpenerWidget(AsyncSnapshot snap, DocumentSnapshot ds, BuildContext context, Order order)
     {
         PostBox box = PostBox.fromDocument(snap.data, ds.documentID);
         String text;
@@ -142,7 +142,7 @@ class _BoxBodyState extends State<BoxBody> {
                 children: <Widget>
                 [
                     StrokedText(text:text),
-                    _getApproppriateImage(box.open, context, box.boxID, 1),                               
+                    _getApproppriateImage(box.open, context, box.boxID, order.orderID, 1),                               
                 ],
             ),
         );
@@ -158,13 +158,13 @@ class _BoxBodyState extends State<BoxBody> {
                 children: <Widget>
                 [
                     StrokedText(text:LanguageModel.noCurrentOrders[LanguageModel.currentLanguage],),
-                    _getApproppriateImage(false, context, "-1", 0.30),
+                    _getApproppriateImage(false, context, "-1", "-1", 0.30),
                 ],
             ),
         );
     }
 
-    Widget _getApproppriateImage(bool open, BuildContext context, String boxID, double opacity)
+    Widget _getApproppriateImage(bool open, BuildContext context, String boxID, String orderID, double opacity)
     {
         assert(opacity >= 0 && opacity <= 1);
         double width = MediaQuery.of(context).size.width;
@@ -190,7 +190,7 @@ class _BoxBodyState extends State<BoxBody> {
                 borderRadius: BorderRadius.circular(18.0),
                 child: GestureDetector
                 (
-                    onTap: (){if(boxID != "-1") BoxesDB.tryToOpen(boxID, context);},
+                    onTap: (){if(boxID != "-1") BoxesDB.tryToOpen(boxID, orderID, context);},
                     child: Opacity
                     (
                         opacity: opacity,
