@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'UI/Screens/coffee_item_view_screen.dart';
 import 'UI/Screens/food_item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
+import 'UI/Screens/order_details_screen.dart';
 import 'UI/Screens/order_page_screen.dart';
 import 'UI/Screens/place_changer_screen.dart';
 import 'UI/Screens/root_screen.dart';
@@ -58,8 +59,8 @@ class MyApp extends StatelessWidget {
         SettingsScreen.route: (BuildContext context) => SettingsScreen(),
         QuestScreen.route: (BuildContext context) => QuestScreen(),
         OrderPageScreen.route: (BuildContext context) => OrderPageScreen(),
-        PlaceChangerScreen.route: (BuildContext context) =>
-            PlaceChangerScreen(),
+        PlaceChangerScreen.route: (BuildContext context) => PlaceChangerScreen(),
+        OrderDetailsScreen.route: (BuildContext context) => OrderDetailsScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),

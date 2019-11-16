@@ -204,6 +204,21 @@ class LanguageModel {
     Language.HUNGARIAN: "Vedd el a termékeket a dobozból"
   };         
 
+  static Map<Language, String> boxNotAssigned = const {
+    Language.ENGLISH: "No box has been assigned to your order.",
+    Language.HUNGARIAN: "Még nem rendeltek dobozt a rendeléshez."
+  };   
+  
+  static Map<Language, String> orderTime = const {
+    Language.ENGLISH: "Order time: \n",
+    Language.HUNGARIAN: "Rendelés ideje: \n"
+  };   
+     
+  static Map<Language, String> items = const {
+    Language.ENGLISH: "Ordered items",
+    Language.HUNGARIAN: "Rendelt termékek"
+  };
+
   static Future init(BuildContext context) async {
     User user;
     await UserDB.getCurrentUser().then((u) {
@@ -316,4 +331,16 @@ class LanguageModel {
 
     return retVal;
   }
+
+  static String boxAssignedAt(String box) {
+    if(currentLanguage == Language.ENGLISH)
+    {
+        return "The box for your order is Nr" + box;
+    }
+    else if (currentLanguage == Language.HUNGARIAN)
+    {
+        return "A rendeléshez tartozó doboz: " + box;
+    }
+    return "";
+  }  
 }
