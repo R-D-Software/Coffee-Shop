@@ -5,6 +5,7 @@ import 'package:coffee_shop/Models/order.dart';
 import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/UI/Components/HomeWidgets/timeleft_widget.dart';
 import 'package:coffee_shop/UI/Components/stroked_text.dart';
+import 'package:coffee_shop/UI/Screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'order_item_component.dart';
@@ -64,7 +65,7 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
                     child: ListView
                     (
                         scrollDirection: Axis.horizontal,
-                        children: _getItems(orders),
+                        children: _getItems(orders, context),
                     )
                 ),
                 Center
@@ -85,7 +86,7 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
     this._itemSize = 100;
   }
 
-    List<Widget> _getItems(List<Order> orders)
+    List<Widget> _getItems(List<Order> orders, BuildContext context)
     {
         List<Widget> retList = new List<Widget>();
 
@@ -95,12 +96,16 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
             {
                 retList.add
                 (
-                    Container
+                    GestureDetector
                     (
-                        margin: EdgeInsets.only(right: 7),
-                        child: OrderItemComponent(itemID, orders.indexOf(order), _itemSize),
-                        width: this._itemSize,
-                        color: Colors.transparent,
+                        onTap: (){Navigator.of(context).pushNamed(OrderDetailsScreen.route, arguments: {"order": order});},
+                        child: Container
+                        (
+                            margin: EdgeInsets.only(right: 7),
+                            child: OrderItemComponent(itemID, orders.indexOf(order), _itemSize),
+                            width: this._itemSize,
+                            color: Colors.transparent,
+                        )
                     )
                 );
             }

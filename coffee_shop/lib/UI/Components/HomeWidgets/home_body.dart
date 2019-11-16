@@ -23,7 +23,7 @@ class _HomeScreenBodyState extends State<HomeScreenBody> {
         stream: Firestore.instance.collection("shop_items").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(); //Penis Ring
+            return Container();
           } else {
             return _makeHomeBody(snapshot);
           }
