@@ -44,12 +44,12 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     final BottomNavigationBar navBar = BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: currentTab,
       elevation: 4,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Colors.brown,
       selectedItemColor: Colors.white,
       unselectedItemColor: Theme.of(context).accentColor,
       onTap: (int numTab) {
@@ -71,7 +71,7 @@ class MainScreenState extends State<MainScreen> {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: new Icon(Icons.home),
-        title: new Text(LanguageModel.home[LanguageModel.currentLanguage]),
+        title: new Text(LanguageModel.home[LanguageModel.currentLanguage]),      
       ),
       BottomNavigationBarItem(
         icon: new Icon(Icons.loyalty),

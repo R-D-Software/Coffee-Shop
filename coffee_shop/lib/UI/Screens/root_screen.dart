@@ -3,7 +3,6 @@ import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/UI/Components/Navigation/main_screen.dart';
 import 'package:coffee_shop/UI/Screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class RootScreen extends StatefulWidget {

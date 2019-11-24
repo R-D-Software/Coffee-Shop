@@ -48,9 +48,7 @@ class _WalletBodyState extends State<WalletBody> {
                                 return Container();
                             }
                             else
-                            {
-
-                                
+                            {  
                                 return _buildBody(context, (shopSnap.data as Shop), (balanceSnap.data as int));
                             }
                         },
@@ -245,7 +243,12 @@ class _WalletBodyState extends State<WalletBody> {
     }  
 
     Widget _balanceBuilder(BuildContext context, int balance)
-    {
+    {        
+        if(balance == null)
+        {
+            balance = 0;
+        }
+        
         return Container
         (
             width: MediaQuery.of(context).size.width,

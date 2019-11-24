@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
@@ -73,6 +75,7 @@ class _CartBodyState extends State<CartBody> {
     );
   }
 
+
   Widget _buildScreen() {
     return StreamBuilder(
         stream: CartItemDB.fetchCartItems(),
@@ -101,17 +104,21 @@ class _CartBodyState extends State<CartBody> {
         });
   }
 
-  Widget _buildCartWithItems(BuildContext context, List<ShopItem> cartItems) {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: MediaQuery.of(context).size.height - widget.bottomNavBarHeight - widget.bottomBarHeight,
-          child: _getCartItems(cartItems),
-        ),
-        _getBottomBar(context, cartItems),
-      ],
-    );
-  }
+    Widget _buildCartWithItems(BuildContext context, List<ShopItem> cartItems)
+    {
+        return Column(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height
+                    - widget.bottomNavBarHeight
+                    - widget.bottomBarHeight
+                    - 29,
+                child: _getCartItems(cartItems),
+              ),
+              _getBottomBar(context, cartItems),
+            ],
+          );
+    }
 
   Widget _getBottomBar(BuildContext context, List<ShopItem> cartItems) {
     if (cartItems.isEmpty) {
