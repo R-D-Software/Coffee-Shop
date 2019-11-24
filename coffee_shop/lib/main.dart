@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/UI/Components/Navigation/main_screen.dart';
+import 'package:coffee_shop/UI/Screens/barion_webview.dart';
 import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         QuestScreen.route: (BuildContext context) => QuestScreen(),
         OrderPageScreen.route: (BuildContext context) => OrderPageScreen(),
         PlaceChangerScreen.route: (BuildContext context) => PlaceChangerScreen(),
+        BarionWebview.route: (BuildContext context) => BarionWebview(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),
