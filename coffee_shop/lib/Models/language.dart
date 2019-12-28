@@ -54,6 +54,11 @@ class LanguageModel {
     Language.HUNGARIAN: "Egyenleg Feltöltése"
   };
 
+  static Map<Language, String> amountOfDeposit = const {
+    Language.ENGLISH: "How much Forint do you want to deposit?",
+    Language.HUNGARIAN: "Hány Forintot akarsz hozzáadni a számládhoz?"
+  };
+
   static Map<Language, String> navigatoToShop = const {
     Language.ENGLISH: "Navigate to the Shop",
     Language.HUNGARIAN: "Irány a Bolt"
@@ -178,6 +183,8 @@ class LanguageModel {
     Language.HUNGARIAN: "Még nem rendeltek dobozt a rendelésedhez"
   };
 
+  static Map<Language, String> signUp = const {Language.ENGLISH: "Sign up", Language.HUNGARIAN: "Regisztráció"};
+
   static Map<Language, String> piece = const {Language.ENGLISH: "piece", Language.HUNGARIAN: "darab"};
 
   static Map<Language, String> openTheBox = const {
@@ -202,13 +209,13 @@ class LanguageModel {
   static Map<Language, String> boxNotAssigned = const {
     Language.ENGLISH: "No box has been assigned to your order.",
     Language.HUNGARIAN: "Még nem rendeltek dobozt a rendeléshez."
-  };   
-  
+  };
+
   static Map<Language, String> orderTime = const {
     Language.ENGLISH: "Order time: \n",
     Language.HUNGARIAN: "Rendelés ideje: \n"
-  };   
-     
+  };
+
   static Map<Language, String> items = const {
     Language.ENGLISH: "Ordered items",
     Language.HUNGARIAN: "Rendelt termékek"
@@ -348,14 +355,11 @@ class LanguageModel {
   }
 
   static String boxAssignedAt(String box) {
-    if(currentLanguage == Language.ENGLISH)
-    {
-        return "The box for your order is Nr" + box;
-    }
-    else if (currentLanguage == Language.HUNGARIAN)
-    {
-        return "A rendeléshez tartozó doboz: " + box;
+    if (currentLanguage == Language.ENGLISH) {
+      return "The box for your order is Nr" + box;
+    } else if (currentLanguage == Language.HUNGARIAN) {
+      return "A rendeléshez tartozó doboz: " + box;
     }
     return "";
-  }  
+  }
 }

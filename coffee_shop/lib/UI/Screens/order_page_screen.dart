@@ -245,7 +245,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
             onPressed: () {
               if (widget.buttonAvailable) {
                 widget.buttonAvailable = false;
-                widget.t = Timer(Duration(seconds: 30), () {
+                widget.t = Timer(Duration(seconds: 2), () {
                   setState(() {
                     widget.buttonAvailable = true;
                   });

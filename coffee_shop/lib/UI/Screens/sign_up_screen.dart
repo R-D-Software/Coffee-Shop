@@ -74,8 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ListView(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 70.0, bottom: 10.0, left: 10.0, right: 10.0),
+                        padding: const EdgeInsets.only(top: 70.0, bottom: 10.0, left: 10.0, right: 10.0),
                         child: Text(
                           "Create new account",
                           softWrap: true,
@@ -90,26 +89,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                        padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                         child: _emailField,
                       ),
                       Padding(
-                        padding:
-                            EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                        padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                         child: _passwordField,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 25.0, horizontal: 40.0),
+                        padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                         child: RenaoFlatButton(
-                          title: "Sign Up",
+                          title: LanguageModel.signUp[LanguageModel.currentLanguage],
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                           textColor: Colors.white,
                           onPressed: () {
-                            _signUp(
-                                email: _email.text, password: _password.text);
+                            _signUp(email: _email.text, password: _password.text);
                           },
                           splashColor: Colors.black12,
                           borderColor: Color.fromRGBO(59, 89, 152, 1.0),
@@ -157,14 +152,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _signUp({String email, String password, BuildContext context}) async {
     String firstShop = await ShopsDB.getFirstShop();
-    if (Validator.validateEmail(email) &&
-        Validator.validatePassword(password)) {
+    if (Validator.validateEmail(email) && Validator.validatePassword(password)) {
       try {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
         _changeBlackVisible();
         await Auth.signUp(email, password).then((uID) {
-          Auth.addUser(
-              new User(userID: uID, email: email, profilePictureURL: '', firstName: "", userDefinedLanguage: Language.NOTHING, completedQuestPart: 0, favouriteItems: [], selectedShop: firstShop, currentOrders: []));
+          Auth.addUser(new User(
+              userID: uID,
+              email: email,
+              profilePictureURL: '',
+              firstName: "",
+              userDefinedLanguage: Language.NOTHING,
+              completedQuestPart: 0,
+              favouriteItems: [],
+              selectedShop: firstShop,
+              currentOrders: []));
           onBackPress();
         });
       } catch (e) {

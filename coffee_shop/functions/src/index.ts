@@ -62,4 +62,13 @@ exports.onSuccessfulPayment = functions.region("europe-west1").https.onRequest( 
 	res.status(200).send(req.body["ok"]);
 });
 
+exports.onDeposit = functions.region("europe-west1").https.onRequest( async (req, res) => {
+	// const getPaymentDocumentref = await db.collection("/payment").doc(req.body["PaymentId"]);
+	// const paymentDocument : DocumentSnapshot = await getPaymentDocumentref.get();
+	// let count : number= paymentDocument.get("serverModifiedCount");
+	// const newCount : number = ++count;
+	// await getPaymentDocumentref.update({"serverModifiedCount": newCount});
+	res.status(200).send(req.body["ok"]);
+});
+
 

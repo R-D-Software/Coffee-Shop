@@ -18,7 +18,7 @@ class RenaoTextField extends StatefulWidget {
       this.baseColor,
       this.borderColor,
       this.errorColor,
-      this.inputType = TextInputType.text,
+      this.inputType,
       this.obscureText = false,
       this.validator});
 
@@ -58,8 +58,8 @@ class _RenaoTextFieldState extends State<RenaoTextField> {
                 currentColor = widget.baseColor;
               }
             });
-          }, 
-          //keyboardType: widget.inputType,
+          },
+          keyboardType: widget.inputType == null ? TextInputType.text : widget.inputType,
           controller: widget.controller,
           decoration: InputDecoration(
             hintStyle: TextStyle(
