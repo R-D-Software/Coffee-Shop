@@ -12,8 +12,10 @@ class _$BarionApiService extends BarionApiService {
     this.client = client;
   }
 
+  @override
   final definitionType = BarionApiService;
 
+  @override
   Future<Response<BuiltBarionStartResponse>> postBarionPayment(
       BuiltBarionPayment body) {
     final $url = '/v2/Payment/Start';
@@ -23,12 +25,10 @@ class _$BarionApiService extends BarionApiService {
         .send<BuiltBarionStartResponse, BuiltBarionStartResponse>($request);
   }
 
+  @override
   Future<Response> getPaymentState(String POSKey, String PaymentId) {
     final $url = '/v2/Payment/GetPaymentState';
-    final Map<String, dynamic> $params = {
-      'POSKey': POSKey,
-      'PaymentId': PaymentId
-    };
+    final $params = <String, dynamic>{'POSKey': POSKey, 'PaymentId': PaymentId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<dynamic, dynamic>($request);
   }
