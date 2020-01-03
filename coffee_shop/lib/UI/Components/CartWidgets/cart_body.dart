@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Cart/decide_item_type.dart';
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
@@ -28,14 +26,14 @@ class CartBody extends StatefulWidget {
   double bottomNavBarHeight = 112;
   int startTime;
   int endTime;
-  final int minutesAfterOrder = StaticData.minutesAfterOrder;
+  final int minutesAfterOrder = 30;
+  List<ShopItem> cartItems;
 }
 
 class _CartBodyState extends State<CartBody> {
   List<DateTime> holidays;
   Shop selectedShop;
-  DateTime today = /*DateTime.now();*/ DateTime
-      .parse("2019-01-02 13:50:00"); //FOR DEBUGGING;
+  DateTime today = DateTime.now(); //DateTime.parse("2019-10-25 18:19:00"); //FOR DEBUGGING;
 
   @override
   void initState() {
@@ -48,8 +46,7 @@ class _CartBodyState extends State<CartBody> {
       body: Container(
         decoration: RenaoBoxDecoration.builder(context),
         child: StreamBuilder(
-          stream: ShopsDB.getShopByID(StaticData.currentUser.selectedShop)
-              .asStream(),
+          stream: ShopsDB.getShopByID(StaticData.currentUser.selectedShop).asStream(),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting) {
               return Container();
@@ -69,9 +66,7 @@ class _CartBodyState extends State<CartBody> {
     return ListView(
       children: items.map((f) {
         return Container(
-          margin: f == items.first
-              ? EdgeInsets.only(top: 30)
-              : EdgeInsets.only(top: 0),
+          margin: f == items.first ? EdgeInsets.only(top: 30) : EdgeInsets.only(top: 0),
           child: CartListItem(item: f, refreshFunction: refreshFunction),
         );
       }).toList(),
@@ -85,25 +80,23 @@ class _CartBodyState extends State<CartBody> {
           if (snapshot.data == null) return RenaoWaitingRing();
 
           QuerySnapshot shopItems = snapshot.data as QuerySnapshot;
-          List<ShopItem> cartItems = new List<ShopItem>();
+          widget.cartItems = new List<ShopItem>();
 
           for (DocumentSnapshot doc in shopItems.documents) {
             ShopItem item = DecideItemType.getItemByClassFromFireStore(doc);
-            cartItems.add(item);
+            widget.cartItems.add(item);
           }
 
           if (shopItems == null) return Container();
 
-          if (cartItems.isEmpty) {
+          if (widget.cartItems.isEmpty) {
             return RenaoEmptyList(
               imagePath: "assets/images/kav.jpg",
-              textHeader:
-                  LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
-              textDescription: LanguageModel
-                  .addToCartDescription[LanguageModel.currentLanguage],
+              textHeader: LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
+              textDescription: LanguageModel.addToCartDescription[LanguageModel.currentLanguage],
             );
           } else {
-            return _buildCartWithItems(context, cartItems);
+            return _buildCartWithItems(context, widget.cartItems);
           }
         });
   }

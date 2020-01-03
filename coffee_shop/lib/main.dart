@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/UI/Components/Navigation/main_screen.dart';
+import 'package:coffee_shop/UI/Screens/barion_webview.dart';
 import 'package:coffee_shop/UI/Screens/favourite_list_screen.dart';
 import 'package:coffee_shop/UI/Screens/home_screen.dart';
 import 'package:coffee_shop/UI/Screens/quest_screen.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'UI/Screens/barion_webview.dart';
 import 'UI/Screens/coffee_item_view_screen.dart';
 import 'UI/Screens/food_item_view_screen.dart';
 import 'UI/Screens/log_in_screen.dart';
@@ -30,7 +32,6 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
     Firestore.instance.settings(timestampsInSnapshotsEnabled: true);
     return MaterialApp(
       title: 'Renao',
@@ -50,24 +51,21 @@ class MyApp extends StatelessWidget {
         SignUpScreen.route: (BuildContext context) => SignUpScreen(),
         HomeScreen.route: (BuildContext context) => HomeScreen(),
         MainScreen.route: (BuildContext context) => MainScreen(),
-        CoffeeItemViewScreen.route: (BuildContext context) =>
-            CoffeeItemViewScreen(),
-        FoodItemViewScreen.route: (BuildContext context) =>
-            FoodItemViewScreen(),
-        FavouriteListScreen.route: (BuildContext context) =>
-            FavouriteListScreen(),
+        CoffeeItemViewScreen.route: (BuildContext context) => CoffeeItemViewScreen(),
+        FoodItemViewScreen.route: (BuildContext context) => FoodItemViewScreen(),
+        FavouriteListScreen.route: (BuildContext context) => FavouriteListScreen(),
         WalletScreen.route: (BuildContext context) => WalletScreen(),
         SettingsScreen.route: (BuildContext context) => SettingsScreen(),
         QuestScreen.route: (BuildContext context) => QuestScreen(),
         OrderPageScreen.route: (BuildContext context) => OrderPageScreen(),
         PlaceChangerScreen.route: (BuildContext context) => PlaceChangerScreen(),
+        BarionWebview.route: (BuildContext context) => BarionWebview(),
         OrderDetailsScreen.route: (BuildContext context) => OrderDetailsScreen(),
       },
       theme: ThemeData(
           primaryColor: Color.fromRGBO(76, 53, 47, 1),
           accentColor: Color.fromRGBO(171, 122, 91, 1),
-          textTheme:
-              TextTheme(body1: TextStyle(fontFamily: "Roboto", fontSize: 20)),
+          textTheme: TextTheme(body1: TextStyle(fontFamily: "Roboto", fontSize: 20)),
           iconTheme: IconThemeData(color: Colors.white, opacity: 1, size: 39)),
       home: RootScreen(),
     );

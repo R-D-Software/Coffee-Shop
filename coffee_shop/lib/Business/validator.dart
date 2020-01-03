@@ -9,4 +9,9 @@ class Validator {
   static bool validatePassword(String text) {
     return text.toString().length >= 6;
   }
+
+  static bool validatePositiveNumber(String text) {
+    double num = double.parse(text);
+    return num >= 1;
+  }
 }

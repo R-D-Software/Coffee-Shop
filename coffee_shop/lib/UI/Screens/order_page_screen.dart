@@ -1,12 +1,18 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/Business/Database/order_DB.dart';
+import 'package:coffee_shop/Business/Database/payment_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/Database/user_DB.dart';
 import 'package:coffee_shop/Business/MapNavigator/google_navigator.dart';
 import 'package:coffee_shop/Business/string_service.dart';
+import 'package:coffee_shop/Data/barion_api_service.dart';
+import 'package:coffee_shop/Models/Barion/barion_item.dart';
+import 'package:coffee_shop/Models/Barion/barion_payment.dart';
+import 'package:coffee_shop/Models/Barion/barion_transaction.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
 import 'package:coffee_shop/Models/shops.dart';
@@ -16,9 +22,13 @@ import 'package:coffee_shop/UI/Components/CustomWidgets/renao_toast.dart';
 import 'package:coffee_shop/UI/Components/OrderPageWidgets/timepicker_component.dart';
 import 'package:coffee_shop/UI/Screens/place_changer_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
+import 'barion_webview.dart';
 
 class OrderPageScreen extends StatefulWidget {
   static const String route = '/main/cart/order_page_screen';
+  static bool isRedirectedFromBarion = false;
   bool buttonAvailable = true;
   Timer t;
 
@@ -51,6 +61,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
   @override
   Widget build(BuildContext context) {
     _initializeData(context);
+    checkPaymentIfRedirectedFromBarion();
 
     return Scaffold(
       appBar: AppBar(
@@ -75,8 +86,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
                   if (snap.connectionState == ConnectionState.waiting) {
                     return Container();
                   } else {
-                    return _buildBody(
-                        context, (snap.data as DocumentSnapshot).data);
+                    return _buildBody(context, (snap.data as DocumentSnapshot).data);
                   }
                 });
           }
@@ -125,8 +135,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
   }
 
   void _initializeData(BuildContext context) {
-    final Map<String, dynamic> routeArgs =
-        ModalRoute.of(context).settings.arguments;
+    final Map<String, dynamic> routeArgs = ModalRoute.of(context).settings.arguments;
     orderDate = routeArgs['orderDate'] as DateTime;
     items = routeArgs['items'] as List<ShopItem>;
     totalPrice = routeArgs['totalPrice'] as int;
@@ -255,7 +264,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
                   });
                 });
                 timePicker.stopClock();
-                _order(context);
+                makePayment();
               }
             },
             child: Text(
@@ -285,6 +294,71 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
       RenaoToast.orderSuccessful();
     } else {
       RenaoToast.orderDeclined();
+    }
+  }
+
+    void makePayment() async {
+    int total = 0;
+    ListBuilder<BuiltBarionItem> builtItems = ListBuilder();
+    for (ShopItem item in items) {
+      final newItem = BuiltBarionItem((b) => b
+        ..Name = item.name
+        ..Description = item.description
+        ..Quantity = 1
+        ..Unit = LanguageModel.piece[LanguageModel.currentLanguage]
+        ..UnitPrice = item.price
+        ..ItemTotal = item.price);
+
+      builtItems.add(newItem);
+      total += item.price;
+    }
+
+    final newTransaction = BuiltBarionTransaction((b) => b
+      ..POSTransactionId = 'Elsobolt'
+      ..Payee = 'robeszpierre@gmail.com'
+      ..Total = total
+      ..Items = builtItems);
+
+    ListBuilder<String> fundingSources = ListBuilder();
+    fundingSources.add("All");
+
+    ListBuilder<BuiltBarionTransaction> transactions = ListBuilder();
+    transactions.add(newTransaction);
+
+    final newPayment = BuiltBarionPayment((b) => b
+      ..POSKey = BuiltBarionPayment.renaoPOSKey
+      ..PaymentType = 'Immediate'
+      ..PaymentRequestId = Uuid().v4()
+      ..FundingSources = fundingSources
+      ..Currency = "HUF"
+      ..RedirectUrl = "https://www.renao.com"
+      ..GuestCheckOut = true
+      ..CallbackUrl = "https://europe-west1-renao-7c69c.cloudfunctions.net/onSuccessfulPayment"
+      ..Locale = LanguageModel.getCurrentLanguageLocale()
+      ..Transactions = transactions);
+
+    await BarionApiService.create().postBarionPayment(newPayment).then((response) async {
+      final id = response.body.PaymentId;
+      Navigator.of(context).pushNamed(BarionWebview.route, arguments: {"paymentUrl": response.body.GatewayUrl});
+      await _writePaymentDataToDatabase(id);
+    });
+  }
+
+  Future _writePaymentDataToDatabase(String paymentId) async {
+    final user = await UserDB.getCurrentUser();
+    PaymentDB.writePaymentDataIntoDb(paymentId, user.userID);
+  }
+
+  Future checkPaymentIfRedirectedFromBarion() async {
+    if (OrderPageScreen.isRedirectedFromBarion) {
+      final user = await UserDB.getCurrentUser();
+      await PaymentDB.wasPaymentSuccessful(user.userID).then((wasPaymentSuccessful) {
+        if (wasPaymentSuccessful) {
+          _order(context);
+          Navigator.of(context).pop();
+        }
+      });
+      OrderPageScreen.isRedirectedFromBarion = false;
     }
   }
 }
