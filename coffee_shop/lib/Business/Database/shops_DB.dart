@@ -53,7 +53,7 @@ class ShopsDB
                 else
                 {
                     (updatedData[order.time.split(":")[0]] as Map<dynamic, dynamic>)[order.time.split(":")[1]] = 1;
-                }
+                } 
             }
             else
             {
