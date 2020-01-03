@@ -180,7 +180,7 @@ class LanguageModel {
   };   
 
   static Map<Language, String> openTheBox = const {
-    Language.ENGLISH: "Box opening",
+    Language.ENGLISH: "Open Box",
     Language.HUNGARIAN: "Doboz kinyitása"
   };  
   
@@ -218,6 +218,26 @@ class LanguageModel {
     Language.ENGLISH: "Ordered items",
     Language.HUNGARIAN: "Rendelt termékek"
   };
+  
+  static Map<Language, String> cannotOpenTheBoxTitle = const {
+    Language.ENGLISH: "Box Failure",
+    Language.HUNGARIAN: "Hiba a dobozzal"
+  };
+
+  static Map<Language, String> cannotOpenTheBoxContent = const {
+    Language.ENGLISH: "The box cannot be opened right now.",
+    Language.HUNGARIAN: "A dobozt jelenleg nem lehet kinyitni."
+  };
+
+  static Map<Language, String> boxIsAlreadyOpenedTitle = const {
+    Language.ENGLISH: "Box",
+    Language.HUNGARIAN: "Doboz"
+  }; 
+
+  static Map<Language, String> boxIsAlreadyOpenedContent = const {
+    Language.ENGLISH: "The box is already open",
+    Language.HUNGARIAN: "A doboz már nyitva van."
+  };   
 
   static Future init(BuildContext context) async {
     User user;

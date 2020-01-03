@@ -21,21 +21,21 @@ import '../stroked_text.dart';
 import 'cart_list_item.dart';
 
 class CartBody extends StatefulWidget {
-    @override
-    _CartBodyState createState() => _CartBodyState();
+  @override
+  _CartBodyState createState() => _CartBodyState();
 
-    double bottomBarHeight = 50;
-    double bottomNavBarHeight = 112;
-    int startTime;
-    int endTime;
-    final int minutesAfterOrder = 30;
+  double bottomBarHeight = 50;
+  double bottomNavBarHeight = 112;
+  int startTime;
+  int endTime;
+  final int minutesAfterOrder = StaticData.minutesAfterOrder;
 }
 
 class _CartBodyState extends State<CartBody> {
-
-    List<DateTime> holidays;
-    Shop selectedShop;
-    DateTime today = DateTime.now();//DateTime.parse("2019-10-25 18:19:00"); //FOR DEBUGGING;
+  List<DateTime> holidays;
+  Shop selectedShop;
+  DateTime today = /*DateTime.now();*/ DateTime
+      .parse("2019-01-02 13:50:00"); //FOR DEBUGGING;
 
   @override
   void initState() {
@@ -46,24 +46,20 @@ class _CartBodyState extends State<CartBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: RenaoBoxDecoration.builder(context),       
-        child: StreamBuilder
-        (
-            stream: ShopsDB.getShopByID(StaticData.currentUser.selectedShop).asStream(),
-            builder: (context, snap)
-            {
-                if(snap.connectionState == ConnectionState.waiting)
-                {
-                    return Container();
-                }
-                else
-                {
-                    widget.startTime = (snap.data as Shop).opensHour;
-                    widget.endTime = (snap.data as Shop).closesHour;
-                    selectedShop = (snap.data as Shop);
-                    return _buildScreen();
-                }
-            },
+        decoration: RenaoBoxDecoration.builder(context),
+        child: StreamBuilder(
+          stream: ShopsDB.getShopByID(StaticData.currentUser.selectedShop)
+              .asStream(),
+          builder: (context, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return Container();
+            } else {
+              widget.startTime = (snap.data as Shop).opensHour;
+              widget.endTime = (snap.data as Shop).closesHour;
+              selectedShop = (snap.data as Shop);
+              return _buildScreen();
+            }
+          },
         ),
       ),
     );
@@ -82,7 +78,6 @@ class _CartBodyState extends State<CartBody> {
     );
   }
 
-
   Widget _buildScreen() {
     return StreamBuilder(
         stream: CartItemDB.fetchCartItems(),
@@ -99,141 +94,122 @@ class _CartBodyState extends State<CartBody> {
 
           if (shopItems == null) return Container();
 
-          if(cartItems.isEmpty)
-          {
-              return RenaoEmptyList
-              (
-                  imagePath: "assets/images/kav.jpg",
-                  textHeader: LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
-                  textDescription: LanguageModel.addToCartDescription[LanguageModel.currentLanguage],
-              );
-          }
-          else
-          {
-              return _buildCartWithItems(context, cartItems);
+          if (cartItems.isEmpty) {
+            return RenaoEmptyList(
+              imagePath: "assets/images/kav.jpg",
+              textHeader:
+                  LanguageModel.yourCartIsEmpty[LanguageModel.currentLanguage],
+              textDescription: LanguageModel
+                  .addToCartDescription[LanguageModel.currentLanguage],
+            );
+          } else {
+            return _buildCartWithItems(context, cartItems);
           }
         });
   }
 
-    Widget _buildCartWithItems(BuildContext context, List<ShopItem> cartItems)
-    {
-        return Column(
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height
-                    - widget.bottomNavBarHeight 
-                    - widget.bottomBarHeight 
-                    - 29,
-                child: _getCartItems(cartItems),
-              ),
-              _getBottomBar(context, cartItems),
-            ],
-          );
+  Widget _buildCartWithItems(BuildContext context, List<ShopItem> cartItems) {
+    return Column(
+      children: <Widget>[
+        Container(
+          height: MediaQuery.of(context).size.height -
+              widget.bottomNavBarHeight -
+              widget.bottomBarHeight -
+              29,
+          child: _getCartItems(cartItems),
+        ),
+        _getBottomBar(context, cartItems),
+      ],
+    );
+  }
+
+  Widget _getBottomBar(BuildContext context, List<ShopItem> cartItems) {
+    if (cartItems.isEmpty) {
+      return Container();
     }
 
-    Widget _getBottomBar(BuildContext context, List<ShopItem> cartItems)
-    {
-        if(cartItems.isEmpty)
-        {
-            return Container();
-        }
+    return Container(
+      height: widget.bottomBarHeight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          StrokedText(
+            text: LanguageModel.total(getTotal(cartItems)),
+            size: 20,
+            color: Theme.of(context).primaryColor,
+          ),
+          RenaoFlatButton(
+            title: LanguageModel.time[LanguageModel.currentLanguage],
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            textColor: Theme.of(context).primaryColor,
+            onPressed: () {
+              pickDate(cartItems);
+            },
+            borderColor: Colors.black12,
+            borderWidth: 2,
+          )
+        ],
+      ),
+    );
+  }
 
-        return Container
-        (
-            height: widget.bottomBarHeight,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>
-                [
-                    StrokedText(
-                        text: LanguageModel.total(getTotal(cartItems)),
-                        size: 20,
-                        color: Theme.of(context).primaryColor,
-                    ),
-                    RenaoFlatButton
-                    (
-                        title: LanguageModel.time[LanguageModel.currentLanguage],
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,    
-                        textColor: Theme.of(context).primaryColor,
-                        onPressed: ()
-                        {                                                            
-                            pickDate(cartItems);
-                        },
-                        borderColor: Colors.black12,
-                        borderWidth: 2,
-                    )
-                ],
-            ),
-        );
+  int getTotal(List<ShopItem> cartItems) {
+    int total = 0;
+    for (ShopItem item in cartItems) {
+      total += item.price;
     }
+    return total;
+  }
 
-    int getTotal(List<ShopItem> cartItems) {
-        int total = 0;
-        for (ShopItem item in cartItems) {
-        total += item.price;
-        }
-        return total;
+  void refreshFunction() {
+    setState(() {});
+  }
+
+  ///TODO: Magic number eltüntetése
+  bool selectableDate(DateTime selected) {
+    if (today.difference(selected).inMinutes.abs() < 30) return false;
+
+    for (DateTime date in holidays) {
+      if (selected.year == date.year &&
+          selected.month == date.month &&
+          selected.day == date.day) return false;
     }
+    return selected.weekday < 6;
+  }
 
-    void refreshFunction()
-    {
-        setState(() {});
+  DateTime getInitialDate(DateTime selected) {
+    if (selectableDate(selected) && selected.isAfter(today)) {
+      return DateTime(selected.year, selected.month, selected.day);
+    } else {
+      return getInitialDate(selected.add(new Duration(days: 1)));
     }
+  }
 
-///TODO: Magic number eltüntetése
-    bool selectableDate(DateTime selected)
-    {
-        if(today.difference(selected).inMinutes.abs() < 30)
-            return false;
+  void pickDate(List<ShopItem> cartItems) async {
+    holidays = await OrderDateDB.getHolidays();
+    DateTime initialDate = getInitialDate(DateTime(today.year, today.month,
+        today.day, selectedShop.closesHour, selectedShop.closesMinute));
+    DateTime nextMonth = today.add(new Duration(days: 30));
+    DateTime orderDate = await showDatePicker(
+        context: context,
+        firstDate:
+            DateTime(initialDate.year, initialDate.month, initialDate.day),
+        initialDate: initialDate,
+        lastDate: nextMonth,
+        selectableDayPredicate: (selected) {
+          selected = DateTime(selected.year, selected.month, selected.day,
+              selectedShop.closesHour, selectedShop.closesMinute);
+          return selectableDate(selected);
+        });
 
-        for(DateTime date in holidays)
-        {
-            if(selected.year == date.year
-                && selected.month == date.month
-                && selected.day == date.day)
-                return false;
-        }
-        return selected.weekday < 6;
+    if (orderDate != null) {
+      Navigator.of(context).pushNamed(OrderPageScreen.route, arguments: {
+        "orderDate": orderDate,
+        "items": cartItems,
+        "totalPrice": getTotal(cartItems),
+        "minutesAfterOrder": widget.minutesAfterOrder
+      });
     }
-
-    DateTime getInitialDate(DateTime selected)
-    {
-        if(selectableDate(selected) && selected.isAfter(today))
-        {           
-            return DateTime(selected.year, selected.month, selected.day);
-        }
-        else
-        {
-            return getInitialDate(selected.add(new Duration(days:1)));
-        }
-    }
-
-    void pickDate(List<ShopItem> cartItems) async 
-    {
-        holidays = await OrderDateDB.getHolidays();
-        DateTime initialDate = getInitialDate(DateTime(today.year, today.month, today.day, selectedShop.closesHour, selectedShop.closesMinute));
-        DateTime nextMonth = today.add(new Duration(days: 30));
-        DateTime orderDate = await showDatePicker(
-            context: context,
-            firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
-            initialDate: initialDate,
-            lastDate: nextMonth,
-            selectableDayPredicate: (selected)
-            {
-                selected = DateTime(selected.year, selected.month, selected.day, selectedShop.closesHour, selectedShop.closesMinute);
-                return selectableDate(selected);
-            });
-
-        if (orderDate != null)
-        {
-            Navigator.of(context).pushNamed(OrderPageScreen.route, arguments: 
-            {
-                "orderDate": orderDate,
-                "items": cartItems,
-                "totalPrice": getTotal(cartItems),
-                "minutesAfterOrder": widget.minutesAfterOrder
-            });
-        }  
-    }
+  }
 }

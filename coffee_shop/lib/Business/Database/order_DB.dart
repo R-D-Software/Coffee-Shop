@@ -20,17 +20,11 @@ class OrderDB
     static Future<bool> placeOrder(BuildContext context,{TimePickerComponent timePicker, User currentUser, Shop currentShop, String yearMonth, String day, List<ShopItem> cartItems}) async
     {
         bool hasCredit = true;
-        List<String> itemIDs = cartItems.map((f){return f.parentID;}).toList();
-        //String freeBox = await ShopsDB.freeBoxAtShop(currentShop.docID, currentUser.userID, yearMonth, day, timePicker.pickedHour, timePicker.pickedMinute);
 
         if(! await _canPlaceOrder(timePicker, currentShop, yearMonth, day))
         {
             return false;
         }
-        /*if(freeBox == "-1")
-        {
-            return false;
-        }*/
         
         Order order = Order
         (
@@ -40,23 +34,23 @@ class OrderDB
             day: day,
             date: yearMonth + "." + day,
             time: timePicker.pickedHour.toString() + ":" + timePicker.pickedMinute.toString(),
-            items: itemIDs,
+            items: cartItems,
             box: "-1",
         );
+        
         if(order == null)
         {
             return false;
         }
-        
-        await NotificationService.makeNotification
-        (
-            LanguageModel.orderIsDue[LanguageModel.currentLanguage],
-            LanguageModel.orderReadyAt(currentShop.toString(), cartItems),
-            order.toDateTime()
-        );
 
         if(hasCredit)
         {
+            await NotificationService.makeNotification
+            (
+                LanguageModel.orderIsDue[LanguageModel.currentLanguage],
+                LanguageModel.orderReadyAt(currentShop.toString(), cartItems),
+                order.toDateTime()
+            );
             await QuestDB.addQuestCounterForUserIfLegit(cartItems);
             DocumentReference df = await Firestore.instance.collection("orders").add(order.toJson());
             QuestDB.changeQuestStatusIfNeeded(cartItems);
@@ -74,7 +68,12 @@ class OrderDB
         DocumentSnapshot ds = await ShopsDB.getCrowdedTimes(currentShop.docID, yearMonth, day);
         List<int> notPickableList = await OrderDB.getNotPickableMinutes(timePicker.pickedHour, ds.data, currentShop);
 
-        if(notPickableList.contains(timePicker.pickedMinute))
+        if(notPickableList.contains(timePicker.pickedMinute)
+            || (currentShop.closesHour == timePicker.pickedHour 
+                && timePicker.pickedMinute > currentShop.closesMinute)
+            || (currentShop.opensHour == timePicker.pickedHour 
+                && timePicker.pickedMinute < currentShop.opensMinute)
+            || (timePicker.asDateTime().difference(DateTime.now()) > Duration(minutes: StaticData.minutesAfterOrder-1)))
         {
             return false;
         }

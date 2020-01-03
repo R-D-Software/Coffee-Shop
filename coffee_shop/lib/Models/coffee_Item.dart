@@ -44,7 +44,7 @@ class CoffeeItem extends ShopItem {
     return jsonEncode(this);
   }
 
-  factory CoffeeItem.fromJson(Map<String, Object> doc, String documentID) {
+  factory CoffeeItem.fromJson(Map<dynamic, dynamic> doc, String documentID) {
     if (doc['sugar'] == null || doc['temperature'] == null) {
       throw RenaoException.notCoffeeItemException();
     }

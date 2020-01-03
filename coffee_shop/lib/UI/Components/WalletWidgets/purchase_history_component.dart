@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class PurchaseHistoryComponent extends StatefulWidget 
 {
     final double height;
+    final double maxElementHeight = 42;
     PurchaseHistoryComponent({@required this.height});
 
     @override
@@ -28,7 +29,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     return Container
                     (
                         width: MediaQuery.of(context).size.width*0.98,
-                        //height: widget.height,
+                        height: widget.height,
                     );
                 }
                 else
@@ -50,7 +51,7 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     return Container
                     (
                         width: MediaQuery.of(context).size.width*0.98,
-                        //height: widget.height,
+                        height: widget.height,
                         child: ListView
                         (
                             children: historyItems.length == 0 ? [Container()] : historyItems
@@ -63,9 +64,11 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
 
     Widget _getHistoryElement(BuildContext context, PurchaseHistoryItem item)
     {
+        double elementHeight = (widget.height*0.37 > widget.maxElementHeight ? widget.maxElementHeight : widget.height*0.37);
+       
         return Container
         (
-            height: 45,
+            height: elementHeight,
             child: Card
             (
                 color: Colors.transparent,
@@ -76,14 +79,14 @@ class _PurchaseHistoryComponentState extends State<PurchaseHistoryComponent>
                     [
                         Padding
                         (
-                            padding: const EdgeInsets.only(left: 10),
-                            child: StrokedText(text: item.date),
+                            padding: EdgeInsets.only(left: 10),
+                            child: StrokedText(text: item.date, size: elementHeight*0.45),
                         ),
-                        StrokedText(text: item.itemName),
+                        StrokedText(text: item.itemName, size: elementHeight*0.45),
                         Padding
                         (
-                            padding: const EdgeInsets.only(right: 10),
-                            child: StrokedText(text: item.price),
+                            padding: EdgeInsets.only(right: 10),
+                            child: StrokedText(text: item.price, size: elementHeight*0.45),
                         ),
                     ],
                 ),

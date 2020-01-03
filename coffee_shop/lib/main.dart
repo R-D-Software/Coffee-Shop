@@ -19,6 +19,7 @@ import 'UI/Screens/root_screen.dart';
 import 'UI/Screens/sign_up_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Color.fromRGBO(76, 53, 47, 1),

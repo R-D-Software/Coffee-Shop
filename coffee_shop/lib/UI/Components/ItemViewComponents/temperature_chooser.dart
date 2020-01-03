@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 class TemperatureChooser extends StatefulWidget {
   ShopItem _item;
   int sugar;
+  double maxHeight;
   Function _setTemparatureValueOnParentScreen;
 
-  TemperatureChooser(this._item, this._setTemparatureValueOnParentScreen);
+  TemperatureChooser(this._item, this._setTemparatureValueOnParentScreen, this.maxHeight);
 
   @override
   _TemperatureChooserState createState() => _TemperatureChooserState();
@@ -53,7 +54,8 @@ class _TemperatureChooserState extends State<TemperatureChooser> {
 
   Container buildSlider(Color activeColor, String label) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+        height: widget.maxHeight,
+      //margin: EdgeInsets.only(bottom: 10),
       child: Slider(
         value: _value.toDouble(),
         min: 0.0,
