@@ -10,8 +10,8 @@ class PurchaseHistoryDB {
     return ph;
   }
 
-  static void addPurchaseForUser(String userID, List<ShopItem> cartItems) {
-    List<Map<String, dynamic>> data = new List<Map<String, dynamic>>();
+    static Future<void> addPurchaseForUser(String userID, List<ShopItem> cartItems) async {
+        List<Map<String, dynamic>> data = new List<Map<String, dynamic>>();
 
     for (ShopItem item in cartItems) {
       data.add({
@@ -25,10 +25,14 @@ class PurchaseHistoryDB {
       });
     }
 
-    //TODO: HA nincs dokumentum akkor létre kell hozni
-    Firestore.instance
-        .collection("purchase_history")
-        .document(userID)
-        .updateData({"orders": FieldValue.arrayUnion(data)});
-  }
+        DocumentSnapshot ds = await Firestore.instance.collection('purchase_history').document(userID).get();
+        if((await ds.data) == null)
+        {
+            Firestore.instance.collection('purchase_history').document(userID).setData({"orders": data});
+        }
+        else
+        {
+            Firestore.instance.collection("purchase_history").document(userID).updateData({"orders": FieldValue.arrayUnion(data)});
+        }
+    } 
 }

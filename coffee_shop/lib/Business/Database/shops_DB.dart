@@ -41,24 +41,26 @@ class ShopsDB
         DocumentSnapshot ds = await Firestore.instance.collection("shop_order_times").document(order.shopID)
             .collection(order.yearMonth).document(order.day).get();
         Map<String, dynamic> updatedData = ds.data; 
-        
+        String hour = order.time.split(":")[0];
+        String minute = order.time.split(":")[1];
+
         if(updatedData != null)
         {
-            if(updatedData[order.time.split(":")[0]] != null)
+            if(updatedData[hour] != null)
             {
-                if((updatedData[order.time.split(":")[0]] as Map<dynamic, dynamic>)[order.time.split(":")[1]] != null)
+                if((updatedData[hour] as Map<dynamic, dynamic>)[minute] != null)
                 {
-                    (updatedData[order.time.split(":")[0]] as Map<dynamic, dynamic>)[order.time.split(":")[1]]++;
+                    (updatedData[hour] as Map<dynamic, dynamic>)[minute]++;
                 }
                 else
                 {
-                    (updatedData[order.time.split(":")[0]] as Map<dynamic, dynamic>)[order.time.split(":")[1]] = 1;
-                } 
+                    (updatedData[hour] as Map<dynamic, dynamic>)[minute] = 1;
+                }
             }
             else
             {
-                updatedData[order.time.split(":")[0]] = new Map<dynamic,dynamic>();
-                (updatedData[order.time.split(":")[0]] as Map<dynamic, dynamic>)[order.time.split(":")[1]] = 1;
+                updatedData[hour] = new Map<dynamic,dynamic>();
+                (updatedData[hour] as Map<dynamic, dynamic>)[minute] = 1;
             }
 
             Firestore.instance.collection("shop_order_times").document(order.shopID)
@@ -67,8 +69,8 @@ class ShopsDB
         else
         {
             updatedData = new Map<String,dynamic>();
-            updatedData[order.time.split(":")[0]] = new Map<dynamic,dynamic>();
-            (updatedData[order.time.split(":")[0]] as Map<dynamic, dynamic>)[order.time.split(":")[1]] = 1;
+            updatedData[hour] = new Map<dynamic,dynamic>();
+            (updatedData[hour] as Map<dynamic, dynamic>)[minute] = 1;
 
             Firestore.instance.collection("shop_order_times").document(order.shopID)
                 .collection(order.yearMonth)

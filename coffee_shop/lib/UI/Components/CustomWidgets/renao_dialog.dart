@@ -1,8 +1,12 @@
+import 'package:coffee_shop/Models/language.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RenaoDialog {
-  RenaoDialog.showDialog({@required BuildContext context, @required String title, @required String description}) {
+  RenaoDialog.showDialog(
+      {@required BuildContext context,
+      @required String title,
+      @required String description}) {
     Dialog dialog = Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -46,7 +50,10 @@ class RenaoDialog {
                 alignment: Alignment.center,
                 child: Text(
                   "$title",
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -73,5 +80,61 @@ class RenaoDialog {
       ),
     );
     showDialog(context: context, builder: (BuildContext context) => dialog);
+  }
+
+  static void showCantOpenDialog(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(LanguageModel
+                .cannotOpenTheBoxTitle[LanguageModel.currentLanguage]),
+            content: Text(LanguageModel
+                .cannotOpenTheBoxContent[LanguageModel.currentLanguage]),
+          );
+        });
+  }
+
+  static Future<bool> showOpenDialog(BuildContext context) async {
+    return await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title:
+                Text(LanguageModel.openTheBox[LanguageModel.currentLanguage]),
+            content: Text(
+                LanguageModel.areYouSureToOpen[LanguageModel.currentLanguage]),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(LanguageModel.no[LanguageModel.currentLanguage]),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              FlatButton(
+                child: Text(LanguageModel.yes[LanguageModel.currentLanguage]),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  static void showBoxIsOpen(BuildContext context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(LanguageModel
+                .boxIsAlreadyOpenedTitle[LanguageModel.currentLanguage]),
+            content: Text(LanguageModel
+                .boxIsAlreadyOpenedContent[LanguageModel.currentLanguage]),
+          );
+        });
   }
 }

@@ -43,6 +43,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
   List<ShopItem> items;
   int totalPrice;
   int minutesAfterOrder;
+  double height;
 
   @override
   void initState() {
@@ -74,8 +75,12 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
           } else {
             currentShop = (snapshot.data as Shop);
             return StreamBuilder(
-                stream: ShopsDB.getCrowdedTimes(currentShop.docID,
-                        (orderDate.year.toString() + "." + orderDate.month.toString()), orderDate.day.toString())
+                stream: ShopsDB.getCrowdedTimes(
+                        currentShop.docID,
+                        (orderDate.year.toString() +
+                            "." +
+                            orderDate.month.toString()),
+                        orderDate.day.toString())
                     .asStream(),
                 builder: (context, snap) {
                   if (snap.connectionState == ConnectionState.waiting) {
@@ -110,24 +115,22 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
     );
   }
 
-  Widget _buildBody(BuildContext context, Map<String, dynamic> notSelectableDates) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+  Widget _buildBody(
+      BuildContext context, Map<String, dynamic> notSelectableDates) {
+    return Container(
+      decoration: RenaoBoxDecoration.builder(context),
+      height: height,
       child: Container(
-        decoration: RenaoBoxDecoration.builder(context),
-        height: MediaQuery.of(context).size.height - new AppBar().preferredSize.height,
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _getPlaceWidget(context),
-              _getTimeWidget(context, notSelectableDates),
-              _getOrderButton(context),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _getPlaceWidget(context, currentShop),
+            _getTimeWidget(context, notSelectableDates),
+            _getOrderButton(context),
+          ],
         ),
-        width: double.infinity,
       ),
+      width: double.infinity,
     );
   }
 
@@ -137,6 +140,9 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
     items = routeArgs['items'] as List<ShopItem>;
     totalPrice = routeArgs['totalPrice'] as int;
     minutesAfterOrder = routeArgs['minutesAfterOrder'] as int;
+    height = MediaQuery.of(context).size.height -
+        new AppBar().preferredSize.height -
+        MediaQuery.of(context).padding.top;
   }
 
   @override
@@ -149,40 +155,44 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
     return LanguageModel.dayName(day - 1);
   }
 
-  Widget _getTimeWidget(BuildContext context, Map<String, dynamic> notSelectableDates) {
+  Widget _getTimeWidget(
+      BuildContext context, Map<String, dynamic> notSelectableDates) {
     timePicker = TimePickerComponent(
         notSelectableDates: notSelectableDates,
         currentShop: currentShop,
+        maxHeight: height * 0.29,
         date: orderDate,
         minutesAfterOrder: minutesAfterOrder);
 
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(left: 8, right: 8),
       child: timePicker,
     );
   }
 
-  Widget _getPlaceWidget(BuildContext context) {
+  Widget _getPlaceWidget(BuildContext context, Shop currentShop) {
     return GestureDetector(
       onTap: () async {
         await Navigator.of(context).pushNamed(PlaceChangerScreen.route);
         setState(() {});
       },
       child: Container(
-        height: MediaQuery.of(context).size.width * 0.80,
+        height: height * 0.44,
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(40))),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(height * 0.44 * 0.15))),
           child: Stack(
             children: <Widget>[
               ClipRRect(
-                borderRadius: new BorderRadius.circular(40.0),
+                borderRadius: new BorderRadius.circular(height * 0.44 * 0.15),
                 child: Image.network(
                   currentShop.imageURL,
-                  height: MediaQuery.of(context).size.width * 0.80,
-                  width: MediaQuery.of(context).size.width * 0.80,
+                  height: height * 0.44,
+                  width: height * 0.44,
                 ),
               ),
-              _buildPlaceHeader(context),
+              _buildPlaceHeader(context, currentShop),
             ],
           ),
         ),
@@ -190,21 +200,23 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
     );
   }
 
-  Widget _buildPlaceHeader(BuildContext context) {
+  Widget _buildPlaceHeader(BuildContext context, Shop currentShop) {
     return GestureDetector(
       onTap: () {
         GoogleNavigator.navigate(currentShop.latitude, currentShop.longitude);
       },
       child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(height * 0.44 * 0.15),
+                topRight: Radius.circular(height * 0.44 * 0.15)),
             color: Colors.grey.withOpacity(0.8),
           ),
-          height: 40,
-          width: MediaQuery.of(context).size.width * 0.80,
+          height: height * 0.44 * 0.15,
+          width: height * 0.44,
           alignment: Alignment.center,
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.65,
+            width: height * 0.44 * 0.92,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -220,6 +232,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
                 Icon(
                   Icons.navigation,
                   color: Colors.blue,
+                  size: height * 0.05,
                 ),
               ],
             ),
@@ -229,13 +242,13 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
 
   Widget _getOrderButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
       child: Container(
         alignment: Alignment.bottomCenter,
         child: ButtonTheme(
           buttonColor: Color.fromRGBO(231, 82, 100, 1),
           minWidth: MediaQuery.of(context).size.width - 20,
-          height: MediaQuery.of(context).size.height * 0.065,
+          height: height * 0.08,
           child: RaisedButton(
             shape: RoundedRectangleBorder(
               side: BorderSide(color: Colors.white),
@@ -245,7 +258,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
             onPressed: () {
               if (widget.buttonAvailable) {
                 widget.buttonAvailable = false;
-                widget.t = Timer(Duration(seconds: 2), () {
+                widget.t = Timer(Duration(seconds: 15), () {
                   setState(() {
                     widget.buttonAvailable = true;
                   });
@@ -256,7 +269,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
             },
             child: Text(
               LanguageModel.order[LanguageModel.currentLanguage],
-              style: TextStyle(fontSize: 25, color: Colors.white),
+              style: TextStyle(fontSize: height * 0.045, color: Colors.white),
             ),
           ),
         ),
@@ -269,9 +282,13 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
         timePicker: timePicker,
         currentUser: StaticData.currentUser,
         currentShop: currentShop,
-        yearMonth: orderDate.year.toString() + "." + StringService.toDateFormatNumber(orderDate.month),
+        yearMonth: orderDate.year.toString() +
+            "." +
+            StringService.toDateFormatNumber(orderDate.month),
         day: StringService.toDateFormatNumber(orderDate.day),
         cartItems: items);
+
+    Navigator.of(context).pop();
 
     if (result) {
       RenaoToast.orderSuccessful();
@@ -280,7 +297,7 @@ class _OrderPageScreenState extends State<OrderPageScreen> {
     }
   }
 
-  void makePayment() async {
+    void makePayment() async {
     int total = 0;
     ListBuilder<BuiltBarionItem> builtItems = ListBuilder();
     for (ShopItem item in items) {

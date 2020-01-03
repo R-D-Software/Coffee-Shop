@@ -105,7 +105,10 @@ class _CartBodyState extends State<CartBody> {
     return Column(
       children: <Widget>[
         Container(
-          height: MediaQuery.of(context).size.height - widget.bottomNavBarHeight - widget.bottomBarHeight - 34,
+          height: MediaQuery.of(context).size.height -
+              widget.bottomNavBarHeight -
+              widget.bottomBarHeight -
+              29,
           child: _getCartItems(cartItems),
         ),
         _getBottomBar(context, cartItems),
@@ -161,7 +164,9 @@ class _CartBodyState extends State<CartBody> {
     if (today.difference(selected).inMinutes.abs() < 30) return false;
 
     for (DateTime date in holidays) {
-      if (selected.year == date.year && selected.month == date.month && selected.day == date.day) return false;
+      if (selected.year == date.year &&
+          selected.month == date.month &&
+          selected.day == date.day) return false;
     }
     return selected.weekday < 6;
   }
@@ -176,17 +181,18 @@ class _CartBodyState extends State<CartBody> {
 
   void pickDate(List<ShopItem> cartItems) async {
     holidays = await OrderDateDB.getHolidays();
-    DateTime initialDate = getInitialDate(
-        DateTime(today.year, today.month, today.day, selectedShop.closesHour, selectedShop.closesMinute));
+    DateTime initialDate = getInitialDate(DateTime(today.year, today.month,
+        today.day, selectedShop.closesHour, selectedShop.closesMinute));
     DateTime nextMonth = today.add(new Duration(days: 30));
     DateTime orderDate = await showDatePicker(
         context: context,
-        firstDate: DateTime(initialDate.year, initialDate.month, initialDate.day),
+        firstDate:
+            DateTime(initialDate.year, initialDate.month, initialDate.day),
         initialDate: initialDate,
         lastDate: nextMonth,
         selectableDayPredicate: (selected) {
-          selected =
-              DateTime(selected.year, selected.month, selected.day, selectedShop.closesHour, selectedShop.closesMinute);
+          selected = DateTime(selected.year, selected.month, selected.day,
+              selectedShop.closesHour, selectedShop.closesMinute);
           return selectableDate(selected);
         });
 

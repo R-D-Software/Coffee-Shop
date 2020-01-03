@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Models/food_item.dart';
 import 'package:coffee_shop/UI/Screens/coffee_item_view_screen.dart';
 import 'package:flutter/foundation.dart';
 
@@ -56,6 +57,20 @@ class ShopItem {
       onSale: doc['onSale'],
       parentID: doc['parentID'],
     );
+    return item;
+  }
+
+  factory ShopItem.fromCartItemJson(Map<dynamic, dynamic> doc) {
+    ShopItem item = null;
+    switch (doc['itemType'])
+    {
+        case "coffee": 
+            item = CoffeeItem.fromJson(doc, doc['parentID']);
+        break;
+        case "food": 
+            item = FoodItem.fromJson(doc, doc['parentID']);
+        break;
+    }
     return item;
   }
 

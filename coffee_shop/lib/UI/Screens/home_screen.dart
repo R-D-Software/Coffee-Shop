@@ -10,21 +10,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-    @override
-    void initState()
-    {
-        super.initState();
-    }
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
-  Widget build(BuildContext context) {    
-    return Container
-    (
-        child: RenaoScaffold(          
-            appBarTitle: LanguageModel.home[LanguageModel.currentLanguage],
-            scaffoldBody: HomeScreenBody(),
-        ),
-        decoration: RenaoBoxDecoration.builder(context),
-    );     
+  Widget build(BuildContext context) {
+    return Container(
+      child: RenaoScaffold(
+        appBarTitle: LanguageModel.home[LanguageModel.currentLanguage],
+        scaffoldBody: HomeScreenBody(),
+      ),
+      decoration: RenaoBoxDecoration.builder(context),
+    );
   }
 }

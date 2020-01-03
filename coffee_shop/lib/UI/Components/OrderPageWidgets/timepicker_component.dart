@@ -13,16 +13,22 @@ class TimePickerComponent extends StatefulWidget
     final Map<String,dynamic> notSelectableDates;
     final int minutesAfterOrder;
     bool stop = false;
+    double maxHeight;
 
     void stopClock()
     {
         stop = true;
     }
 
-    TimePickerComponent({this.notSelectableDates, this.currentShop, this.date, this.minutesAfterOrder});
+    TimePickerComponent({this.notSelectableDates, this.currentShop, this.date, this.minutesAfterOrder, this.maxHeight});
 
     @override
     _TimePickerComponentState createState() => _TimePickerComponentState();
+
+    DateTime asDateTime()
+    {
+        return DateTime(date.year, date.month, date.day, pickedHour, pickedMinute);
+    }
 }
 
 class _TimePickerComponentState extends State<TimePickerComponent> with SingleTickerProviderStateMixin 
@@ -49,6 +55,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
     @override
     void dispose() 
     {
+        widget.stopClock();
         super.dispose();
         _controller.dispose();
     }
@@ -73,7 +80,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
             color: Colors.brown,
             child: Container
             (
-                height: 175,
+                height: widget.maxHeight,
                 child: Stack
                 (
                     children: <Widget>
@@ -82,7 +89,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                         (
                             child: SizedBox
                             (
-                                height: 50,
+                                height: (widget.maxHeight/3),
                                 width: MediaQuery.of(context).size.width*0.90,
                                 child: Container
                                 (
@@ -91,7 +98,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                                         borderRadius: BorderRadius.all(Radius.circular(8)),
                                         border: Border.all
                                         (
-                                            color: Colors.white, width: 4
+                                            color: Colors.white, width: 3
                                         ),
                                     )
                                 )
@@ -106,9 +113,10 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
                                 (
                                     numbers: pickableHours,
                                     initialValue: widget.pickedHour,
+                                    listItemHeight: (widget.maxHeight/3),
                                     listViewWidth: MediaQuery.of(context).size.width*0.45,
                                     textColor: Colors.white,
-                                    afterBuildCallback: _generateAvailableMinutesList,
+                                    afterBuildCallback: ((s){_generateAvailableMinutesList(s);}),
                                     setValue: (int val)
                                     {
                                         if(val != 0)
@@ -146,7 +154,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
         startDate = widget.date.add(Duration(hours: startHour, minutes: startMinutes));
         closesDate = widget.date.add(Duration(hours: endHour, minutes: endMinute));
         pickableHours = new List<int>();
-        //now = DateTime.parse("2019-10-25 05:00:00"); //FOR DEBUGGING
+        now = DateTime.parse("2019-01-02 13:50:00"); //FOR DEBUGGING
 
         if(now.isBefore(startDate.add(Duration(seconds:10)))) // there is no <= with isBefore -> add 10 seconds to startDate
         {
@@ -187,6 +195,15 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
             if(!notPickableList.contains(i))
                 pickableMinutes.add(i);
         }
+
+        if(widget.pickedHour == widget.currentShop.closesHour)
+        {
+            for(int i = widget.currentShop.closesMinute; i<= 60; i++)
+            {
+               pickableMinutes.remove(i); 
+            }
+        }
+
         if(!widget.stop)
             setState(() {buildMinutes = true;});
     }
@@ -223,6 +240,7 @@ class _TimePickerComponentState extends State<TimePickerComponent> with SingleTi
             initialValue: pickableList.first,
             numbers: pickableMinutes,
             textColor: Colors.white,
+            listItemHeight: (widget.maxHeight/3),
             listViewWidth: MediaQuery.of(context).size.width*0.45,
             setValue: (int val)
             {

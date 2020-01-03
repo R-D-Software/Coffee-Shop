@@ -10,6 +10,7 @@ class RenaoFlatButton extends StatelessWidget {
   final Color splashColor;
   final Color borderColor;
   final double borderWidth;
+  double padding;
 
   RenaoFlatButton(
       {
@@ -21,7 +22,8 @@ class RenaoFlatButton extends StatelessWidget {
       @required this.color,
       @required this.splashColor,
       @required this.borderColor,
-      @required this.borderWidth});
+      @required this.borderWidth,
+      this.padding = 12.0});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class RenaoFlatButton extends StatelessWidget {
       color: color,
       splashColor: splashColor,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: EdgeInsets.symmetric(vertical: this.padding),
         child: Text(
           title,
           softWrap: true,

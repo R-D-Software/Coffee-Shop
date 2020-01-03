@@ -26,6 +26,9 @@ class CoffeeItemViewScreen extends StatelessWidget {
   Temperature temperature;
   String _buttonLabel = LanguageModel.add[LanguageModel.currentLanguage];
   Quest quest;
+  double sideFontSize;
+  final double maxFontSize = 27;
+  final double maxIconSize = 37;
 
   int leavingCounter = 0;
 
@@ -35,21 +38,16 @@ class CoffeeItemViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    initializeData(context);
-
     MediaQueryData mData = MediaQuery.of(context);
-
-    if (mData.orientation == Orientation.portrait) {
-      height = mData.size.height;
-    } else {
-      height = mData.size.width;
-    }
+    height = mData.size.height - _appBar.preferredSize.height - mData.padding.top;
+    initializeData(context);
 
     _addButton = _getAddButton(context);
     
     return Scaffold(
         appBar: _appBar,
         body: Container(
+            height: height,
             decoration: RenaoBoxDecoration.builder(context),          
             child: StreamBuilder(
                 stream: ShopItemDB.getShopItemByID(itemID),
@@ -84,6 +82,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
     }
     
     temperature = Temperature.hot();
+    sideFontSize = (height*0.04 > maxFontSize*0.9 ? maxFontSize*0.9 : height*0.04);
   }
 
   Widget makeItemViewBody(AsyncSnapshot snapshot, BuildContext context) {
@@ -92,21 +91,18 @@ class CoffeeItemViewScreen extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      height: height - _appBar.preferredSize.height - 29,
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+      margin: EdgeInsets.symmetric(vertical: 0),
+      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
         StrokedText(
-          text: _item.name,
-          color: Colors.white,
-          size: 25,
+            text: _item.name,
+            color: Colors.white,
+            size: (height*0.04 > maxFontSize ? maxFontSize : height*0.04),
         ),
         Stack(
           alignment: Alignment.topCenter,
           children: <Widget>[
             Container(
-                margin: EdgeInsets.only(top: 20, bottom: 25),
+                margin: EdgeInsets.only(top: height * 0.02, bottom: height * 0.02),
                 width: height * 0.35,
                 height: height * 0.35,
                 decoration: new BoxDecoration(
@@ -114,50 +110,50 @@ class CoffeeItemViewScreen extends StatelessWidget {
                       new BoxShadow(
                         color: Colors.red,
                         spreadRadius: 2,
-                        offset: new Offset(-5.0, 10.0),
+                        offset: new Offset(-(5.0), 10.0),
                       )
                     ],
-                    border: Border.all(color: Theme.of(context).primaryColor, width: 14),
+                    border: Border.all(color: Theme.of(context).primaryColor, width: (height * 0.35*0.07)),
                     shape: BoxShape.circle,
                     image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(_item.imageUrl)))),
             FavouriteStar(itemID: itemID),
             Align(
               alignment: Alignment.bottomRight,
               child: Container(
-                margin: EdgeInsets.only(top: height * 0.35),
+                margin: EdgeInsets.only(top: height * 0.32),
                 child: _buildInformationIcon(context),
               ),
             ),
           ],
         ),
-        SizedBox(height: 50,),
+        SizedBox(height: height* 0.05,),
         Container(
           margin: EdgeInsets.only(bottom: 0),
           child: StrokedText(
             text: LanguageModel.sugar[LanguageModel.currentLanguage],
             color: Colors.white,
-            size: 25,
+            size: sideFontSize,
           ),
         ),
-        SugarChooser(_item, _setSugar),
-        SizedBox(height: 30,),
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          child: StrokedText(
+        SugarChooser(_item, _setSugar, height * 0.1),
+        SizedBox(height: height * 0.03,),
+        StrokedText(
             text: LanguageModel.temperature[LanguageModel.currentLanguage],
             color: Colors.white,
-            size: 25,
-          ),
+            size: sideFontSize,
         ),
-        TemperatureChooser(_item, _setTemperature),
-        SizedBox(height: 20,),
+        SizedBox(height: height * 0.005,),
+        TemperatureChooser(_item, _setTemperature, height * 0.01),
+        SizedBox(height: height * 0.01,),
         _addButton,
+        SizedBox(height: 0,)
       ]),
-    ));
+    );
   }
 
   Container _buildInformationIcon(BuildContext context) {
     return Container(
+        height: (height * 0.06 > maxIconSize ? maxIconSize : height * 0.06),
       child: RawMaterialButton(
         onPressed: () {
           RenaoDialog.showDialog(context: context, title: _item.name, description: _item.description);
@@ -165,7 +161,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
         child: Icon(
           Icons.info,
           color: Colors.blue,
-          size: 40.0,
+          size: (height * 0.06 > maxIconSize ? maxIconSize : height * 0.06),
         ),
         shape: CircleBorder(),
         elevation: 2.0,
@@ -201,7 +197,7 @@ class CoffeeItemViewScreen extends StatelessWidget {
           },
           child: Text(
             _buttonLabel,
-            style: TextStyle(fontSize: 25, color: Colors.white),
+            style: TextStyle(fontSize: height*0.045, color: Colors.white),
           ),
         ),
       ),

@@ -31,11 +31,7 @@ class FoodItemViewScreen extends StatelessWidget {
 
     MediaQueryData mData = MediaQuery.of(context);
 
-    if (mData.orientation == Orientation.portrait) {
-      height = mData.size.height;
-    } else {
-      height = mData.size.width;
-    }
+    height = mData.size.height - _appBar.preferredSize.height - mData.padding.top;
 
     _addButton = _getAddButton(context);
 
@@ -45,7 +41,7 @@ class FoodItemViewScreen extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: Container(
             decoration: RenaoBoxDecoration.builder(context),
-            height: height - _appBar.preferredSize.height - 29,
+            height: height,
             child: StreamBuilder(
                 stream: ShopItemDB.getShopItemByID(itemID),
                 builder: (context, snapshot) {
@@ -126,7 +122,7 @@ class FoodItemViewScreen extends StatelessWidget {
       child: ButtonTheme(
         buttonColor: Color.fromRGBO(231, 82, 100, 1),
         minWidth: MediaQuery.of(context).size.width - 20,
-        height: height * 0.065,
+        height: height * 0.07,
         child: RaisedButton(
           shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.white),

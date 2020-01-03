@@ -11,6 +11,7 @@ class RenaoNumberPicker extends StatefulWidget
     final List<int> numbers;
     final Color textColor;
     final double listViewWidth;
+    double listItemHeight;
     int currentValue;
     Function setValue;
     Function afterBuildCallback;
@@ -23,7 +24,8 @@ class RenaoNumberPicker extends StatefulWidget
             this.textColor,
             this.setValue,
             this.afterBuildCallback,
-            this.listViewWidth
+            this.listViewWidth,
+            this.listItemHeight
         }
     );
 
@@ -66,7 +68,7 @@ class _RenaoNumberPickerState extends State<RenaoNumberPicker> with SingleTicker
             initialList: widget.numbers,
             listViewWidth: widget.listViewWidth,
             initialValue: widget.initialValue,
-            itemExtent: 60,
+            itemExtent: widget.listItemHeight,
             textColor: widget.textColor,
             onChanged: (newValue) => setState(() => onValueChange(newValue))
         );

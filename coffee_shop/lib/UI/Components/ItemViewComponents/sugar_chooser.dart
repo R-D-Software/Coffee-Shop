@@ -11,9 +11,11 @@ class SugarChooser extends StatefulWidget {
   int sugar;
   final int _maxSugar = 4;
   final int _minSugar = 0;
+  double maxHeight;
+  double maxFontSize = 20;
   Function setSugarValueOnParentScreen;
 
-  SugarChooser(this._item, this.setSugarValueOnParentScreen);
+  SugarChooser(this._item, this.setSugarValueOnParentScreen, this.maxHeight);
 
   @override
   _SugarChooserState createState() => _SugarChooserState();
@@ -32,32 +34,27 @@ class _SugarChooserState extends State<SugarChooser> {
     }
     return Container(
       width: double.infinity,
-      height: 75,
+      height: widget.maxHeight,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Container(
-          child: Container(
-            child: IconButton(
-              icon: Icon(Icons.remove),
-              iconSize: 30,
-              onPressed: () {
-                modifySugar("-");
-              },
-            ),
+        child: IconButton(
+            icon: Icon(Icons.remove),
+            iconSize: widget.maxHeight*0.55,
+            onPressed: () {
+            modifySugar("-");
+            },
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width - 100,
+          width: MediaQuery.of(context).size.width *0.7,
           child: sugars.isEmpty ? _getNoSugarText() : _getSugars(),
-        ),
-        Container(
-          child: IconButton(
+        ),IconButton(
             icon: Icon(Icons.add),
-            iconSize: 30,
+            iconSize: widget.maxHeight*0.55,
             onPressed: () {
               modifySugar("+");
             },
           ),
-        ),
       ]),
     );
   }
@@ -75,8 +72,8 @@ class _SugarChooserState extends State<SugarChooser> {
 
   Widget SugarCube() {
     return SugarCard(
-      height: 50,
-      width: 50,
+      height: MediaQuery.of(context).size.width *0.7*0.18,
+      width: MediaQuery.of(context).size.width *0.7*0.18,
     );
   }
 
@@ -93,7 +90,7 @@ class _SugarChooserState extends State<SugarChooser> {
   Widget _getNoSugarText() {
     return StrokedText(
       text: LanguageModel.withoutSugar[LanguageModel.currentLanguage],
-      size: 20,
+      size: widget.maxFontSize,
       color: Theme.of(context).primaryColor,
     );
   }

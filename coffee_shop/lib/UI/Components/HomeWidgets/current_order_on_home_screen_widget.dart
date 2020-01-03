@@ -92,7 +92,8 @@ class _CurrentOrderOnHomeScreenWidgetState extends State<CurrentOrderOnHomeScree
 
         for(Order order in orders)
         {
-            for(String itemID in order.items)
+            if(order.items != null)
+            for(String itemID in order.items.map((f) => f.parentID).toList())
             {
                 retList.add
                 (

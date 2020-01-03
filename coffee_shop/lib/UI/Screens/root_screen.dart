@@ -14,7 +14,7 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return new StreamBuilder<FirebaseUser>(
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (BuildContext context, snapshot) {
@@ -22,29 +22,24 @@ class _RootScreenState extends State<RootScreen> {
           return new Container(
             color: Theme.of(context).primaryColor,
           );
-        } else {        
-            return StreamBuilder
-            (
-                stream: LanguageModel.init(context).asStream(),
-                builder: (context, snap)
-                {
-                    if(snap.connectionState == ConnectionState.waiting)
-                    {
-                        return new Container(
-                            color: Theme.of(context).primaryColor,
-                        );
-                    }
-                    else
-                    {
-                        if (snapshot.hasData) {
-                            UserDB.updateToken();
-                            return MainScreen();
-                        } else {
-                            return WelcomeScreen();
-                        }
-                    }
-                },
-            ); 
+        } else {
+          return StreamBuilder(
+            stream: LanguageModel.init(context).asStream(),
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                return new Container(
+                  color: Theme.of(context).primaryColor,
+                );
+              } else {
+                if (snapshot.hasData) {
+                  UserDB.updateToken();
+                  return MainScreen();
+                } else {
+                  return WelcomeScreen();
+                }
+              }
+            },
+          );
         }
       },
     );

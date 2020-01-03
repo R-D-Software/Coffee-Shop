@@ -35,7 +35,7 @@ class FoodItem extends ShopItem {
     return jsonEncode(this);
   }
 
-  factory FoodItem.fromJson(Map<String, Object> doc, String documentID) {
+  factory FoodItem.fromJson(Map<dynamic, dynamic> doc, String documentID) {
     FoodItem item = FoodItem(
       shopItem: ShopItem(
         documentID: documentID,
