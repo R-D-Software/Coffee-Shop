@@ -8,46 +8,104 @@ enum Language { NOTHING, ENGLISH, HUNGARIAN }
 class LanguageModel {
   static Language currentLanguage = Language.ENGLISH;
 
-  static List<String> daysInEnglish = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  static List<String> daysInHungarian = ["Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"];
+  static List<String> daysInEnglish = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+  static List<String> daysInHungarian = [
+    "Hétfő",
+    "Kedd",
+    "Szerda",
+    "Csütörtök",
+    "Péntek",
+    "Szombat",
+    "Vasárnap"
+  ];
 
-  static Map<Language, String> noOrder = const {Language.ENGLISH: "No Order", Language.HUNGARIAN: "Nincs Megrendelés"};
+  static Map<Language, String> noOrder = const {
+    Language.ENGLISH: "No Order",
+    Language.HUNGARIAN: "Nincs Megrendelés"
+  };
 
-  static Map<Language, String> home = const {Language.ENGLISH: "Home", Language.HUNGARIAN: "Főképernyő"};
+  static Map<Language, String> home = const {
+    Language.ENGLISH: "Home",
+    Language.HUNGARIAN: "Főképernyő"
+  };
 
-  static Map<Language, String> quest = const {Language.ENGLISH: "Quest", Language.HUNGARIAN: "Isten Adta"};
+  static Map<Language, String> quest = const {
+    Language.ENGLISH: "Quest",
+    Language.HUNGARIAN: "Isten Adta"
+  };
 
-  static Map<Language, String> cart = const {Language.ENGLISH: "Cart", Language.HUNGARIAN: "Kosár"};
+  static Map<Language, String> cart = const {
+    Language.ENGLISH: "Cart",
+    Language.HUNGARIAN: "Kosár"
+  };
 
   static Map<Language, String> coffeeOfTheWeek = const {
     Language.ENGLISH: "Coffee of the Week",
     Language.HUNGARIAN: "Heti Ajánlat"
   };
 
-  static Map<Language, String> logOut = const {Language.ENGLISH: "Log Out", Language.HUNGARIAN: "Kijelentkezés"};
+  static Map<Language, String> logOut = const {
+    Language.ENGLISH: "Log Out",
+    Language.HUNGARIAN: "Kijelentkezés"
+  };
 
-  static Map<Language, String> wallet = const {Language.ENGLISH: "Wallet", Language.HUNGARIAN: "Pénztárca"};
+  static Map<Language, String> wallet = const {
+    Language.ENGLISH: "Wallet",
+    Language.HUNGARIAN: "Pénztárca"
+  };
 
-  static Map<Language, String> postBox = const {Language.ENGLISH: "Cabins", Language.HUNGARIAN: "Szekrények"};
+  static Map<Language, String> postBox = const {
+    Language.ENGLISH: "Cabins",
+    Language.HUNGARIAN: "Szekrények"
+  };
 
-  static Map<Language, String> favourites = const {Language.ENGLISH: "Favourites", Language.HUNGARIAN: "Kedvencek"};
+  static Map<Language, String> favourites = const {
+    Language.ENGLISH: "Favourites",
+    Language.HUNGARIAN: "Kedvencek"
+  };
 
-  static Map<Language, String> yourBalance = const {Language.ENGLISH: "Balance: ", Language.HUNGARIAN: "Egyenleg: "};
+  static Map<Language, String> yourBalance = const {
+    Language.ENGLISH: "Balance: ",
+    Language.HUNGARIAN: "Egyenleg: "
+  };
 
-  static Map<Language, String> add = const {Language.ENGLISH: "Add", Language.HUNGARIAN: "Hozzáad"};
+  static Map<Language, String> add = const {
+    Language.ENGLISH: "Add",
+    Language.HUNGARIAN: "Hozzáad"
+  };
 
-  static Map<Language, String> sugar = const {Language.ENGLISH: "Sugar", Language.HUNGARIAN: "Cukor"};
+  static Map<Language, String> sugar = const {
+    Language.ENGLISH: "Sugar type:",
+    Language.HUNGARIAN: "Cukor típus:"
+  };
 
-  static Map<Language, String> temperature = const {Language.ENGLISH: "Temperature", Language.HUNGARIAN: "Hőmérséklet"};
+  static Map<Language, String> temperature = const {
+    Language.ENGLISH: "Temperature",
+    Language.HUNGARIAN: "Hőmérséklet"
+  };
 
   static Map<Language, String> purchaseHistory = const {
     Language.ENGLISH: "Purchase History",
     Language.HUNGARIAN: "Vásárlási Előzmények"
   };
 
-  static Map<Language, String> settings = const {Language.ENGLISH: "Settings", Language.HUNGARIAN: "Beállítások"};
+  static Map<Language, String> settings = const {
+    Language.ENGLISH: "Settings",
+    Language.HUNGARIAN: "Beállítások"
+  };
 
-  static Map<Language, String> language = const {Language.ENGLISH: "Language", Language.HUNGARIAN: "Nyelv"};
+  static Map<Language, String> language = const {
+    Language.ENGLISH: "Language",
+    Language.HUNGARIAN: "Nyelv"
+  };
 
   static Map<Language, String> deposit = const {
     Language.ENGLISH: "Add to Balance",
@@ -64,9 +122,15 @@ class LanguageModel {
     Language.HUNGARIAN: "Irány a Bolt"
   };
 
-  static Map<Language, String> coffee = const {Language.ENGLISH: "Coffee", Language.HUNGARIAN: "Kávé"};
+  static Map<Language, String> coffee = const {
+    Language.ENGLISH: "Coffee",
+    Language.HUNGARIAN: "Kávé"
+  };
 
-  static Map<Language, String> sandwich = const {Language.ENGLISH: "Sandwich", Language.HUNGARIAN: "Szendvics"};
+  static Map<Language, String> sandwich = const {
+    Language.ENGLISH: "Sandwich",
+    Language.HUNGARIAN: "Szendvics"
+  };
 
   static Map<Language, String> todaysDeals = const {
     Language.ENGLISH: "Today's Deals",
@@ -74,7 +138,8 @@ class LanguageModel {
   };
 
   static Map<Language, String> addToFavourite = const {
-    Language.ENGLISH: "To add something to your favourite list, please tap on the star icon in the product view.",
+    Language.ENGLISH:
+        "To add something to your favourite list, please tap on the star icon in the product view.",
     Language.HUNGARIAN:
         "Ahhoz, hogy a kedvencek listához tudj adni egy terméket, a termék képe fölötti csillagra kell kattintanod."
   };
@@ -85,7 +150,8 @@ class LanguageModel {
   };
 
   static Map<Language, String> addToCartDescription = const {
-    Language.ENGLISH: "To add something to your cart, please tap on the \'Add to Cart\'",
+    Language.ENGLISH:
+        "To add something to your cart, please tap on the \'Add to Cart\'",
     Language.HUNGARIAN:
         "Ahhoz, hogy a kosárhoz adj egy terméket, a terméknél lévő \'Kosárhoz\' gombra kell kattintanod."
   };
@@ -95,7 +161,10 @@ class LanguageModel {
     Language.HUNGARIAN: "A kosarad üres"
   };
 
-  static Map<Language, String> addToCart = const {Language.ENGLISH: "Add to Cart", Language.HUNGARIAN: "Kosárba"};
+  static Map<Language, String> addToCart = const {
+    Language.ENGLISH: "Add to Cart",
+    Language.HUNGARIAN: "Kosárba"
+  };
 
   static Map<Language, String> questComplete = const {
     Language.ENGLISH: "Congratulation, You have completed the quest!",
@@ -103,7 +172,8 @@ class LanguageModel {
   };
 
   static Map<Language, String> questCompleteAndOrdered = const {
-    Language.ENGLISH: "Congratulation, You have completed the quest, and succesfully ordered it!",
+    Language.ENGLISH:
+        "Congratulation, You have completed the quest, and succesfully ordered it!",
     Language.HUNGARIAN: "Gratulálunk, nyertél, és már meg is rendelted!"
   };
 
@@ -112,30 +182,60 @@ class LanguageModel {
     Language.HUNGARIAN: " hozzáadásra került"
   };
 
-  static Map<Language, String> time = const {Language.ENGLISH: "Time", Language.HUNGARIAN: "Időpont"};
+  static Map<Language, String> time = const {
+    Language.ENGLISH: "Time",
+    Language.HUNGARIAN: "Időpont"
+  };
 
-  static Map<Language, String> order = const {Language.ENGLISH: "Order", Language.HUNGARIAN: "Megrendel"};
+  static Map<Language, String> order = const {
+    Language.ENGLISH: "Order",
+    Language.HUNGARIAN: "Megrendel"
+  };
 
   static Map<Language, String> selectedPlace = const {
     Language.ENGLISH: "Selected Place",
     Language.HUNGARIAN: "Kiválasztott Hely"
   };
 
-  static Map<Language, String> date = const {Language.ENGLISH: "Date", Language.HUNGARIAN: "Nap"};
+  static Map<Language, String> date = const {
+    Language.ENGLISH: "Date",
+    Language.HUNGARIAN: "Nap"
+  };
 
-  static Map<Language, String> withoutSugar = const {Language.ENGLISH: "Sugarfree", Language.HUNGARIAN: "Cukormentes"};
+  static Map<Language, String> withoutSugar = const {
+    Language.ENGLISH: "Sugarfree",
+    Language.HUNGARIAN: "Cukormentes"
+  };
 
-  static Map<Language, String> modify = const {Language.ENGLISH: "Modify", Language.HUNGARIAN: "Módosítás"};
+  static Map<Language, String> modify = const {
+    Language.ENGLISH: "Modify",
+    Language.HUNGARIAN: "Módosítás"
+  };
 
-  static Map<Language, String> pay = const {Language.ENGLISH: "Pay", Language.HUNGARIAN: "Fizetés"};
+  static Map<Language, String> pay = const {
+    Language.ENGLISH: "Pay",
+    Language.HUNGARIAN: "Fizetés"
+  };
 
-  static Map<Language, String> iceCold = const {Language.ENGLISH: "Ice cold", Language.HUNGARIAN: "Jég hideg"};
+  static Map<Language, String> iceCold = const {
+    Language.ENGLISH: "Ice cold",
+    Language.HUNGARIAN: "Jég hideg"
+  };
 
-  static Map<Language, String> cold = const {Language.ENGLISH: "Cold", Language.HUNGARIAN: "Hideg"};
+  static Map<Language, String> cold = const {
+    Language.ENGLISH: "Cold",
+    Language.HUNGARIAN: "Hideg"
+  };
 
-  static Map<Language, String> warm = const {Language.ENGLISH: "Warm", Language.HUNGARIAN: "Meleg"};
+  static Map<Language, String> warm = const {
+    Language.ENGLISH: "Warm",
+    Language.HUNGARIAN: "Meleg"
+  };
 
-  static Map<Language, String> hot = const {Language.ENGLISH: "Hot", Language.HUNGARIAN: "Forró"};
+  static Map<Language, String> hot = const {
+    Language.ENGLISH: "Hot",
+    Language.HUNGARIAN: "Forró"
+  };
 
   static Map<Language, String> orderSuccessful = const {
     Language.ENGLISH: "Order Successful",
@@ -147,14 +247,20 @@ class LanguageModel {
     Language.HUNGARIAN: "A rendelés meghíusult, kérlek válassz másik időpontot"
   };
 
-  static Map<Language, String> orders = const {Language.ENGLISH: "Orders", Language.HUNGARIAN: "Rendelések"};
+  static Map<Language, String> orders = const {
+    Language.ENGLISH: "Orders",
+    Language.HUNGARIAN: "Rendelések"
+  };
 
   static Map<Language, String> timeRemaining = const {
     Language.ENGLISH: "Time remaining",
     Language.HUNGARIAN: "Hátralévő idő"
   };
 
-  static Map<Language, String> dayLetter = const {Language.ENGLISH: "d", Language.HUNGARIAN: "n"};
+  static Map<Language, String> dayLetter = const {
+    Language.ENGLISH: "d",
+    Language.HUNGARIAN: "n"
+  };
 
   static Map<Language, String> orderIsReady = const {
     Language.ENGLISH: "Order is ready",
@@ -166,7 +272,10 @@ class LanguageModel {
     Language.HUNGARIAN: "A rendelésed 5 perc és kész"
   };
 
-  static Map<Language, String> box = const {Language.ENGLISH: "Box", Language.HUNGARIAN: "Doboz"};
+  static Map<Language, String> box = const {
+    Language.ENGLISH: "Box",
+    Language.HUNGARIAN: "Doboz"
+  };
 
   static Map<Language, String> noCurrentOrders = const {
     Language.ENGLISH: "You have no current orders",
@@ -183,9 +292,15 @@ class LanguageModel {
     Language.HUNGARIAN: "Még nem rendeltek dobozt a rendelésedhez"
   };
 
-  static Map<Language, String> signUp = const {Language.ENGLISH: "Sign up", Language.HUNGARIAN: "Regisztráció"};
+  static Map<Language, String> signUp = const {
+    Language.ENGLISH: "Sign up",
+    Language.HUNGARIAN: "Regisztráció"
+  };
 
-  static Map<Language, String> piece = const {Language.ENGLISH: "piece", Language.HUNGARIAN: "darab"};
+  static Map<Language, String> piece = const {
+    Language.ENGLISH: "piece",
+    Language.HUNGARIAN: "darab"
+  };
 
   static Map<Language, String> openTheBox = const {
     Language.ENGLISH: "Open Box",
@@ -193,13 +308,21 @@ class LanguageModel {
   };
 
   static Map<Language, String> areYouSureToOpen = const {
-    Language.ENGLISH: "Are you ready to open the box? You have to be near the box to open it.",
-    Language.HUNGARIAN: "Biztos ki szeretnéd nyitni a dobozt? A nyitáshoz a közelében kell lenned."
+    Language.ENGLISH:
+        "Are you ready to open the box? You have to be near the box to open it.",
+    Language.HUNGARIAN:
+        "Biztos ki szeretnéd nyitni a dobozt? A nyitáshoz a közelében kell lenned."
   };
 
-  static Map<Language, String> yes = const {Language.ENGLISH: "Yes", Language.HUNGARIAN: "Igen"};
+  static Map<Language, String> yes = const {
+    Language.ENGLISH: "Yes",
+    Language.HUNGARIAN: "Igen"
+  };
 
-  static Map<Language, String> no = const {Language.ENGLISH: "No", Language.HUNGARIAN: "Nem"};
+  static Map<Language, String> no = const {
+    Language.ENGLISH: "No",
+    Language.HUNGARIAN: "Nem"
+  };
 
   static Map<Language, String> grabYourGoods = const {
     Language.ENGLISH: "Grab your goods from the box",
@@ -220,7 +343,7 @@ class LanguageModel {
     Language.ENGLISH: "Ordered items",
     Language.HUNGARIAN: "Rendelt termékek"
   };
-  
+
   static Map<Language, String> cannotOpenTheBoxTitle = const {
     Language.ENGLISH: "Box Failure",
     Language.HUNGARIAN: "Hiba a dobozzal"
@@ -234,12 +357,27 @@ class LanguageModel {
   static Map<Language, String> boxIsAlreadyOpenedTitle = const {
     Language.ENGLISH: "Box",
     Language.HUNGARIAN: "Doboz"
-  }; 
+  };
 
   static Map<Language, String> boxIsAlreadyOpenedContent = const {
     Language.ENGLISH: "The box is already open",
     Language.HUNGARIAN: "A doboz már nyitva van."
-  };   
+  };
+
+  static Map<Language, String> brownSugar = const {
+    Language.ENGLISH: "Brown sugar",
+    Language.HUNGARIAN: "Barna cukor"
+  };
+
+  static Map<Language, String> whiteSugar = const {
+    Language.ENGLISH: "White sugar",
+    Language.HUNGARIAN: "Fehér cukor"
+  };
+
+  static Map<Language, String> sweetener = const {
+    Language.ENGLISH: "Sweetener",
+    Language.HUNGARIAN: "Édesítőszer"
+  };
 
   static Future init(BuildContext context) async {
     User user;
@@ -248,7 +386,8 @@ class LanguageModel {
     });
 
     if (user != null) {
-      if (user.userDefinedLanguage == Language.NOTHING || user.userDefinedLanguage == null) {
+      if (user.userDefinedLanguage == Language.NOTHING ||
+          user.userDefinedLanguage == null) {
         currentLanguage = _getLocalizedLang(context);
       } else {
         currentLanguage = user.userDefinedLanguage;
@@ -314,15 +453,27 @@ class LanguageModel {
   static String questOrder(int missingParts, String itemName) {
     switch (currentLanguage) {
       case Language.NOTHING:
-        return "Order " + missingParts.toString() + " more " + itemName + " to get a free one!";
+        return "Order " +
+            missingParts.toString() +
+            " more " +
+            itemName +
+            " to get a free one!";
         break;
 
       case Language.ENGLISH:
-        return "Order " + missingParts.toString() + " more " + itemName + " to get a free one!";
+        return "Order " +
+            missingParts.toString() +
+            " more " +
+            itemName +
+            " to get a free one!";
         break;
 
       case Language.HUNGARIAN:
-        return "Rendelj még " + missingParts.toString() + " " + itemName + "t és egyet ingyen vihetsz!";
+        return "Rendelj még " +
+            missingParts.toString() +
+            " " +
+            itemName +
+            "t és egyet ingyen vihetsz!";
         break;
     }
   }

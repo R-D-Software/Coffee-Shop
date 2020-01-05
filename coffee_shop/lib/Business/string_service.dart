@@ -1,3 +1,5 @@
+import 'package:coffee_shop/Models/static_data.dart';
+
 class StringService
 {
     static String toDateFormatNumber(int number)
@@ -28,5 +30,47 @@ class StringService
             return ("0" + day);
         }
         return day;
+    }
+
+    static String getPathForPic(int sugarType)
+    {
+        String retVal = StaticData.whiteSugarPath;
+        switch(sugarType)
+        {
+            case 0:
+                retVal = StaticData.whiteSugarPath;    
+            break;
+            
+            case 1:
+                retVal = StaticData.brownSugarPath;
+            break;
+
+            case 2:
+                retVal = StaticData.sweetenerPath;
+            break;
+        }
+
+        return retVal;
+    }
+
+    static int getSugarTypeFromPath(String path)
+    {
+        int retVal = 0;
+        switch(path)
+        {
+            case StaticData.whiteSugarPath:
+                retVal = 0;    
+            break;
+            
+            case StaticData.brownSugarPath:
+                retVal = 1;
+            break;
+
+            case StaticData.sweetenerPath:
+                retVal = 2;
+            break;
+        }
+
+        return retVal;
     }
 }

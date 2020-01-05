@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/post_box.dart';
+import 'package:coffee_shop/Models/shops.dart';
 import 'package:coffee_shop/Models/static_data.dart';
 import 'package:coffee_shop/UI/Components/CustomWidgets/renao_dialog.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +36,12 @@ class BoxesDB {
 
   static Future<OpenBoxStatus> tryToOpen(
       String boxID, String orderID, BuildContext context) async {
+    Shop orderShop = await ShopsDB.getShopByID(orderID);
     PostBox box = await getBoxByIDFuture(boxID);
     bool answer = false;
 
-    if (box.ownerUserID != StaticData.currentUser.userID)
+    if (box.ownerUserID != StaticData.currentUser.userID
+        && await orderShop.isOpenNow())
       return OpenBoxStatus.ERROR_HAPPENED;
 
     if (box != null) {

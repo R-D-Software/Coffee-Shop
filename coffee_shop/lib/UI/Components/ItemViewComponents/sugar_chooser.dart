@@ -8,14 +8,15 @@ import '../stroked_text.dart';
 
 class SugarChooser extends StatefulWidget {
   ShopItem _item;
-  int sugar;
+  int sugarCount;
   final int _maxSugar = 4;
   final int _minSugar = 0;
   double maxHeight;
   double maxFontSize = 20;
   Function setSugarValueOnParentScreen;
+  String imagePath;
 
-  SugarChooser(this._item, this.setSugarValueOnParentScreen, this.maxHeight);
+  SugarChooser(this._item, this.setSugarValueOnParentScreen, this.maxHeight, this.imagePath, this.sugarCount);
 
   @override
   _SugarChooserState createState() => _SugarChooserState();
@@ -28,7 +29,7 @@ class _SugarChooserState extends State<SugarChooser> {
   Widget build(BuildContext context) {
     int i = 0;
     sugars.clear();
-    while (i < widget.sugar) {
+    while (i < widget.sugarCount) {
       sugars.add(SugarCube());
       i++;
     }
@@ -61,30 +62,31 @@ class _SugarChooserState extends State<SugarChooser> {
 
   void modifySugar(String operation) {
     if (operation == "+") {
-      if (widget.sugar < widget._maxSugar) widget.sugar++;
+      if (widget.sugarCount < widget._maxSugar) widget.sugarCount++;
       setState(() {});
     } else if (operation == "-") {
-      if (widget.sugar > widget._minSugar) widget.sugar--;
+      if (widget.sugarCount > widget._minSugar) widget.sugarCount--;
       setState(() {});
     }
-    widget.setSugarValueOnParentScreen(widget.sugar);
+    widget.setSugarValueOnParentScreen(widget.sugarCount);
   }
 
   Widget SugarCube() {
     return SugarCard(
       height: MediaQuery.of(context).size.width *0.7*0.18,
       width: MediaQuery.of(context).size.width *0.7*0.18,
+      imagePath: widget.imagePath,
     );
   }
 
   @override
   void initState() {
-    if (widget._item is CoffeeItem) {
+    /*if (widget._item is CoffeeItem) {
       CoffeeItem coffeeItem = widget._item as CoffeeItem;
-      widget.sugar = coffeeItem.sugar;
+      widget.sugarCount = coffeeItem.sugar;
     } else {
-      widget.sugar = 2;
-    }
+      widget.sugarCount = 2;
+    }*/
   }
 
   Widget _getNoSugarText() {
