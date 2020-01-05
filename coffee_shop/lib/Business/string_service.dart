@@ -48,6 +48,10 @@ class StringService
             case 2:
                 retVal = StaticData.sweetenerPath;
             break;
+
+            case -1:
+                retVal = "-1";
+            break;
         }
 
         return retVal;
@@ -68,6 +72,10 @@ class StringService
 
             case StaticData.sweetenerPath:
                 retVal = 2;
+            break;
+
+            case "-1":
+                retVal = -1;
             break;
         }
 
