@@ -83,6 +83,9 @@ flutter:
    - assets/images/sugar.png
    - assets/images/box_closed.jpg
    - assets/images/box_open.jpg
+   - assets/images/sweetener.jpg
+   - assets/images/brownSugarCube.jpg
+   - assets/images/sugar.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

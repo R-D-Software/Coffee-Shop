@@ -9,11 +9,13 @@ import 'package:flutter/material.dart';
 class CoffeeItem extends ShopItem {
   Temperature temperature;
   int sugar;
+  int sugarType;
 
   CoffeeItem(
       {@required ShopItem shopItem,
       @required this.temperature,
-      @required this.sugar})
+      @required this.sugar,
+      @required this.sugarType})
       : super(
             documentID: shopItem.documentID,
             imageUrl: shopItem.imageUrl,
@@ -22,7 +24,8 @@ class CoffeeItem extends ShopItem {
             description: shopItem.description,
             itemType: "coffee",
             onSale: shopItem.onSale,
-            parentID: shopItem.parentID);
+            parentID: shopItem.parentID,
+            );
 
   Map<String, Object> toJson() {
     return {
@@ -35,6 +38,7 @@ class CoffeeItem extends ShopItem {
       'appIdentifier': 'Renao',
       'temperature': temperature.temperature,
       'sugar': sugar,
+      'sugarType': sugarType,
       'parentID': parentID
     };
   }
@@ -61,6 +65,7 @@ class CoffeeItem extends ShopItem {
       ),
       temperature: _setTemperature(doc['temperature']),
       sugar: doc['sugar'],
+      sugarType: doc['sugarType']
     );
     return item;
   }

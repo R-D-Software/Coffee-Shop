@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/Business/Database/order_date_DB.dart';
 import 'package:coffee_shop/Business/string_service.dart';
 import 'package:flutter/material.dart';
 
@@ -113,9 +114,32 @@ class Shop{
     return Shop.fromJson(doc.data, doc.documentID);
   }
 
-  @override
-  String toString()
-  {
-      return place + " " + street + " " + buildingNumber;
-  }
+    @override
+    String toString()
+    {
+        return place + " " + street + " " + buildingNumber;
+    }
+
+    Future<bool> isOpenNow() async 
+    {
+        DateTime now = DateTime.now();
+        List<DateTime> holidays = await OrderDateDB.getHolidays();
+
+        for(DateTime holiday in holidays)
+        {
+            if(holiday.year == now.year
+                && holiday.month == now.month
+                && holiday.day == now.day)
+            {
+                return false;
+            }
+        }
+
+        DateTime opensToday = DateTime(now.year, now.month, now.day, opensHour, opensMinute);
+        DateTime closesToday = DateTime(now.year, now.month, now.day, closesHour, closesMinute);
+        if(now.isAfter(opensToday) && now.isBefore(closesToday.add(Duration(minutes:5))))
+            return true;
+        else
+            return false;
+    }
 }

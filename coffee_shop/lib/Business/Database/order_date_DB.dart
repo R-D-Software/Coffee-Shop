@@ -9,9 +9,7 @@ class OrderDateDB {
     Map<String, dynamic> awaitVal;
     List<DateTime> holidays = new List<DateTime>();
 
-    await getHolidaySnaphosts()
-        .first
-        .then((x) => {awaitVal = x.documents.last.data});
+    await getHolidaySnaphosts().first.then((x) => {awaitVal = x.documents.last.data});
 
     for (var stamp in awaitVal["nationalHolidays"]) {
       holidays.add((stamp as Timestamp).toDate());

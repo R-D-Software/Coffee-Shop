@@ -69,10 +69,9 @@ class UserDB
 
     static Future<Shop> getCurrentUserSelectedShop() async 
     {
-        DocumentSnapshot ds = await Firestore.instance.collection("shops").document(StaticData.currentUser.selectedShop).snapshots().first;         
+        DocumentSnapshot ds = await Firestore.instance.collection("shops").document(StaticData.currentUser.selectedShop).get();         
 
         return Shop.fromDocument(ds);
-
     }
 
     static Future<void> incrementCurrentUserQuestItemCountBy(int sumOfPoints, int requiredAmount, int calWeek) async

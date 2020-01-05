@@ -27,7 +27,7 @@ class QuestDB
 {
     static Future<DocumentSnapshot> getCurrentQuestData()
     {
-        return Firestore.instance.collection("quest").document("currentQuest").snapshots().first;
+        return Firestore.instance.collection("quest").document("currentQuest").get();
     }
 
     static Future<void> addQuestCounterForUserIfLegit(List<ShopItem> cartItems) async

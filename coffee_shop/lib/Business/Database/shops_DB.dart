@@ -79,12 +79,10 @@ class ShopsDB
         }         
     } 
 
-    static Future<Shop> getShopByID(String shopID) 
+    static Future<Shop> getShopByID(String shopID) async
     {
-        return Firestore.instance.collection("shops").document(shopID).snapshots().first.then((shop)
-        {
-            return Shop.fromDocument(shop);
-        });
+        DocumentSnapshot ds = await Firestore.instance.collection("shops").document(shopID).get();
+        return Shop.fromDocument(ds);
     }
 
     static Future<String> freeBoxAtShop(String shopID, String ownerID, String yearMonth, String day, int pickedHour, int pickedMinute) async 

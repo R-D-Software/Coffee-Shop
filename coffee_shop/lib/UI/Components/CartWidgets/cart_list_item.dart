@@ -1,5 +1,6 @@
 import 'package:coffee_shop/Business/Database/cart_item_DB.dart';
 import 'package:coffee_shop/Business/Database/quest_DB.dart';
+import 'package:coffee_shop/Business/string_service.dart';
 import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/shop_item.dart';
@@ -117,6 +118,7 @@ class CartListItem extends StatelessWidget {
       sugarIcons.add(SugarCard(
         width: 15,
         height: 15,
+        imagePath: StringService.getPathForPic(coffeeItem.sugarType),
       ));
     }
     return sugarIcons.isEmpty

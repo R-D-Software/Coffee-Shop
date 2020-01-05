@@ -148,7 +148,7 @@ class _BoxBodyState extends State<BoxBody> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(18.0),
         child: GestureDetector(
-            onTap: () async {
+            onTap: () async {               
               if (boxID != "-1") {
                 OpenBoxStatus answer =
                     await BoxesDB.tryToOpen(boxID, orderID, context);
