@@ -5,6 +5,7 @@ import 'package:coffee_shop/Business/Database/shop_item_DB.dart';
 import 'package:coffee_shop/Business/Database/shops_DB.dart';
 import 'package:coffee_shop/Business/MapNavigator/google_navigator.dart';
 import 'package:coffee_shop/Business/string_service.dart';
+import 'package:coffee_shop/Models/coffee_Item.dart';
 import 'package:coffee_shop/Models/language.dart';
 import 'package:coffee_shop/Models/order.dart';
 import 'package:coffee_shop/Models/post_box.dart';
@@ -74,8 +75,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               LanguageModel.items[LanguageModel.currentLanguage],
               style: TextStyle(fontSize: 25, color: Colors.brown),
             ),
-            _makeItemsList(
-                updatedOrder.items.map((f) => f.parentID).toList(), context),
+            _makeItemsList(updatedOrder, context),
           ],
         ),
       ),
@@ -208,24 +208,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return LanguageModel.dayName(day - 1);
   }
 
-  Widget _makeItemsList(List<String> items, BuildContext context) {
+  Widget _makeItemsList(Order order, BuildContext context) 
+  {
     List<Widget> itemWidgets = [];
 
-    for (String item in items) {
-      itemWidgets.add(StreamBuilder(
-        stream: ShopItemDB.getShopItemByID(item),
-        builder: (context, itemSnap) {
-          if (itemSnap.connectionState == ConnectionState.waiting) {
-            return Container();
-          } else {
-            return _itemListElement((itemSnap.data as ShopItem), context);
-          }
-        },
-      ));
+    for (ShopItem item in order.items) 
+    {
+        itemWidgets.add(_itemListElement(item, context));       
     }
 
     return Container(
-      height: items.length * 59.0,
+      height: order.items.length * 59.0,
       child: Column(
         children: itemWidgets,
       ),
@@ -233,6 +226,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   }
 
   Widget _itemListElement(ShopItem item, BuildContext context) {
+      Widget coffeItemDetails = Container();
+      if(item is CoffeeItem)
+      {
+          coffeItemDetails = _coffeeItemDetails((item as CoffeeItem), 28);
+      }
+
     return Card(
       color: Theme.of(context).accentColor,
       child: Row(
@@ -248,6 +247,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           StrokedText(
             text: item.name,
           ),
+          coffeItemDetails
         ],
       ),
     );
@@ -271,7 +271,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             onPressed: () async {
               if (updateOrder.box != "-1") {
                 PostBox pb = await BoxesDB.getBoxByIDFuture(updateOrder.box);
-                print(pb.open);
 
                 if (updateOrder.userID == pb.ownerUserID) {
                   OpenBoxStatus answer = await BoxesDB.tryToOpen(
@@ -296,4 +295,35 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       ),
     );
   }
+
+    Widget _coffeeItemDetails(CoffeeItem item, double height)
+    {
+        String path = StringService.getPathForPic(item.sugarType);
+        if(item.sugar == 0)
+        {
+            path = StringService.getPathForPic(0);
+        }
+
+        return Expanded
+        (
+            flex: 1,
+            child: Row
+            (
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>
+                [
+                    StrokedText(text: item.temperature.temperature, color: item.temperature.color, size: 22),
+                    SizedBox(width: 30,),
+                    Image.asset
+                    (
+                        path,
+                        height: height,
+                    ),
+                    SizedBox(width: 5,),
+                    StrokedText(text: "x" + item.sugar.toString()),
+                    SizedBox(width: 5,),
+                ],
+            ),
+        );
+    }
 }
